@@ -1,0 +1,26 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+  # Build with Cloud Native Buildpacks
+  - name: 'gcr.io/k8s-skaffold/pack'
+    args:
+      - build
+      - '--builder=gcr.io/buildpacks/builder:v1'
+      - '--path=.'
+      - 'gcr.io/$PROJECT_ID/powellstats'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'powellstats'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/powellstats'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
