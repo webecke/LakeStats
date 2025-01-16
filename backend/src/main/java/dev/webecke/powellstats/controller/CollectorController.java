@@ -1,6 +1,7 @@
 package dev.webecke.powellstats.controller;
 
-import dev.webecke.powellstats.model.LakeLevelData;
+import dev.webecke.powellstats.model.CurrentConditions;
+import dev.webecke.powellstats.model.RawLakeLevelData;
 import dev.webecke.powellstats.service.DataCollectionService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class CollectorController {
 
     //TODO: change this to a POST or UPDATE request, its just a GET request right now for ease of testing
     @GetMapping
-    public LakeLevelData runCollectors() {
+    public CurrentConditions runCollectors() {
         return service.dailyDataCollection();
     }
 }
