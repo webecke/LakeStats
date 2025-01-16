@@ -1,10 +1,10 @@
 package dev.webecke.powellstats.model.geography;
 
-import java.util.Map;
+import java.util.List;
 
 public record LakeRegion(
         String id,
         String name,
         String description,
-        Map<String, AccessPoint> accessPoints
+        List<AccessPoint> accessPoints
 ){}

@@ -1,0 +1,89 @@
+{
+  "id": "powell",
+  "name": "Lake Powell",
+  "fullPoolElevation": 3700.0,
+  "minPowerPoolElevation": 3490.0,
+  "deadPoolElevation": 3370.0,
+  "regions": {
+
+    "north": {
+      "id": "north",
+      "name": "North Lake",
+      "description": "The north end of the lake, generally anything north of Rainbow Bridge",
+      "accessPoints": [
+        {
+          "id": "bullfrog-north",
+          "name": "Bullfrog North Ramp",
+          "minSafeElevation": 3529.0,
+          "minUsableElevation": 3527.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "bullfrog-spur",
+          "name": "Bullfrog Spur",
+          "minSafeElevation": 3549.0,
+          "minUsableElevation": 3547.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        }
+      ]
+    },
+
+    "south": {
+      "id": "south",
+      "name": "South Lake",
+      "description": "The south end of the lake, generally anything south of Rainbow Bridge",
+      "accessPoints": [
+        {
+          "id": "stateline-aux",
+          "name": "Stateline Auxillary Ramp",
+          "minSafeElevation": 3502.0,
+          "minUsableElevation": 3500.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "stateline-main",
+          "name": "Stateline Main Ramp",
+          "minSafeElevation": 3564.0,
+          "minUsableElevation": 3562.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "wahweap-main",
+          "name": "Wahweap Main Ramp",
+          "minSafeElevation": 3546.0,
+          "minUsableElevation": 3544.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "antelope-private",
+          "name": "Antelope Point Business Ramp",
+          "minSafeElevation": 3540.0,
+          "minUsableElevation": 3538.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "antelope-public",
+          "name": "Antelope Point Public Ramp",
+          "minSafeElevation": 3588.0,
+          "minUsableElevation": 3586.0,
+          "googleMapsLink": "",
+          "type": "RAMP"
+        },
+        {
+          "id": "castle-cut",
+          "name": "Castle Rock Cut-Off",
+          "minSafeElevation": 3583.0,
+          "minUsableElevation": 3580.0,
+          "googleMapsLink": "",
+          "type": "CHANNEL"
+        }
+      ]
+    }
+  }
+}
