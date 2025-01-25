@@ -1,6 +1,5 @@
 package dev.webecke.powellstats.model;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -12,5 +11,6 @@ public record CurrentConditions(
         float oneDayChange,
         float twoWeekChange,
         float oneYearChange,
-        float differenceFromTenYearAverage
+        float differenceFromTenYearAverage,
+        String debugInfo
 ) {}

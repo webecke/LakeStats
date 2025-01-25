@@ -1,7 +1,6 @@
 package dev.webecke.powellstats.controller;
 
 import dev.webecke.powellstats.model.CurrentConditions;
-import dev.webecke.powellstats.model.RawLakeLevelData;
 import dev.webecke.powellstats.service.DataCollectionService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
