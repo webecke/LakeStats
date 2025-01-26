@@ -10,6 +10,12 @@ import java.util.Map;
 
 @Service
 public class CurrentConditionsAggregator {
+    ErrorAggregator errorAggregator;
+
+    public CurrentConditionsAggregator(ErrorAggregator errorAggregator) {
+        this.errorAggregator = errorAggregator;
+    }
+
     public CurrentConditions aggregateCurrentConditions(CollectorResponse<LakeLevelDataset> collectorResponse) {
         if (!collectorResponse.successful()) { return null; }
 
@@ -46,7 +52,9 @@ public class CurrentConditionsAggregator {
             LakeLevelDataset.LakeLevelEntry entry = indexedData.get(startDate.minusYears(i + 1));
 
             if (entry == null) {
-                //TODO: Notify ErrorAggregator that data ran out
+                errorAggregator.add(
+                        "Less than %d years of data found for %s while calculating multiYearAverageOnThisDate"
+                                .formatted(years, dataset.lake()));
                 break;
             }
 
