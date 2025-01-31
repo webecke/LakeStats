@@ -2,7 +2,7 @@ package dev.webecke.powellstats.aggregator;
 
 import dev.webecke.powellstats.model.CollectorResponse;
 import dev.webecke.powellstats.model.CurrentConditions;
-import dev.webecke.powellstats.model.LakeLevelDataset;
+import dev.webecke.powellstats.model.TimeSeriesData;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,23 +16,23 @@ public class CurrentConditionsAggregator {
         this.errorAggregator = errorAggregator;
     }
 
-    public CurrentConditions aggregateCurrentConditions(CollectorResponse<LakeLevelDataset> collectorResponse) {
+    public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse) {
         if (!collectorResponse.successful()) { return null; }
 
-        LakeLevelDataset dataset = collectorResponse.data();
+        TimeSeriesData dataset = collectorResponse.data();
 
-        LakeLevelDataset.LakeLevelEntry today = dataset.chronologicalData().getFirst();
-        float todayElevation = today.elevationFeet();
+        TimeSeriesData.TimeSeriesEntry today = dataset.chronologicalData().getFirst();
+        float todayElevation = today.value();
         LocalDate todayDate = today.date();
 
-        float oneDayChange = todayElevation - dataset.dateIndex().get(todayDate.minusDays(1)).elevationFeet();
-        float twoWeekChange = todayElevation - dataset.dateIndex().get(todayDate.minusWeeks(2)).elevationFeet();
-        float oneYearChange = todayElevation - dataset.dateIndex().get(todayDate.minusYears(1)).elevationFeet();
+        float oneDayChange = todayElevation - dataset.dateIndex().get(todayDate.minusDays(1)).value();
+        float twoWeekChange = todayElevation - dataset.dateIndex().get(todayDate.minusWeeks(2)).value();
+        float oneYearChange = todayElevation - dataset.dateIndex().get(todayDate.minusYears(1)).value();
 
         float tenYearAverage = multiYearAverageOnThisDate(todayDate, 10, dataset);
 
         return new CurrentConditions(
-                dataset.lake(),
+                dataset.lakeId(),
                 collectorResponse.collectedAt(),
                 todayDate,
                 todayElevation,
@@ -44,21 +44,21 @@ public class CurrentConditionsAggregator {
         );
     }
 
-    private float multiYearAverageOnThisDate(LocalDate startDate, Integer years, LakeLevelDataset dataset) {
-        Map<LocalDate, LakeLevelDataset.LakeLevelEntry> indexedData = dataset.dateIndex();
+    private float multiYearAverageOnThisDate(LocalDate startDate, Integer years, TimeSeriesData dataset) {
+        Map<LocalDate, TimeSeriesData.TimeSeriesEntry> indexedData = dataset.dateIndex();
 
         float runningSum = 0;
         for (int i = 0; i < years; i++) {
-            LakeLevelDataset.LakeLevelEntry entry = indexedData.get(startDate.minusYears(i + 1));
+            TimeSeriesData.TimeSeriesEntry entry = indexedData.get(startDate.minusYears(i + 1));
 
             if (entry == null) {
                 errorAggregator.add(
                         "Less than %d years of data found for %s while calculating multiYearAverageOnThisDate"
-                                .formatted(years, dataset.lake()));
+                                .formatted(years, dataset.lakeId()));
                 break;
             }
 
-            runningSum += entry.elevationFeet();
+            runningSum += entry.value();
         }
 
         return runningSum / years;

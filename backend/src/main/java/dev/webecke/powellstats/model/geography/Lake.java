@@ -1,5 +1,7 @@
 package dev.webecke.powellstats.model.geography;
 
+import dev.webecke.powellstats.model.measurements.DataType;
+
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -7,24 +9,22 @@ public record Lake(
         String id,
         String name,
         String description,
+        LocalDate fillDate,
+        String googleMapsLinkToDam,
         float fullPoolElevation,
         float minPowerPoolElevation,
         float deadPoolElevation,
-        Map<String, LakeRegion> regions,
         DataSources dataSources,
-        String googleMapsLinkToDam,
-        LocalDate fillDate)
+        Map<String, LakeRegion> regions
+)
 {
-    public record DataSources(
-            String elevation,
-            String inflow,
-            String totalRelease,
-            String spillwayRelease,
-            String bypassRelease,
-            String powerRelease,
-            String evaporation,
-            String activeStorage,
-            String bankStorage,
-            String deltaStorage
-    ) {}
+    public record DataSources(Map<DataType, String> sources) {
+        public String getUrl(DataType type) {
+            String url = sources.get(type);
+            if (url == null) {
+                throw new IllegalArgumentException("No URL found for data type: " + type);
+            }
+            return url;
+        }
+    }
 }
