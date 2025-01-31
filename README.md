@@ -22,3 +22,6 @@ Additionally, I just want to have a project to learn new technologies. This proj
 - Google Firebase
 - GoLang
 - React
+
+## Deployment
+This is not an open source project. I retain all possible rights to this code. However, for testing purposes or my own future documentation, here's info about how to deploy this: [deployment.md](deployment.md)
