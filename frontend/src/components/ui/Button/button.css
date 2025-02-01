@@ -1,0 +1,128 @@
+@import '../../../styles/colors.css';
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    line-height: 1;
+}
+
+/* Sizes */
+.button--sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 14px;
+    gap: 8px;
+}
+
+.button--md {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 16px;
+    gap: 8px;
+}
+
+.button--lg {
+    height: 48px;
+    padding: 0 24px;
+    font-size: 18px;
+    gap: 12px;
+}
+
+/* Variants */
+.button--primary {
+    background-color: var(--action-primary);
+    color: var(--text-primary);
+}
+
+.button--primary:hover:not(:disabled) {
+    background-color: var(--action-secondary);
+}
+
+.button--secondary {
+    background-color: var(--background-elevated);
+    color: var(--text-secondary);
+}
+
+.button--secondary:hover:not(:disabled) {
+    background-color: var(--background-higher);
+}
+
+.button--outline {
+    background-color: var(--background-base);
+    border: 1px solid var(--border-medium);
+    color: var(--text-secondary);
+}
+
+.button--outline:hover:not(:disabled) {
+    background-color: var(--background-elevated);
+}
+
+.button--ghost {
+    background-color: transparent;
+    color: var(--text-secondary);
+}
+
+.button--ghost:hover:not(:disabled) {
+    background-color: var(--background-elevated);
+}
+
+.button--destructive {
+    background-color: var(--status-error);
+    color: var(--text-primary);
+}
+
+.button--destructive:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+/* States */
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--action-primary);
+    outline-offset: 2px;
+}
+
+.button--loading {
+    opacity: 0.7;
+    cursor: wait;
+}
+
+/* Spinner */
+.button__spinner {
+    display: inline-flex;
+    color: currentColor;
+}
+
+.button__spinner-icon {
+    animation: spin 1s linear infinite;
+    height: 16px;
+    width: 16px;
+}
+
+.button__spinner-circle {
+    opacity: 0.25;
+}
+
+.button__spinner-path {
+    opacity: 0.75;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
