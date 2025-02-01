@@ -47,12 +47,3 @@
 .footer-content p {
     margin: 0.25rem 0;
 }
-
-.footer-content a {
-    color: var(--text-secondary);
-    text-decoration: none;
-}
-
-.footer-content a:hover {
-    color: var(--text-primary);
-}

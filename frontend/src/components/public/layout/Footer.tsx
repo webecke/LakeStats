@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import webeckeLogo from '../../../assets/webeckedev.svg';
 import './Footer.css';
+import {BUILD_TIME} from "../../../buildInfo.ts";
 
 export default function Footer() {
     return (
@@ -14,7 +15,7 @@ export default function Footer() {
                     <p>
                         <a href="https://github.com/webecke/LakeStats" target="_blank">View on Github</a>
                         {" | "}
-                        Latest build: <em>February 1 2025 16:30</em>
+                        Latest build: <em>{BUILD_TIME}</em>
                     </p>
                     <p>
                         <Link to="/privacy">Privacy Notice</Link>

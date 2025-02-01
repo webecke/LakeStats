@@ -24,3 +24,29 @@ body {
 .main-content {
   flex: 1;
 }
+
+/* General link styling - covers both HTML <a> and React Router <Link> */
+a,
+a[href],
+Link,
+.Link {
+  color: var(--brand-blue-400);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover,
+a[href]:hover,
+Link:hover,
+.Link:hover {
+  color: var(--brand-blue-300);
+}
+
+/* Focus styles for both */
+a:focus-visible,
+a[href]:focus-visible,
+Link:focus-visible,
+.Link:focus-visible {
+  outline: 2px solid var(--brand-blue-400);
+  outline-offset: 2px;
+}
