@@ -1,0 +1,15 @@
+/* src/components/admin/layout/AdminLayout.css */
+.admin-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-header {
+    padding: 0;
+}
+
+.admin-main {
+    flex: 1;
+    padding: 1rem;
+}
