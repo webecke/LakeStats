@@ -7,3 +7,23 @@
 # OS
 .DS_Store
 Thumbs.db
+/.gradle/buildOutputCleanup/buildOutputCleanup.lock
+/.gradle/buildOutputCleanup/cache.properties
+/.gradle/8.10/checksums/checksums.lock
+/.gradle/8.10/executionHistory/executionHistory.bin
+/.gradle/8.10/executionHistory/executionHistory.lock
+/.gradle/file-system.probe
+/.gradle/8.10/fileHashes/fileHashes.bin
+/.gradle/8.10/fileHashes/fileHashes.lock
+/.gradle/8.10/dependencies-accessors/gc.properties
+/.gradle/8.10/gc.properties
+/.gradle/vcs-1/gc.properties
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/gradlew
+/gradlew.bat
+/.gradle/8.10/fileChanges/last-build.bin
+/backend/old_policy.json
+/.gradle/buildOutputCleanup/outputFiles.bin
+/.gradle/8.10/fileHashes/resourceHashesCache.bin
+/backend/roles.txt
