@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import {Outlet} from 'react-router-dom';
+import Footer from "./Footer.tsx";
 
 export default function PublicLayout() {
     return (
@@ -7,7 +8,9 @@ export default function PublicLayout() {
             <main>
                 <Outlet />
             </main>
-            {/* Add your footer */}
+            <footer>
+                <Footer />
+            </footer>
         </div>
     );
 }

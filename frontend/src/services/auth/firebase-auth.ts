@@ -17,7 +17,6 @@ export class FirebaseAuthService implements AuthService {
         return {
             id: fbUser.uid,
             email: fbUser.email,
-            isAdmin: true, // Since only manually added users can sign in, they're all admins
         };
     }
 

@@ -1,7 +1,6 @@
 export interface User {
     id: string;
     email: string | null;
-    isAdmin: boolean;
 }
 
 export interface AuthService {

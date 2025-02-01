@@ -32,7 +32,7 @@ export default function AdminLayout() {
     return (
         <div>
             <div className="admin-header">
-                <span>Welcome, {user.email}</span>
+                <h1>LakeStats Admin Panel</h1>
                 <Button
                     variant="outline"
                     onClick={() => authService.signOut()}

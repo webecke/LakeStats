@@ -59,6 +59,8 @@ export function LoginForm() {
             {error && (
                 <div className="login-form__error">
                     {error}
+                    <hr />
+                    <p>Remember: this page is for LakeStats admins only. You don't need an account to use the services provided by LakeStats!</p>
                 </div>
             )}
 
