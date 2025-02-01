@@ -1,6 +1,6 @@
-# PowellStats
+# LakeStats
 
-A simple PWA to show current and historical conditions at Lake Powell in the Glen Canyon National Recreation Area in Utah and Arizona.
+A simple PWA to show current and historical conditions at various lakes run by the Bureau of Reclamation.
 
 ## What
 The goal is to make a simple webapp that:
