@@ -1,17 +1,15 @@
 import {
-    GoogleAuthProvider,
-    signInWithPopup,
+    signInWithEmailAndPassword,
     signOut as firebaseSignOut,
     onAuthStateChanged as firebaseOnAuthStateChanged,
     type User as FirebaseUser
 } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { app } from '../../firebase/config.ts';  // Import the initialized app
+import { app } from '../../firebase/config.ts';
 import { AuthService, User } from './types';
 
 export class FirebaseAuthService implements AuthService {
-    private auth = getAuth(app);  // Pass the app instance
-    private googleProvider = new GoogleAuthProvider();
+    private auth = getAuth(app);
 
     private transformFirebaseUser(fbUser: FirebaseUser | null): User | null {
         if (!fbUser) return null;
@@ -19,12 +17,12 @@ export class FirebaseAuthService implements AuthService {
         return {
             id: fbUser.uid,
             email: fbUser.email,
-            isAdmin: false, // We'll update this when we implement admin checks
+            isAdmin: true, // Since only manually added users can sign in, they're all admins
         };
     }
 
-    async signIn(): Promise<User> {
-        const result = await signInWithPopup(this.auth, this.googleProvider);
+    async signIn(email: string, password: string): Promise<User> {
+        const result = await signInWithEmailAndPassword(this.auth, email, password);
         const user = this.transformFirebaseUser(result.user);
         if (!user) throw new Error('Failed to sign in');
         return user;

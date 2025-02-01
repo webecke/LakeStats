@@ -13,3 +13,24 @@
     flex: 1;
     padding: 1rem;
 }
+
+/* The wrapper element */
+.admin-auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-base);
+    margin: 0;
+    padding: 0;
+    position: fixed;
+}
+
+.login-form {
+    background-color: var(--background-elevated);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+}

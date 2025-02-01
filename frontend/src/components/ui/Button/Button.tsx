@@ -1,10 +1,12 @@
 import { ButtonHTMLAttributes, forwardRef } from "react";
+import { Link, type LinkProps } from "react-router-dom";
 import "./button.css";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
     size?: 'sm' | 'md' | 'lg';
     isLoading?: boolean;
+    href?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -14,6 +16,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
                                                                size = 'md',
                                                                isLoading = false,
                                                                disabled,
+                                                               href,
+                                                               onClick,
                                                                ...props
                                                            }, ref) => {
     const classes = [
@@ -24,11 +28,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
         className
     ].filter(Boolean).join(' ');
 
+    if (href) {
+        return (
+            <Link
+                to={href}
+                className={classes}
+                onClick={onClick as LinkProps['onClick']}
+            >
+                {children}
+            </Link>
+        );
+    }
+
     return (
         <button
             className={classes}
             disabled={disabled || isLoading}
             ref={ref}
+            onClick={onClick}
             {...props}
         >
             {isLoading && (
