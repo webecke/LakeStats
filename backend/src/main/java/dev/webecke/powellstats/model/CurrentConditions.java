@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public record CurrentConditions(
-        String lake,
+        String lakeId,
         LocalDateTime timeOfCollection,
         LocalDate date,
         float currentLevel,

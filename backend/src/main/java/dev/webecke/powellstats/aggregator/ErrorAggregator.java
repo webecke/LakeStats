@@ -28,7 +28,15 @@ public class ErrorAggregator {
         errors.add(new SystemError(errorMessage));
     }
 
+    public void add(String errorMessage, String lakeId) {
+        errors.add(new SystemError(errorMessage, lakeId));
+    }
+
     public void add(String errorMessage, Throwable cause) {
         errors.add(new SystemError(errorMessage, cause));
+    }
+
+    public void add(String errorMessage, Throwable cause, String lakeId) {
+        errors.add(new SystemError(errorMessage, cause, lakeId));
     }
 }

@@ -1,6 +1,7 @@
 package dev.webecke.powellstats.service;
 
 import dev.webecke.powellstats.aggregator.CurrentConditionsAggregator;
+import dev.webecke.powellstats.aggregator.ErrorAggregator;
 import dev.webecke.powellstats.collector.BureauOfReclamationDataCollector;
 import dev.webecke.powellstats.dao.PublishingDao;
 import dev.webecke.powellstats.model.CollectorResponse;
@@ -20,13 +21,16 @@ import java.util.Map;
 
 @Service
 public class DataCollectionService {
+    private final ErrorAggregator errorAggregator;
     private final BureauOfReclamationDataCollector bureauOfReclamationDataCollector;
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final PublishingDao publishingDao;
 
-    public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
+    public DataCollectionService(ErrorAggregator errorAggregator,
+                                 BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
                                  PublishingDao publishingDao) {
+        this.errorAggregator = errorAggregator;
         this.bureauOfReclamationDataCollector = bureauOfReclamationDataCollector;
         this.currentConditionsAggregator = currentConditionsAggregator;
         this.publishingDao = publishingDao;
@@ -35,12 +39,22 @@ public class DataCollectionService {
     public CurrentConditions dailyDataCollection() {
         List<Lake> lakesToCollect = List.of(makeLakePowellRecord());
 
-        CollectorResponse<TimeSeriesData> powellData = bureauOfReclamationDataCollector.collectData(lakesToCollect.get(0), DataType.ELEVATION);
-        CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(powellData);
-        publishingDao.publishCurrentConditions(currentConditions);
-        return currentConditions;
-    }
+        for (Lake lake : lakesToCollect) {
+            try {
+                CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
 
+                CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData);
+                publishingDao.publishCurrentConditions(currentConditions);
+                errorAggregator.add("Testing the error aggregator", lake.id());
+            } catch (Exception e) {
+                errorAggregator.add("Unknown error while collecting data for lakeId: " + lake.id(), e, lake.id());
+            }
+        }
+
+        publishingDao.publishErrors(errorAggregator.flushErrors());
+
+        return null;
+    }
 
     public Lake makeLakePowellRecord() {
         ArrayList<AccessPoint> southAccess = new ArrayList<>();

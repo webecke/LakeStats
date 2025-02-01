@@ -3,6 +3,7 @@ package dev.webecke.powellstats.aggregator;
 import dev.webecke.powellstats.model.CollectorResponse;
 import dev.webecke.powellstats.model.CurrentConditions;
 import dev.webecke.powellstats.model.TimeSeriesData;
+import dev.webecke.powellstats.model.measurements.DataType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +19,11 @@ public class CurrentConditionsAggregator {
 
     public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse) {
         if (!collectorResponse.successful()) { return null; }
+        if (collectorResponse.data().type() != DataType.ELEVATION) {
+            errorAggregator.add("Unexpected data type received while aggregating current conditions: %s on %s"
+                    .formatted(collectorResponse.data().type()), collectorResponse.data().lakeId());
+            return null;
+        }
 
         TimeSeriesData dataset = collectorResponse.data();
 
@@ -54,7 +60,7 @@ public class CurrentConditionsAggregator {
             if (entry == null) {
                 errorAggregator.add(
                         "Less than %d years of data found for %s while calculating multiYearAverageOnThisDate"
-                                .formatted(years, dataset.lakeId()));
+                                .formatted(years, dataset.lakeId()), dataset.lakeId());
                 break;
             }
 

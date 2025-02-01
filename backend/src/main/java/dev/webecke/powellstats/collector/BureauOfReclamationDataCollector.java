@@ -30,7 +30,7 @@ public class BureauOfReclamationDataCollector {
         try {
             dataSourceUrl = lake.dataSources().getUrl(type);
         } catch (IllegalArgumentException e) {
-            errorAggregator.add("No URL found for data type: " + type + " while collecting data", e);
+            errorAggregator.add("No URL found for data type: " + type + " while collecting data", e, lake.id());
             throw new RuntimeException(e);
         }
 
@@ -51,7 +51,7 @@ public class BureauOfReclamationDataCollector {
             return new CollectorResponse<>(data, true, LocalDateTime.now());
 
         } catch (NetworkException e) {
-            errorAggregator.add("Network exception while collecting %s data for lake %s".formatted(type, lake.id()), e);
+            errorAggregator.add("Network exception while collecting %s data for lakeId %s".formatted(type, lake.id()), e, lake.id());
             return new CollectorResponse<>(null, false, LocalDateTime.now());
         }
     }

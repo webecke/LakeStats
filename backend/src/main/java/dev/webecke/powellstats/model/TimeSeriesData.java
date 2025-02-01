@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * Stores time series data
- * @param lakeId the name of the lake this data came from
+ * @param lakeId the name of the lakeId this data came from
  * @param chronologicalData an ordered list (newest entries first) of daily data entries
  * @param dateIndex the same data as 'chronologicalData', but in a map to provided O(1) access to specific dates
  * @param type the type of data stored in this object
