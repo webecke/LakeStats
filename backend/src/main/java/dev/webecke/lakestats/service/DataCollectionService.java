@@ -4,9 +4,7 @@ import dev.webecke.lakestats.aggregator.CurrentConditionsAggregator;
 import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.collector.BureauOfReclamationDataCollector;
 import dev.webecke.lakestats.dao.PublishingDao;
-import dev.webecke.lakestats.model.CollectorResponse;
-import dev.webecke.lakestats.model.CurrentConditions;
-import dev.webecke.lakestats.model.TimeSeriesData;
+import dev.webecke.lakestats.model.*;
 import dev.webecke.lakestats.model.geography.AccessPoint;
 import dev.webecke.lakestats.model.geography.AccessType;
 import dev.webecke.lakestats.model.geography.Lake;
@@ -45,7 +43,9 @@ public class DataCollectionService {
 
                 CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData);
                 publishingDao.publishCurrentConditions(currentConditions);
-                errorAggregator.add("Testing the error aggregator", lake.id());
+
+                publishingDao.publishLakeInfo(lake);
+
             } catch (Exception e) {
                 errorAggregator.add("Unknown error while collecting data for lakeId: " + lake.id(), e, lake.id());
             }

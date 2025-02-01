@@ -6,6 +6,7 @@ import dev.webecke.lakestats.model.CurrentConditions;
 
 import com.google.cloud.firestore.Firestore;
 import dev.webecke.lakestats.model.SystemError;
+import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.utils.Serializer;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 @Service
 public class FirestoreDao implements PublishingDao {
     public static final String SYSTEM_ERRORS_ID = "system-errors";
-    public static final String GENERAL_ID = "general";
+    public static final String GENERAL_ID = "system";
+    public static final String LAKE_INFO_ID = "lake-info";
 
     private final Firestore firestore;
     private final Serializer serializer;
@@ -34,6 +36,18 @@ public class FirestoreDao implements PublishingDao {
 
     @Override
     public void publishErrors(List<SystemError> errors) throws DataAccessException {
+        if (errors.isEmpty()) {
+            // Get all lake IDs that have recent errors
+            firestore.collection(SYSTEM_ERRORS_ID)
+                    .document("recent")
+                    .listCollections()
+                    .forEach(collection -> {
+                        // Delete the errors document for each lake
+                        collection.document("errors").delete();
+                    });
+            return;
+        }
+
         Map<String, List<SystemError>> errorsByLake = errors.stream()
                 .collect(Collectors.groupingBy(
                         SystemError::lakeId
@@ -59,5 +73,10 @@ public class FirestoreDao implements PublishingDao {
                     .document("errors")
                     .set(serializer.serializeToMap(errorData));
         });
+    }
+
+    @Override
+    public void publishLakeInfo(Lake lake) throws DataAccessException {
+        firestore.collection(lake.id()).document(LAKE_INFO_ID).set(serializer.serializeToMap(lake));
     }
 }
