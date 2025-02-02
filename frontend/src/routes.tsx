@@ -39,7 +39,6 @@ export const router = createBrowserRouter([
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <AdminDashboard />
-                        <LoadingSpinner />
                     </Suspense>
                 )
             },

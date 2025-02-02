@@ -3,6 +3,7 @@ import {Outlet} from 'react-router-dom';
 import {authService, User} from '../../../services/auth';
 import {Button} from '../../ui/Button';
 import {LoginForm} from "../login/LoginForm.tsx";
+import LoadingSpinner from "../../shared/LoadingSpinner.tsx";
 
 export default function AdminLayout() {
     const [user, setUser] = useState<User | null>(null);
@@ -16,7 +17,7 @@ export default function AdminLayout() {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner />;
     }
 
     if (!user) {

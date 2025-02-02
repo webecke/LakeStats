@@ -1,0 +1,11 @@
+.preview-container {
+    background-color: var(--background-higher);
+    padding: 1rem;
+    border-radius: 15px;
+    width: 100%;
+}
+
+hr {
+    color: var(--action-accent);
+    margin: 10px 10%;
+}

@@ -1,5 +1,10 @@
+import './Dashboard.css'
+import LakeManagerPreview from "../../components/admin/dashboard/LakeManagerPreview.tsx";
+
 export default function Dashboard() {
     return (
-        <p>Dashboard</p>
+        <div className="dashboard">
+            <LakeManagerPreview />
+        </div>
     );
 }
