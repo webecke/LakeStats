@@ -1,0 +1,38 @@
+// Copy and paste these into firebase console
+// These are the security rules for the Firestore database
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Lakes collection
+    match /lakes/{lakeId} {
+      // Anyone can read
+      allow read: if true;
+      // Only authenticated users can write
+      allow write: if isAuthenticated();
+
+      // Same rules apply to subcollections
+      match /{document=**} {
+        allow read: if true;
+        allow write: if isAuthenticated();
+      }
+    }
+
+    // System errors collection
+    match /system-errors/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Current conditions collection
+    match /{lakeId}/current_conditions/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}
