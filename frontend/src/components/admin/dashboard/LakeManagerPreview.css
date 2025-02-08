@@ -1,6 +1,6 @@
 .preview-container {
     background-color: var(--background-higher);
-    padding: 1rem;
+    padding: 0.5rem;
     border-radius: 15px;
     width: 100%;
 }
@@ -8,4 +8,106 @@
 hr {
     color: var(--action-accent);
     margin: 10px 10%;
+}
+
+.lake-manager__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.lake-manager__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.lake-manager__button-icon {
+    margin-right: 0.5rem;
+    height: 1rem;
+    width: 1rem;
+}
+
+/* Modal styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: var(--background-elevated);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-field input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 4px;
+    background-color: var(--background-base);
+    color: var(--text-primary);
+}
+
+.form-field input:focus {
+    outline: none;
+    border-color: var(--action-primary);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
 }

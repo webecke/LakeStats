@@ -11,11 +11,13 @@ export interface Lake {
     regions: Record<string, LakeRegion>;
 }
 
+export type LakeStatus = 'ENABLED' | 'DISABLED' | 'TESTING';
+
 export interface LakeSystemStatus {
     lakeId: string;
     lakeName: string;
     brandedName: string;
-    status: 'ENABLED' | 'DISABLED' | 'TESTING'
+    status: LakeStatus;
     features: LakeSystemFeatures[];
 }
 
@@ -74,5 +76,9 @@ export interface SystemError {
 }
 
 export interface DataService {
-    saveEnabledLakes(lakes: LakeSystemStatus[]): Promise<void>
+    addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features'>): Promise<void>
+    updateLakeStatus(lakeId: string, newStatus: LakeStatus): Promise<void>
+    getLakesByStatus(status: LakeStatus): Promise<LakeSystemStatus[]>
+    getAllLakes(): Promise<LakeSystemStatus[]>
+    getLake(lakeId: string): Promise<LakeSystemStatus | null>
 }
