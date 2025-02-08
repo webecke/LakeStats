@@ -7,7 +7,33 @@ export interface Lake {
     fullPoolElevation: number;
     minPowerPoolElevation: number;
     deadPoolElevation: number;
+    dataSources: Map<DataType, string>
     regions: Record<string, LakeRegion>;
+}
+
+export interface LakeSystemStatus {
+    lakeId: string;
+    lakeName: string;
+    brandedName: string;
+    status: 'ENABLED' | 'DISABLED' | 'TESTING'
+    features: LakeSystemFeatures[];
+}
+
+export enum DataType {
+    ELEVATION = 'ELEVATION',
+    INFLOW = 'INFLOW',
+    TOTAL_RELEASE = 'TOTAL_RELEASE',
+    SPILLWAY_RELEASE = 'SPILLWAY_RELEASE',
+    BYPASS_RELEASE = 'BYPASS_RELEASE',
+    POWER_RELEASE = 'POWER_RELEASE',
+    EVAPORATION = 'EVAPORATION',
+    ACTIVE_STORAGE = 'ACTIVE_STORAGE',
+    BANK_STORAGE = 'BANK_STORAGE',
+    DELTA_STORAGE = 'DELTA_STORAGE',
+}
+
+export enum LakeSystemFeatures {
+    CURRENT_CONDITIONS = 'CURRENT_CONDITIONS',
 }
 
 export interface LakeRegion {
@@ -48,16 +74,5 @@ export interface SystemError {
 }
 
 export interface DataService {
-    // Lake methods
-    getLake(lakeId: string): Promise<Lake | null>;
-    getAllLakes(): Promise<Lake[]>;
-    updateLake(lakeId: string, data: Partial<Lake>): Promise<void>;
-
-    // Current conditions methods
-    getCurrentConditions(lakeId: string): Promise<CurrentConditions | null>;
-    updateCurrentConditions(lakeId: string, data: CurrentConditions): Promise<void>;
-
-    // System errors methods
-    getRecentErrors(lakeId?: string): Promise<SystemError[]>;
-    addSystemError(error: SystemError): Promise<void>;
+    saveEnabledLakes(lakes: LakeSystemStatus[]): Promise<void>
 }

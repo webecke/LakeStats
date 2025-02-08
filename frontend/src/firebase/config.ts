@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from "firebase/analytics";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB6e1865HRtISGpw3BUn9U71lK0lKXTdJY",
@@ -14,3 +15,9 @@ const firebaseConfig = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
+
+const environment = import.meta.env.VITE_ENVIRONMENT || 'prod';
+
+export function getFirestoreDb() {
+    return getFirestore(app, environment === 'dev' ? 'development' : '(default)');
+}

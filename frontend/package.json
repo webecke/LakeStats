@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prebuild": "node generateBuildInfo.js",
-    "dev": "npm run prebuild && vite",
+    "dev": "npm run prebuild && VITE_ENVIRONMENT=dev vite",
     "build": "npm run prebuild && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
