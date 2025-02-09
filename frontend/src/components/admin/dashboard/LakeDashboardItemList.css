@@ -1,0 +1,20 @@
+.lake-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.lake-list__section {
+    background-color: var(--background-higher);
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.lake-list__section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    padding: 0 0.5rem;
+}

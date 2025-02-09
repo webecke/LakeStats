@@ -3,6 +3,7 @@ import { Button } from "../../ui/Button";
 import "./LakeManagerPreview.css";
 import { Plus } from "lucide-react";
 import {dataService} from "../../../services/data";
+import LakeDashboardItemList from "./LakeDashboardItemList.tsx";
 
 export default function LakeManagerPreview() {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,9 +13,9 @@ export default function LakeManagerPreview() {
         brandedName: ''
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        dataService.addNewLake({
+        await dataService.addNewLake({
             lakeName: formData.lakeName,
             lakeId: formData.lakeId,
             brandedName: formData.brandedName
@@ -47,7 +48,9 @@ export default function LakeManagerPreview() {
                     Add Lake
                 </Button>
             </div>
-            {/* Future lake previews will go here */}
+
+            <LakeDashboardItemList />
+
 
             {isOpen && (
                 <div className="modal-backdrop" onClick={handleBackdropClick}>
@@ -92,9 +95,12 @@ export default function LakeManagerPreview() {
                                     name="brandedName"
                                     value={formData.brandedName}
                                     onChange={handleChange}
-                                    placeholder="e.g., Lake Powell Stats"
+                                    placeholder="e.g., PowellStats"
                                     required
                                 />
+                            </div>
+                            <div>
+                                <p>This lake will be added with no active features and listed as "DISABLED"</p>
                             </div>
                             <div className="modal-footer">
                                 <Button
