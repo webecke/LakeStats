@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
                 )
             },
             {
-                path: 'lakes',
+                path: ':lakeId',
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <LakeManager />

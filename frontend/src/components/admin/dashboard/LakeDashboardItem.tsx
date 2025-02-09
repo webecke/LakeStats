@@ -30,7 +30,7 @@ export default function LakeDashboardItem({ lake }: LakePreviewProps) {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => console.log('Edit lake:', lake.lakeId)}
+                        href={`/admin/${lake.lakeId}`}
                     >
                         <Settings className="w-4 h-4" />
                     </Button>
