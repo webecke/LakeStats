@@ -4,8 +4,10 @@ import "./LakeManagerPreview.css";
 import { Plus } from "lucide-react";
 import {dataService} from "../../../services/data";
 import LakeDashboardItemList from "./LakeDashboardItemList.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function LakeManagerPreview() {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         lakeName: '',
@@ -20,7 +22,7 @@ export default function LakeManagerPreview() {
             lakeId: formData.lakeId,
             brandedName: formData.brandedName
         })
-        console.log('Form submitted:', formData);
+        navigate('/admin/' + formData.lakeId);
         setIsOpen(false);
         setFormData({ lakeName: '', lakeId: '', brandedName: '' }); // Reset form
     };
