@@ -8,7 +8,7 @@
 .lake-list__section {
     background-color: var(--background-higher);
     border-radius: 15px;
-    padding: 1rem;
+    padding: 0 1rem;
 }
 
 .lake-list__section-title {
@@ -17,4 +17,5 @@
     color: var(--text-primary);
     margin: 0 0 1rem 0;
     padding: 0 0.5rem;
+    text-align: left;
 }

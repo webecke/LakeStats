@@ -19,6 +19,7 @@ export interface LakeSystemStatus {
     brandedName: string;
     status: LakeStatus;
     features: LakeSystemFeatures[];
+    sortOrder: number;  // New field
 }
 
 export enum DataType {
@@ -76,9 +77,11 @@ export interface SystemError {
 }
 
 export interface DataService {
-    addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features'>): Promise<void>
+    addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features' | 'sortOrder'>): Promise<void>
     updateLakeStatus(lakeId: string, newStatus: LakeStatus): Promise<void>
     getLakesByStatus(status: LakeStatus): Promise<LakeSystemStatus[]>
     getAllLakes(): Promise<LakeSystemStatus[]>
     getLake(lakeId: string): Promise<LakeSystemStatus | null>
+    updateLakeOrder(lakeId: string, newOrder: number): Promise<void>
+    reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void>
 }

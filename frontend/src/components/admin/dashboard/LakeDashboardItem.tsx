@@ -1,13 +1,23 @@
 import { LakeSystemStatus } from "../../../services/data";
 import { Button } from "../../ui/Button";
-import { Settings } from "lucide-react";
+import { Settings, ChevronUp, ChevronDown } from "lucide-react";
 import "./LakeDashboardItem.css";
 
 interface LakePreviewProps {
     lake: LakeSystemStatus;
+    onMoveUp?: (lake: LakeSystemStatus) => void;
+    onMoveDown?: (lake: LakeSystemStatus) => void;
+    isFirst?: boolean;
+    isLast?: boolean;
 }
 
-export default function LakeDashboardItem({ lake }: LakePreviewProps) {
+export default function LakeDashboardItem({
+      lake,
+      onMoveUp,
+      onMoveDown,
+      isFirst = false,
+      isLast = false
+  }: LakePreviewProps) {
     return (
         <div className="lake-preview">
             <div className="lake-preview__content">
@@ -27,6 +37,24 @@ export default function LakeDashboardItem({ lake }: LakePreviewProps) {
                     </div>
                 </div>
                 <div className="lake-preview__actions">
+                    <div className="lake-preview__order-actions">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onMoveUp?.(lake)}
+                            disabled={isFirst}
+                        >
+                            <ChevronUp className="w-4 h-4" />
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => onMoveDown?.(lake)}
+                            disabled={isLast}
+                        >
+                            <ChevronDown className="w-4 h-4" />
+                        </Button>
+                    </div>
                     <Button
                         variant="ghost"
                         size="sm"

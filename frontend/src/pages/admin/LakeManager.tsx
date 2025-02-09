@@ -36,7 +36,7 @@ export default function LakeManager() {
     }, [lakeId]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <LoadingSpinner/>;
     }
 
     if (error) {
