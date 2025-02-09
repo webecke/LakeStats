@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import { dataService, LakeSystemStatus } from '../../services/data';
+import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -47,9 +48,11 @@ export default function LakeManager() {
     }
 
     return (
-        <div className="lake-manager">
-            <h1>Managing {lake.lakeName}</h1>
-            <pre>{JSON.stringify(lake, null, 2)}</pre>
-        </div>
+        <Suspense fallback={<LoadingSpinner />}>
+            <div className="lake-manager">
+                <h1>Managing {lake.lakeName}</h1>
+                <pre>{JSON.stringify(lake, null, 2)}</pre>
+            </div>
+        </Suspense>
     );
 }

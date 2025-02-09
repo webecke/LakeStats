@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
-import {Outlet} from 'react-router-dom';
+import {Outlet, useNavigate} from 'react-router-dom';
 import {authService, User} from '../../../services/auth';
 import {Button} from '../../ui/Button';
 import {LoginForm} from "../login/LoginForm.tsx";
 import LoadingSpinner from "../../shared/LoadingSpinner.tsx";
 
 export default function AdminLayout() {
+    const navigate = useNavigate();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -34,6 +35,11 @@ export default function AdminLayout() {
         <div>
             <div className="admin-header">
                 <h1>LakeStats Admin Panel</h1>
+                <Button
+                    variant="outline"
+                    onClick={() => navigate("/admin")} >
+                    Dashboard
+                </Button>
                 <Button
                     variant="outline"
                     onClick={() => authService.signOut()}
