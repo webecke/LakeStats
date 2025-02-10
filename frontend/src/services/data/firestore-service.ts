@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import { DataService, LakeStatus, LakeSystemStatus } from "./types.ts";
+import {DataService, Lake, LakeStatus, LakeSystemStatus} from "./types.ts";
 import { getFirestoreDb } from "../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
@@ -72,7 +72,7 @@ export class FirestoreService implements DataService {
     }
 
     // Get a single lake
-    async getLake(lakeId: string): Promise<LakeSystemStatus | null> {
+    async getLakeSystem(lakeId: string): Promise<LakeSystemStatus | null> {
         const docRef = doc(this.db, this.systemCollection, lakeId);
         const docSnap = await getDoc(docRef);
 
@@ -99,5 +99,16 @@ export class FirestoreService implements DataService {
         });
 
         await batch.commit();
+    }
+
+    async getLakeInfo(lakeId: string): Promise<Lake | null> {
+        const docRef = doc(this.db, lakeId, 'lake-data');
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            return null;
+        }
+
+        return docSnap.data() as Lake;
     }
 }

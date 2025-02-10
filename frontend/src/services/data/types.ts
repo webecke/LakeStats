@@ -1,6 +1,5 @@
 export interface Lake {
     id: string;
-    name: string;
     description: string;
     fillDate: Date;
     googleMapsLinkToDam: string;
@@ -81,7 +80,8 @@ export interface DataService {
     updateLakeStatus(lakeId: string, newStatus: LakeStatus): Promise<void>
     getLakesByStatus(status: LakeStatus): Promise<LakeSystemStatus[]>
     getAllLakes(): Promise<LakeSystemStatus[]>
-    getLake(lakeId: string): Promise<LakeSystemStatus | null>
+    getLakeSystem(lakeId: string): Promise<LakeSystemStatus | null>
     updateLakeOrder(lakeId: string, newOrder: number): Promise<void>
     reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void>
+    getLakeInfo(lakeId: string): Promise<Lake | null>
 }

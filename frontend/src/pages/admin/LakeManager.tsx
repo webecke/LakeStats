@@ -1,58 +1,137 @@
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {Suspense, useEffect, useState} from 'react';
-import { dataService, LakeSystemStatus } from '../../services/data';
+import { Button } from '../../components/ui/Button';
+import './LakeManager.css';
+import {dataService, Lake, LakeSystemStatus} from "../../services/data";
 import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
+import LakeDetails from "../../components/admin/lakeManager/LakeDetails.tsx";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
-    const [lake, setLake] = useState<LakeSystemStatus | null>(null);
+    const [systemConfig, setSystemConfig] = useState<LakeSystemStatus | null>(null);
+    const [lakeData, setLakeData] = useState<Lake | null>(null);
+    const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function loadLake() {
-            if (!lakeId) {
-                setError('No lake ID provided');
-                setIsLoading(false);
-                return;
-            }
+        async function loadData() {
+            if (!lakeId) return;
 
             try {
-                const fetchedLake = await dataService.getLake(lakeId);
-                if (fetchedLake) {
-                    setLake(fetchedLake);
-                } else {
-                    setError(`No lake found with ID: ${lakeId}`);
+                setIsLoading(true);
+                const [systemData, lakeDetails] = await Promise.all([
+                    dataService.getLakeSystem(lakeId),
+                    dataService.getLakeInfo(lakeId)
+                ]);
+
+                if (!systemData) {
+                    throw new Error(`No system config found for lake ${lakeId}`);
                 }
-            } catch (err) {
-                setError('Error loading lake data');
-                console.error('Error loading lake:', err);
+
+                if (!lakeDetails) {
+                    const newLake: Lake = {
+                        id: lakeId,
+                        description: '',
+                        fillDate: new Date(),
+                        googleMapsLinkToDam: '',
+                        fullPoolElevation: 0,
+                        minPowerPoolElevation: 0,
+                        deadPoolElevation: 0,
+                        dataSources: new Map(),
+                        regions: {}
+                    };
+                    setLakeData(newLake);
+                } else {
+                    setLakeData(lakeDetails as Lake);
+                }
+
+                setSystemConfig(systemData);
+            } catch (error) {
+                console.error('Error loading lake data:', error);
+                // TODO: Add error state handling
             } finally {
                 setIsLoading(false);
             }
         }
 
-        loadLake();
+        loadData();
     }, [lakeId]);
 
     if (isLoading) {
         return <LoadingSpinner/>;
     }
 
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    const tabs = [
+        { id: 'overview', label: 'Overview' },
+        { id: 'dataSources', label: 'Data Sources' },
+        { id: 'regions', label: 'Regions' }
+    ];
 
-    if (!lake) {
-        return <div>Lake not found</div>;
-    }
+    const renderContent = () => {
+        switch (activeTab) {
+            case 'overview':
+                return (
+                    <div className="content-panel">
+                        <div className="content-panel__header">
+                            <h2 className="content-panel__title">Lake Overview</h2>
+                        </div>
+                        <div className="content-panel__content">
+                            <LakeDetails lake={lakeData} setLake={setLakeData} />
+                            {/*<SystemConfig config={systemConfig} onChange={setSystemConfig} />*/}
+                        </div>
+                    </div>
+                );
+            case 'dataSources':
+                return (
+                    <div className="content-panel">
+                        <div className="content-panel__header">
+                            <h2 className="content-panel__title">Data Sources</h2>
+                        </div>
+                        <div className="content-panel__content">
+                            <p>DATA SOURCES</p>
+                        </div>
+                    </div>
+                );
+            case 'regions':
+                return (
+                    <div className="content-panel">
+                        <div className="content-panel__header">
+                            <h2 className="content-panel__title">Regions</h2>
+                        </div>
+                        <div className="content-panel__content">
+                            <p>REGION MANAGER</p>
+                        </div>
+                    </div>
+                );
+        }
+    };
 
     return (
-        <Suspense fallback={<LoadingSpinner />}>
-            <div className="lake-manager">
-                <h1>Managing {lake.lakeName}</h1>
-                <pre>{JSON.stringify(lake, null, 2)}</pre>
+        <div className="lake-manager">
+            <div className="lake-manager__header">
+                <h1 className="lake-manager__title">
+                    {lakeId}
+                </h1>
+                <Button variant="outline">Save Changes</Button>
             </div>
-        </Suspense>
+
+            <div className="tabs">
+                <div className="tabs__list">
+                    {tabs.map(tab => (
+                        <button
+                            key={tab.id}
+                            className={`tabs__trigger ${
+                                activeTab === tab.id ? 'tabs__trigger--active' : ''
+                            }`}
+                            onClick={() => setActiveTab(tab.id)}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+
+                {renderContent()}
+            </div>
+        </div>
     );
 }

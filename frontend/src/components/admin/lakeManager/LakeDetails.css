@@ -1,0 +1,93 @@
+.lake-form {
+    width: 100%;
+}
+
+.lake-form__grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.lake-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lake-form__label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.lake-form__input {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--background-base);
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.lake-form__input:focus {
+    outline: none;
+    border-color: var(--action-primary);
+}
+
+.lake-form__input:disabled {
+    background-color: var(--background-higher);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.lake-form__input--error {
+    border-color: var(--status-error);
+}
+
+.lake-form__error {
+    color: var(--status-error);
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.lake-form__elevation-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.lake-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+}
+
+.lake-form__button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.lake-form__button--primary {
+    background-color: var(--action-primary);
+    color: var(--text-primary);
+}
+
+.lake-form__button--primary:hover {
+    background-color: var(--action-secondary);
+}
+
+.lake-form__button--secondary {
+    background-color: var(--background-higher);
+    color: var(--text-secondary);
+}
+
+.lake-form__button--secondary:hover {
+    background-color: var(--background-elevated);
+    color: var(--text-primary);
+}
