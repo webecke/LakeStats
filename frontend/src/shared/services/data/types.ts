@@ -19,6 +19,7 @@ export interface LakeSystemSettings {
     status: LakeStatus;
     features: LakeSystemFeatures[];
     sortOrder: number;
+    accentColor: string;
 }
 
 export enum DataType {

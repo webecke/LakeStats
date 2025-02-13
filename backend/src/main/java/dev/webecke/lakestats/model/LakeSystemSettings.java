@@ -7,6 +7,7 @@ public record LakeSystemSettings(
         String lakeName,
         String brandedName,
         Status status,
+        String accentColor,
         List<LakeSystemFeatures> features
 ) {
     public enum Status {

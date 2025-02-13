@@ -20,7 +20,8 @@ export default function LakeManagerPreview() {
         await dataService.addNewLake({
             lakeName: formData.lakeName,
             lakeId: formData.lakeId,
-            brandedName: formData.brandedName
+            brandedName: formData.brandedName,
+            accentColor: "#ffffff"
         })
         navigate('/admin/' + formData.lakeId);
         setIsOpen(false);
