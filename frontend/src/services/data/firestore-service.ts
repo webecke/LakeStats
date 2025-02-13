@@ -126,18 +126,9 @@ export class FirestoreService implements DataService {
         }
 
         const data = docSnap.data();
-        const timestamp = data.fillDate?.toDate() || new Date();
-
-        // Convert to UTC date
-        const utcDate = new Date(Date.UTC(
-            timestamp.getFullYear(),
-            timestamp.getMonth(),
-            timestamp.getDate()
-        ));
 
         return {
             ...data,
-            fillDate: utcDate,
             dataSources: this.convertObjectToMap(data.dataSources || {})
         } as Lake;
     }
@@ -185,18 +176,10 @@ export class FirestoreService implements DataService {
             const infoRef = doc(this.db, lakeId, 'lake-data');
             const infoDoc = await getDoc(infoRef);
 
-            // Normalize the date to UTC midnight
-            const fillDate = updates.info.fillDate;
-            const normalizedDate = new Date(Date.UTC(
-                fillDate.getUTCFullYear(),
-                fillDate.getUTCMonth(),
-                fillDate.getUTCDate()
-            ));
-
             const infoData = {
                 ...updates.info,
                 id: lakeId,
-                fillDate: normalizedDate,
+                // fillDate is already a string, no conversion needed
                 dataSources: this.convertMapToObject(updates.info.dataSources)
             };
 

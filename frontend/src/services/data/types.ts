@@ -1,7 +1,7 @@
 export interface Lake {
     id: string;
     description: string;
-    fillDate: Date;
+    fillDate: string;
     googleMapsLinkToDam: string;
     fullPoolElevation: number;
     minPowerPoolElevation: number;

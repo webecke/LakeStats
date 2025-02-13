@@ -41,7 +41,7 @@ export default function LakeManager() {
                     const newLake: Lake = {
                         id: lakeId,
                         description: '',
-                        fillDate: new Date(),
+                        fillDate: '',
                         googleMapsLinkToDam: '',
                         fullPoolElevation: 0,
                         minPowerPoolElevation: 0,

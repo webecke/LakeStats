@@ -21,10 +21,10 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
             }
 
             if (type === 'date') {
-                const [year, month, day] = value.split('-').map(Number);
+                // The value is already in YYYY-MM-DD format from the input
                 return {
                     ...prev,
-                    [name]: new Date(Date.UTC(year, month - 1, day))
+                    [name]: value
                 };
             }
 
@@ -33,13 +33,6 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                 [name]: value
             };
         });
-    };
-
-    const formatDateForInput = (date: Date) => {
-        const year = date.getUTCFullYear();
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(date.getUTCDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
     };
 
     return (
@@ -65,7 +58,7 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                         type="date"
                         id="fillDate"
                         name="fillDate"
-                        value={formatDateForInput(lake.fillDate)}
+                        value={lake.fillDate}
                         onChange={handleChange}
                     />
                 </div>
