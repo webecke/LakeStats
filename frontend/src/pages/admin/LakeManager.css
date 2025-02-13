@@ -58,11 +58,11 @@
 .content-panel {
     background-color: var(--background-elevated);
     border-radius: 8px;
-    padding: 1.5rem;
     margin-bottom: 1.5rem;
 }
 
 .content-panel__header {
+    padding: 1.5rem 1.5rem 0 1.5rem;
     margin-bottom: 1.5rem;
 }
 
@@ -75,4 +75,32 @@
 
 .content-panel__content {
     color: var(--text-secondary);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .content-panel__content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .content-panel__content > * {
+        background-color: var(--background-higher);
+        border-radius: 8px;
+        padding: 1.5rem;
+        height: fit-content;
+        overflow: visible; /* Ensure content isn't cut off */
+    }
+
+    /* Ensure section headings align */
+    .content-panel__content > * > h3 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
 }

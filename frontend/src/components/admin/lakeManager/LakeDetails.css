@@ -1,5 +1,6 @@
 .lake-form {
     width: 100%;
+    min-width: 0;
 }
 
 .lake-form__grid {
@@ -27,6 +28,7 @@
     color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.2s;
+    width: 100%;
 }
 
 .lake-form__input:focus {
@@ -52,42 +54,13 @@
 
 .lake-form__elevation-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+    width: 100%;
 }
 
-.lake-form__actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 2rem;
-}
-
-.lake-form__button {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-}
-
-.lake-form__button--primary {
-    background-color: var(--action-primary);
-    color: var(--text-primary);
-}
-
-.lake-form__button--primary:hover {
-    background-color: var(--action-secondary);
-}
-
-.lake-form__button--secondary {
-    background-color: var(--background-higher);
-    color: var(--text-secondary);
-}
-
-.lake-form__button--secondary:hover {
-    background-color: var(--background-elevated);
-    color: var(--text-primary);
+/* Makes sure numbered inputs don't overflow */
+.lake-form__input[type="number"] {
+    min-width: 0;
+    width: 100%;
 }

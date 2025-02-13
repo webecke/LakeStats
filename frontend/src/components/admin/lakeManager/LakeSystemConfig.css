@@ -1,0 +1,90 @@
+.lake-system-config {
+    width: 100%;
+}
+
+.lake-system-config__grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.lake-system-config__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lake-system-config__label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.lake-system-config__input {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--background-base);
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.lake-system-config__input:focus {
+    outline: none;
+    border-color: var(--action-primary);
+}
+
+.lake-system-config__select {
+    padding: 0.5rem 0.75rem;
+    background-color: var(--background-base);
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.lake-system-config__select:focus {
+    outline: none;
+    border-color: var(--action-primary);
+}
+
+.lake-system-config__checkbox-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.lake-system-config__checkbox {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 4px;
+    background-color: var(--background-base);
+    cursor: pointer;
+}
+
+.lake-system-config__checkbox:checked {
+    background-color: var(--action-primary);
+    border-color: var(--action-primary);
+}
+
+.lake-system-config__feature-label {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    user-select: none;
+    cursor: pointer;
+}
+
+/* Grid layout for name fields */
+.lake-system-config__names-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+/* Make number input smaller */
+.lake-system-config__input--number {
+    width: 8rem;
+}

@@ -5,6 +5,7 @@ import './LakeManager.css';
 import {dataService, Lake, LakeSystemStatus} from "../../services/data";
 import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
 import LakeDetails from "../../components/admin/lakeManager/LakeDetails.tsx";
+import LakeSystemConfig from "../../components/admin/lakeManager/LakeSystemConfig.tsx";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -76,8 +77,8 @@ export default function LakeManager() {
                             <h2 className="content-panel__title">Lake Overview</h2>
                         </div>
                         <div className="content-panel__content">
+                            <LakeSystemConfig config={systemConfig} onChange={setSystemConfig} />
                             <LakeDetails lake={lakeData} setLake={setLakeData} />
-                            {/*<SystemConfig config={systemConfig} onChange={setSystemConfig} />*/}
                         </div>
                     </div>
                 );
