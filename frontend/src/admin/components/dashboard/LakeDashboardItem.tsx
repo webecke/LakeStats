@@ -1,12 +1,12 @@
-import { LakeSystemStatus } from "../../../shared/services/data";
+import { LakeSystemSettings } from "../../../shared/services/data";
 import { Button } from "../../../shared/components/Button";
 import { Settings, ChevronUp, ChevronDown } from "lucide-react";
 import "./LakeDashboardItem.css";
 
 interface LakePreviewProps {
-    lake: LakeSystemStatus;
-    onMoveUp?: (lake: LakeSystemStatus) => void;
-    onMoveDown?: (lake: LakeSystemStatus) => void;
+    lake: LakeSystemSettings;
+    onMoveUp?: (lake: LakeSystemSettings) => void;
+    onMoveDown?: (lake: LakeSystemSettings) => void;
     isFirst?: boolean;
     isLast?: boolean;
 }

@@ -12,13 +12,13 @@ export interface Lake {
 
 export type LakeStatus = 'ENABLED' | 'DISABLED' | 'TESTING';
 
-export interface LakeSystemStatus {
+export interface LakeSystemSettings {
     lakeId: string;
     lakeName: string;
     brandedName: string;
     status: LakeStatus;
     features: LakeSystemFeatures[];
-    sortOrder: number;  // New field
+    sortOrder: number;
 }
 
 export enum DataType {
@@ -76,16 +76,16 @@ export interface SystemError {
 }
 
 export interface DataService {
-    addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features' | 'sortOrder'>): Promise<void>
+    addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void>
     updateLakeStatus(lakeId: string, newStatus: LakeStatus): Promise<void>
-    getLakesByStatus(status: LakeStatus): Promise<LakeSystemStatus[]>
-    getAllLakes(): Promise<LakeSystemStatus[]>
-    getLakeSystem(lakeId: string): Promise<LakeSystemStatus | null>
+    getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]>
+    getAllLakes(): Promise<LakeSystemSettings[]>
+    getLakeSystemSetting(lakeId: string): Promise<LakeSystemSettings | null>
     updateLakeOrder(lakeId: string, newOrder: number): Promise<void>
     reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void>
     getLakeInfo(lakeId: string): Promise<Lake | null>
     updateLake(lakeId: string, updates: {
-        system?: Omit<LakeSystemStatus, 'lakeId'>,
+        system?: Omit<LakeSystemSettings, 'lakeId'>,
         info?: Omit<Lake, 'id'>
     }): Promise<void>
 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../../shared/components/Button';
 import './LakeManager.css';
-import { dataService, Lake, LakeSystemStatus } from "../../shared/services/data";
+import { dataService, Lake, LakeSystemSettings } from "../../shared/services/data";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
@@ -11,7 +11,7 @@ import { useNotifications } from '../../shared/components/Notification/Notificat
 
 export default function LakeManager() {
     const { lakeId } = useParams();
-    const [systemConfig, setSystemConfig] = useState<LakeSystemStatus | null>(null);
+    const [systemConfig, setSystemConfig] = useState<LakeSystemSettings | null>(null);
     const [lakeData, setLakeData] = useState<Lake | null>(null);
     const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +24,7 @@ export default function LakeManager() {
             try {
                 setIsLoading(true);
                 const [systemData, lakeDetails] = await Promise.all([
-                    dataService.getLakeSystem(lakeId),
+                    dataService.getLakeSystemSetting(lakeId),
                     dataService.getLakeInfo(lakeId)
                 ]);
 

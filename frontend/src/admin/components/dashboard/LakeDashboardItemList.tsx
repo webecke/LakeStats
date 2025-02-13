@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import {dataService, LakeSystemStatus} from "../../../shared/services/data";
+import {dataService, LakeSystemSettings} from "../../../shared/services/data";
 import LakeDashboardItem from "./LakeDashboardItem.tsx";
 import "./LakeDashboardItemList.css";
 
 export default function LakeDashboardItemList() {
-    const [lakes, setLakes] = useState<LakeSystemStatus[]>([]);
+    const [lakes, setLakes] = useState<LakeSystemSettings[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export default function LakeDashboardItemList() {
         }
     };
 
-    const handleMoveUp = async (lake: LakeSystemStatus) => {
+    const handleMoveUp = async (lake: LakeSystemSettings) => {
         const sameCategoryLakes = lakes
             .filter(l => l.status === lake.status)
             .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -41,7 +41,7 @@ export default function LakeDashboardItemList() {
         }
     };
 
-    const handleMoveDown = async (lake: LakeSystemStatus) => {
+    const handleMoveDown = async (lake: LakeSystemSettings) => {
         const sameCategoryLakes = lakes
             .filter(l => l.status === lake.status)
             .sort((a, b) => a.sortOrder - b.sortOrder);
@@ -74,7 +74,7 @@ export default function LakeDashboardItemList() {
         .filter(lake => lake.status === 'DISABLED')
         .sort((a, b) => a.sortOrder - b.sortOrder);
 
-    const renderLakeItems = (lakesList: LakeSystemStatus[]) => {
+    const renderLakeItems = (lakesList: LakeSystemSettings[]) => {
         return lakesList.map((lake, index) => (
             <LakeDashboardItem
                 key={lake.lakeId}

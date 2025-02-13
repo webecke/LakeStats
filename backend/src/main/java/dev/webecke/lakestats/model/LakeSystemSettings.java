@@ -2,7 +2,7 @@ package dev.webecke.lakestats.model;
 
 import java.util.List;
 
-public record LakeSystemStatus(
+public record LakeSystemSettings(
         String lakeId,
         String lakeName,
         String brandedName,

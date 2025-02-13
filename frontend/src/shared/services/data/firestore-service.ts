@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import {DataService, Lake, LakeStatus, LakeSystemStatus, DataType} from "./types.ts";
+import {DataService, Lake, LakeStatus, LakeSystemSettings, DataType} from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
@@ -23,7 +23,7 @@ export class FirestoreService implements DataService {
     }
 
     // Add a new lake (defaults to DISABLED)
-    async addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features' | 'sortOrder'>): Promise<void> {
+    async addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void> {
         // Get current max order for disabled lakes
         const q = query(
             collection(this.db, this.systemCollection),
@@ -65,7 +65,7 @@ export class FirestoreService implements DataService {
     }
 
     // Get all lakes with a specific status
-    async getLakesByStatus(status: LakeStatus): Promise<LakeSystemStatus[]> {
+    async getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]> {
         const q = query(
             collection(this.db, this.systemCollection),
             where('status', '==', status),
@@ -73,22 +73,22 @@ export class FirestoreService implements DataService {
         );
 
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemStatus);
+        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
     }
 
     // Get all lakes
-    async getAllLakes(): Promise<LakeSystemStatus[]> {
+    async getAllLakes(): Promise<LakeSystemSettings[]> {
         const querySnapshot = await getDocs(
             query(
                 collection(this.db, this.systemCollection),
                 orderBy('sortOrder', 'asc')
             )
         );
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemStatus);
+        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
     }
 
     // Get a single lake
-    async getLakeSystem(lakeId: string): Promise<LakeSystemStatus | null> {
+    async getLakeSystemSetting(lakeId: string): Promise<LakeSystemSettings | null> {
         const docRef = doc(this.db, this.systemCollection, lakeId);
         const docSnap = await getDoc(docRef);
 
@@ -96,7 +96,7 @@ export class FirestoreService implements DataService {
             return null;
         }
 
-        return docSnap.data() as LakeSystemStatus;
+        return docSnap.data() as LakeSystemSettings;
     }
 
     // Update lake order
@@ -142,7 +142,7 @@ export class FirestoreService implements DataService {
         });
     }
 
-    async updateLakeSystem(lakeId: string, systemConfig: Omit<LakeSystemStatus, 'lakeId'>): Promise<void> {
+    async updateLakeSystem(lakeId: string, systemConfig: Omit<LakeSystemSettings, 'lakeId'>): Promise<void> {
         const docRef = doc(this.db, this.systemCollection, lakeId);
         await updateDoc(docRef, {
             ...systemConfig,
@@ -151,7 +151,7 @@ export class FirestoreService implements DataService {
     }
 
     async updateLake(lakeId: string, updates: {
-        system?: Omit<LakeSystemStatus, 'lakeId'>,
+        system?: Omit<LakeSystemSettings, 'lakeId'>,
         info?: Omit<Lake, 'id'>
     }): Promise<void> {
         const batch = writeBatch(this.db);

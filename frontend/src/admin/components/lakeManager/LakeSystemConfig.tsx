@@ -1,13 +1,13 @@
 import './LakeSystemConfig.css';
-import {LakeSystemFeatures, LakeSystemStatus} from "../../../shared/services/data";
+import {LakeSystemFeatures, LakeSystemSettings} from "../../../shared/services/data";
 
 interface LakeSystemConfigProps {
-    config: LakeSystemStatus;
-    onChange: (newConfig: LakeSystemStatus) => void;
+    config: LakeSystemSettings;
+    onChange: (newConfig: LakeSystemSettings) => void;
 }
 
 export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigProps) {
-    const handleChange = (field: keyof LakeSystemStatus, value: any) => {
+    const handleChange = (field: keyof LakeSystemSettings, value: any) => {
         onChange({
             ...config,
             [field]: value
