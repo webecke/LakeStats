@@ -1,7 +1,14 @@
-.notification {
+.notification-container {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 1000;
+}
+
+.notification {
     padding: 1rem 1.5rem;
     border-radius: 8px;
     background-color: var(--background-higher);
@@ -10,8 +17,9 @@
     align-items: center;
     gap: 0.75rem;
     animation: slideIn 0.3s ease-out;
-    z-index: 1000;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+    max-width: 500px;
 }
 
 .notification--success {
@@ -22,6 +30,14 @@
     border-left: 4px solid var(--status-error);
 }
 
+.notification--warning {
+    border-left: 4px solid var(--status-warning);
+}
+
+.notification--info {
+    border-left: 4px solid var(--status-info);
+}
+
 @keyframes slideIn {
     from {
         transform: translateX(100%);
@@ -30,5 +46,16 @@
     to {
         transform: translateX(0);
         opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
     }
 }
