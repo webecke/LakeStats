@@ -88,3 +88,16 @@
 .lake-system-config__input--number {
     width: 8rem;
 }
+
+.lake-system-config__color-input-group {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.lake-system-config__input--color {
+    width: 50px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+}

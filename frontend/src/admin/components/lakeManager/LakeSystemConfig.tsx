@@ -60,6 +60,29 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                     </div>
                 </div>
 
+                {/* Add the new color input field */}
+                <div className="lake-system-config__field">
+                    <label className="lake-system-config__label" htmlFor="accentColor">
+                        Accent Color
+                    </label>
+                    <div className="lake-system-config__color-input-group">
+                        <input
+                            id="accentColor"
+                            type="color"
+                            className="lake-system-config__input lake-system-config__input--color"
+                            value={config.accentColor || '#000000'}
+                            onChange={(e) => handleChange('accentColor', e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            className="lake-system-config__input"
+                            value={config.accentColor || '#000000'}
+                            onChange={(e) => handleChange('accentColor', e.target.value)}
+                            placeholder="#000000"
+                        />
+                    </div>
+                </div>
+
                 <div className="lake-system-config__field">
                     <label className="lake-system-config__label">System Status</label>
                     <select
