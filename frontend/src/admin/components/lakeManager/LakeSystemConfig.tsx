@@ -1,5 +1,5 @@
 import './LakeSystemConfig.css';
-import {LakeSystemFeatures, LakeSystemStatus} from "../../../services/data";
+import {LakeSystemFeatures, LakeSystemStatus} from "../../../shared/services/data";
 
 interface LakeSystemConfigProps {
     config: LakeSystemStatus;

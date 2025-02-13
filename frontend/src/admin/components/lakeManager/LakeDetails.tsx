@@ -1,6 +1,6 @@
 import React from 'react';
 import './LakeDetails.css';
-import { Lake } from '../../../services/data';
+import { Lake } from '../../../shared/services/data';
 
 interface LakeDetailsProps {
     lake: Lake;

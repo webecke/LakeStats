@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
 import {DataService, Lake, LakeStatus, LakeSystemStatus, DataType} from "./types.ts";
-import { getFirestoreDb } from "../../firebase/config.ts";
+import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
     private db = getFirestoreDb();

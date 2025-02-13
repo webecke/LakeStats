@@ -5,8 +5,8 @@ import {
     type User as FirebaseUser
 } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { app } from '../../firebase/config.ts';
-import { AuthService, User } from './types';
+import { app } from '../../../firebase/config.ts';
+import { AuthService, User } from './types.ts';
 
 export class FirebaseAuthService implements AuthService {
     private auth = getAuth(app);

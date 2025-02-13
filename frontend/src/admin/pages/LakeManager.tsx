@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button } from '../../components/ui/Button';
+import { Button } from '../../shared/components/Button';
 import './LakeManager.css';
-import {dataService, Lake, LakeSystemStatus} from "../../services/data";
-import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
-import LakeDetails from "../../components/admin/lakeManager/LakeDetails.tsx";
-import LakeSystemConfig from "../../components/admin/lakeManager/LakeSystemConfig.tsx";
-import Notification from "../../components/shared/Notification.tsx";
-import DataSources from "../../components/admin/lakeManager/DataSources.tsx";
+import {dataService, Lake, LakeSystemStatus} from "../../shared/services/data";
+import LoadingSpinner from "../../shared/components/LoadingSpinner.tsx";
+import LakeDetails from "../components/lakeManager/LakeDetails.tsx";
+import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig.tsx";
+import Notification from "../../shared/components/Notification.tsx";
+import DataSources from "../components/lakeManager/DataSources.tsx";
 
 interface NotificationState {
     message: string;

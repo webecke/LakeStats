@@ -1,5 +1,5 @@
-import { LakeSystemStatus } from "../../../services/data";
-import { Button } from "../../ui/Button";
+import { LakeSystemStatus } from "../../../shared/services/data";
+import { Button } from "../../../shared/components/Button";
 import { Settings, ChevronUp, ChevronDown } from "lucide-react";
 import "./LakeDashboardItem.css";
 

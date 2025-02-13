@@ -1,9 +1,9 @@
 import {useEffect, useState} from 'react';
 import {Outlet, useNavigate} from 'react-router-dom';
-import {authService, User} from '../../../services/auth';
-import {Button} from '../../ui/Button';
+import {authService, User} from '../../../shared/services/auth';
+import {Button} from '../../../shared/components/Button';
 import {LoginForm} from "../login/LoginForm.tsx";
-import LoadingSpinner from "../../shared/LoadingSpinner.tsx";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner.tsx";
 
 export default function AdminLayout() {
     const navigate = useNavigate();

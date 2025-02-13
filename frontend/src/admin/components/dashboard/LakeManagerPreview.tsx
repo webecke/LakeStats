@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../../ui/Button";
+import { Button } from "../../../shared/components/Button";
 import "./LakeManagerPreview.css";
 import { Plus } from "lucide-react";
-import {dataService} from "../../../services/data";
+import {dataService} from "../../../shared/services/data";
 import LakeDashboardItemList from "./LakeDashboardItemList.tsx";
 import {useNavigate} from "react-router-dom";
 

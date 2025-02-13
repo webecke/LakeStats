@@ -1,5 +1,5 @@
 import './DataSources.css';
-import { DataType } from '../../../services/data';
+import { DataType } from '../../../shared/services/data';
 
 interface DataSourcesProps {
     sources: Map<DataType, string>;

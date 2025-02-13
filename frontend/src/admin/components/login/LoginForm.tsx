@@ -1,6 +1,6 @@
 import { useState, FormEvent } from 'react';
-import { Button } from '../../ui/Button';
-import { authService } from '../../../services/auth';
+import { Button } from '../../../shared/components/Button';
+import { authService } from '../../../shared/services/auth';
 import './LoginForm.css';
 
 export function LoginForm() {

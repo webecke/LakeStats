@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {dataService, LakeSystemStatus} from "../../../services/data";
+import {dataService, LakeSystemStatus} from "../../../shared/services/data";
 import LakeDashboardItem from "./LakeDashboardItem.tsx";
 import "./LakeDashboardItemList.css";
 
