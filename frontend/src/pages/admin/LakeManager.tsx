@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../../components/ui/Button';
 import './LakeManager.css';
@@ -76,9 +76,10 @@ export default function LakeManager() {
                         <div className="content-panel__header">
                             <h2 className="content-panel__title">Lake Overview</h2>
                         </div>
-                        <div className="content-panel__content">
-                            <LakeSystemConfig config={systemConfig} onChange={setSystemConfig} />
-                            <LakeDetails lake={lakeData} setLake={setLakeData} />
+                        <div className="content-panel__content content-panel__content--overview">
+                            <LakeSystemConfig config={systemConfig!} onChange={setSystemConfig} />
+                            <LakeDetails lake={lakeData!} setLake={setLakeData} />
+
                         </div>
                     </div>
                 );
