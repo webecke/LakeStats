@@ -6,7 +6,13 @@ import {dataService, Lake, LakeSystemStatus} from "../../services/data";
 import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
 import LakeDetails from "../../components/admin/lakeManager/LakeDetails.tsx";
 import LakeSystemConfig from "../../components/admin/lakeManager/LakeSystemConfig.tsx";
+import Notification from "../../components/shared/Notification.tsx";
 import DataSources from "../../components/admin/lakeManager/DataSources.tsx";
+
+interface NotificationState {
+    message: string;
+    type: 'success' | 'error';
+}
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -14,6 +20,7 @@ export default function LakeManager() {
     const [lakeData, setLakeData] = useState<Lake | null>(null);
     const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(true);
+    const [notification, setNotification] = useState<NotificationState | null>(null);
 
     useEffect(() => {
         async function loadData() {
@@ -50,7 +57,10 @@ export default function LakeManager() {
                 setSystemConfig(systemData);
             } catch (error) {
                 console.error('Error loading lake data:', error);
-                // TODO: Add error state handling
+                setNotification({
+                    message: 'Failed to load lake data',
+                    type: 'error'
+                });
             } finally {
                 setIsLoading(false);
             }
@@ -58,6 +68,27 @@ export default function LakeManager() {
 
         loadData();
     }, [lakeId]);
+
+    const handleSave = async () => {
+        if (!lakeId || !lakeData || !systemConfig) return;
+
+        try {
+            await dataService.updateLake(lakeId, {
+                system: systemConfig,
+                info: lakeData
+            });
+            setNotification({
+                message: 'Changes saved successfully',
+                type: 'success'
+            });
+        } catch (error) {
+            console.error('Error saving lake data:', error);
+            setNotification({
+                message: 'Failed to save changes',
+                type: 'error'
+            });
+        }
+    };
 
     if (isLoading) {
         return <LoadingSpinner/>;
@@ -80,7 +111,6 @@ export default function LakeManager() {
                         <div className="content-panel__content content-panel__content--overview">
                             <LakeSystemConfig config={systemConfig!} onChange={setSystemConfig} />
                             <LakeDetails lake={lakeData!} setLake={setLakeData} />
-
                         </div>
                     </div>
                 );
@@ -121,7 +151,9 @@ export default function LakeManager() {
                 <h1 className="lake-manager__title">
                     {lakeId}
                 </h1>
-                <Button variant="outline">Save Changes</Button>
+                <Button variant="outline" onClick={handleSave}>
+                    Save Changes
+                </Button>
             </div>
 
             <div className="tabs">
@@ -141,6 +173,14 @@ export default function LakeManager() {
 
                 {renderContent()}
             </div>
+
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
+            )}
         </div>
     );
 }

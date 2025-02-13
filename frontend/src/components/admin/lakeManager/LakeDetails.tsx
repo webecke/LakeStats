@@ -2,28 +2,51 @@ import React from 'react';
 import './LakeDetails.css';
 import { Lake } from '../../../services/data';
 
-interface LakeFormProps {
+interface LakeDetailsProps {
     lake: Lake;
     setLake: (value: (((prevState: Lake | null) => Lake | null) | Lake | null)) => void;
 }
 
-export default function LakeDetails({ lake, setLake }: LakeFormProps) {
-
+export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setLake(prev => {
             if (!prev) return prev;
+
+            if (type === 'number') {
+                return {
+                    ...prev,
+                    [name]: parseFloat(value)
+                };
+            }
+
+            if (type === 'date') {
+                const [year, month, day] = value.split('-').map(Number);
+                return {
+                    ...prev,
+                    [name]: new Date(Date.UTC(year, month - 1, day))
+                };
+            }
+
             return {
                 ...prev,
-                [name]: type === 'number' ? parseFloat(value) : value
+                [name]: value
             };
         });
     };
 
+    const formatDateForInput = (date: Date) => {
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     return (
-        <form className="lake-form">
+        <div className="lake-form">
             <div className="lake-form__grid">
                 <h3>Lake Details</h3>
+
                 <div className="lake-form__field">
                     <label className="lake-form__label" htmlFor="description">Description</label>
                     <input
@@ -42,7 +65,7 @@ export default function LakeDetails({ lake, setLake }: LakeFormProps) {
                         type="date"
                         id="fillDate"
                         name="fillDate"
-                        value={lake.fillDate.toISOString().split('T')[0]}
+                        value={formatDateForInput(lake.fillDate)}
                         onChange={handleChange}
                     />
                 </div>
@@ -104,6 +127,6 @@ export default function LakeDetails({ lake, setLake }: LakeFormProps) {
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     );
 }

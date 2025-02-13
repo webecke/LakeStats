@@ -1,10 +1,26 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import {DataService, Lake, LakeStatus, LakeSystemStatus} from "./types.ts";
+import {DataService, Lake, LakeStatus, LakeSystemStatus, DataType} from "./types.ts";
 import { getFirestoreDb } from "../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
     private db = getFirestoreDb();
     private systemCollection = 'system';
+
+    private convertMapToObject(map: Map<DataType, string>): Record<string, string> {
+        const obj: Record<string, string> = {};
+        map.forEach((value, key) => {
+            obj[key] = value;
+        });
+        return obj;
+    }
+
+    private convertObjectToMap(obj: Record<string, string>): Map<DataType, string> {
+        const map = new Map<DataType, string>();
+        Object.entries(obj).forEach(([key, value]) => {
+            map.set(key as DataType, value);
+        });
+        return map;
+    }
 
     // Add a new lake (defaults to DISABLED)
     async addNewLake(lake: Omit<LakeSystemStatus, 'status' | 'features' | 'sortOrder'>): Promise<void> {
@@ -109,6 +125,88 @@ export class FirestoreService implements DataService {
             return null;
         }
 
-        return docSnap.data() as Lake;
+        const data = docSnap.data();
+        const timestamp = data.fillDate?.toDate() || new Date();
+
+        // Convert to UTC date
+        const utcDate = new Date(Date.UTC(
+            timestamp.getFullYear(),
+            timestamp.getMonth(),
+            timestamp.getDate()
+        ));
+
+        return {
+            ...data,
+            fillDate: utcDate,
+            dataSources: this.convertObjectToMap(data.dataSources || {})
+        } as Lake;
+    }
+
+    async updateLakeInfo(lakeId: string, lakeInfo: Omit<Lake, 'id'>): Promise<void> {
+        const docRef = doc(this.db, lakeId, 'lake-data');
+        await updateDoc(docRef, {
+            ...lakeInfo,
+            id: lakeId,
+            dataSources: this.convertMapToObject(lakeInfo.dataSources)
+        });
+    }
+
+    async updateLakeSystem(lakeId: string, systemConfig: Omit<LakeSystemStatus, 'lakeId'>): Promise<void> {
+        const docRef = doc(this.db, this.systemCollection, lakeId);
+        await updateDoc(docRef, {
+            ...systemConfig,
+            lakeId: lakeId
+        });
+    }
+
+    async updateLake(lakeId: string, updates: {
+        system?: Omit<LakeSystemStatus, 'lakeId'>,
+        info?: Omit<Lake, 'id'>
+    }): Promise<void> {
+        const batch = writeBatch(this.db);
+
+        if (updates.system) {
+            const systemRef = doc(this.db, this.systemCollection, lakeId);
+            const systemDoc = await getDoc(systemRef);
+
+            const systemData = {
+                ...updates.system,
+                lakeId: lakeId
+            };
+
+            if (!systemDoc.exists()) {
+                batch.set(systemRef, systemData);
+            } else {
+                batch.update(systemRef, systemData);
+            }
+        }
+
+        if (updates.info) {
+            const infoRef = doc(this.db, lakeId, 'lake-data');
+            const infoDoc = await getDoc(infoRef);
+
+            // Normalize the date to UTC midnight
+            const fillDate = updates.info.fillDate;
+            const normalizedDate = new Date(Date.UTC(
+                fillDate.getUTCFullYear(),
+                fillDate.getUTCMonth(),
+                fillDate.getUTCDate()
+            ));
+
+            const infoData = {
+                ...updates.info,
+                id: lakeId,
+                fillDate: normalizedDate,
+                dataSources: this.convertMapToObject(updates.info.dataSources)
+            };
+
+            if (!infoDoc.exists()) {
+                batch.set(infoRef, infoData);
+            } else {
+                batch.update(infoRef, infoData);
+            }
+        }
+
+        await batch.commit();
     }
 }

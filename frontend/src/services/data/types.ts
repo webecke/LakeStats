@@ -84,4 +84,8 @@ export interface DataService {
     updateLakeOrder(lakeId: string, newOrder: number): Promise<void>
     reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void>
     getLakeInfo(lakeId: string): Promise<Lake | null>
+    updateLake(lakeId: string, updates: {
+        system?: Omit<LakeSystemStatus, 'lakeId'>,
+        info?: Omit<Lake, 'id'>
+    }): Promise<void>
 }
