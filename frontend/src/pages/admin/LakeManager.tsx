@@ -6,6 +6,7 @@ import {dataService, Lake, LakeSystemStatus} from "../../services/data";
 import LoadingSpinner from "../../components/shared/LoadingSpinner.tsx";
 import LakeDetails from "../../components/admin/lakeManager/LakeDetails.tsx";
 import LakeSystemConfig from "../../components/admin/lakeManager/LakeSystemConfig.tsx";
+import DataSources from "../../components/admin/lakeManager/DataSources.tsx";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -90,7 +91,13 @@ export default function LakeManager() {
                             <h2 className="content-panel__title">Data Sources</h2>
                         </div>
                         <div className="content-panel__content">
-                            <p>DATA SOURCES</p>
+                            <DataSources
+                                sources={lakeData!.dataSources}
+                                onChange={(newSources) => setLakeData(prev => prev ? {
+                                    ...prev,
+                                    dataSources: newSources
+                                } : prev)}
+                            />
                         </div>
                     </div>
                 );
