@@ -3,7 +3,8 @@ package dev.webecke.lakestats.service;
 import dev.webecke.lakestats.aggregator.CurrentConditionsAggregator;
 import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.collector.BureauOfReclamationDataCollector;
-import dev.webecke.lakestats.dao.PublishingDao;
+import dev.webecke.lakestats.dao.DataAccessException;
+import dev.webecke.lakestats.dao.DatabaseAccess;
 import dev.webecke.lakestats.model.*;
 import dev.webecke.lakestats.model.geography.AccessPoint;
 import dev.webecke.lakestats.model.geography.AccessType;
@@ -22,38 +23,57 @@ public class DataCollectionService {
     private final ErrorAggregator errorAggregator;
     private final BureauOfReclamationDataCollector bureauOfReclamationDataCollector;
     private final CurrentConditionsAggregator currentConditionsAggregator;
-    private final PublishingDao publishingDao;
+    private final DatabaseAccess databaseAccess;
 
     public DataCollectionService(ErrorAggregator errorAggregator,
                                  BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
-                                 PublishingDao publishingDao) {
+                                 DatabaseAccess databaseAccess) {
         this.errorAggregator = errorAggregator;
         this.bureauOfReclamationDataCollector = bureauOfReclamationDataCollector;
         this.currentConditionsAggregator = currentConditionsAggregator;
-        this.publishingDao = publishingDao;
+        this.databaseAccess = databaseAccess;
     }
 
-    public CurrentConditions dailyDataCollection() {
-        List<Lake> lakesToCollect = List.of(makeLakePowellRecord());
+    public void dailyDataCollection() {
+        List<String> lakeIds = databaseAccess.getAllLakeIds();
 
-        for (Lake lake : lakesToCollect) {
-            try {
-                CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
+        for (String lakeId : lakeIds) {
+            LakeSystemSettings settings = databaseAccess.getLakeSystemSettings(lakeId);
 
-                CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData);
-                publishingDao.publishCurrentConditions(currentConditions);
+            if (settings.status() == LakeSystemSettings.Status.DISABLED)  { continue; }
 
-                publishingDao.publishLakeInfo(lake);
-
-            } catch (Exception e) {
-                errorAggregator.add("Unknown error while collecting data for lakeId: " + lake.id(), e, lake.id());
-            }
+            collectDataForLake(lakeId);
         }
 
-        publishingDao.publishErrors(errorAggregator.flushErrors());
+        databaseAccess.publishErrors(errorAggregator.flushErrors());
+        return;
+    }
 
-        return null;
+    public void collectDataForLake(String lakeId) {
+        try {
+            Lake lake = databaseAccess.getLakeDetails(lakeId);
+            collectDataForLake(lake);
+        } catch (DataAccessException e) {
+            errorAggregator.add("Error while getting lake details for data for lake: " + lakeId, e, lakeId);
+            return;
+        }
+    }
+
+    public void collectDataForLake(Lake lake) {
+        try {
+            CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
+            CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData);
+
+            try {
+                databaseAccess.publishCurrentConditions(currentConditions);
+                databaseAccess.publishLakeInfo(lake);
+            } catch (DataAccessException e) {
+                errorAggregator.add("Error while publishing data for lake: " + lake.id(), e, lake.id());
+            }
+        } catch (Exception e) {
+            errorAggregator.add("Unknown error while collecting data for lake: " + lake.id(), e, lake.id());
+        }
     }
 
     public Lake makeLakePowellRecord() {
@@ -69,7 +89,6 @@ public class DataCollectionService {
 
         return new Lake(
                 "lake-powell",
-                "Lake Powell",
                 "Lake Powell is a reservoir on the Colorado River, straddling the border between Utah and Arizona.",
                 LocalDate.of(1963, 6, 22),
                 "https://maps.app.goo.gl/EHVfByomwz1Pnb5CA",

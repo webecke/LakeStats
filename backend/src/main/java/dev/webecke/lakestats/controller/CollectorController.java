@@ -20,8 +20,9 @@ public class CollectorController {
 
     //TODO: change this to a POST or UPDATE request, its just a GET request right now for ease of testing
     @GetMapping
-    public CurrentConditions runCollectors() {
+    public String runCollectors() {
         errorAggregator.flushErrors();
-        return service.dailyDataCollection();
+        service.dailyDataCollection();
+        return "Collectors have been run.";
     }
 }

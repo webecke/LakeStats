@@ -118,7 +118,7 @@ export class FirestoreService implements DataService {
     }
 
     async getLakeInfo(lakeId: string): Promise<Lake | null> {
-        const docRef = doc(this.db, lakeId, 'lake-data');
+        const docRef = doc(this.db, lakeId, 'lake-info');
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -134,7 +134,7 @@ export class FirestoreService implements DataService {
     }
 
     async updateLakeInfo(lakeId: string, lakeInfo: Omit<Lake, 'id'>): Promise<void> {
-        const docRef = doc(this.db, lakeId, 'lake-data');
+        const docRef = doc(this.db, lakeId, 'lake-info');
         await updateDoc(docRef, {
             ...lakeInfo,
             id: lakeId,
@@ -173,7 +173,7 @@ export class FirestoreService implements DataService {
         }
 
         if (updates.info) {
-            const infoRef = doc(this.db, lakeId, 'lake-data');
+            const infoRef = doc(this.db, lakeId, 'lake-info');
             const infoDoc = await getDoc(infoRef);
 
             const infoData = {
