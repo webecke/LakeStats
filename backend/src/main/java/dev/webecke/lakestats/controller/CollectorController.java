@@ -4,6 +4,7 @@ import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.model.CurrentConditions;
 import dev.webecke.lakestats.service.DataCollectionService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class CollectorController {
     @GetMapping
     public String runCollectors() {
         errorAggregator.flushErrors();
-        service.dailyDataCollection();
-        return "Collectors have been run.";
+        int numOfErrors = service.dailyDataCollection();
+        return "Collectors have been run with %d errors.".formatted(numOfErrors);
     }
 }

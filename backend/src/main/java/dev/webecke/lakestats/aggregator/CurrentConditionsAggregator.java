@@ -45,8 +45,7 @@ public class CurrentConditionsAggregator {
                 oneDayChange,
                 twoWeekChange,
                 oneYearChange,
-                todayElevation - tenYearAverage,
-                ""
+                todayElevation - tenYearAverage
         );
     }
 

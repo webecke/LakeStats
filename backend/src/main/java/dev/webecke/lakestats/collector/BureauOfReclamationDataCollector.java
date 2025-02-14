@@ -28,7 +28,7 @@ public class BureauOfReclamationDataCollector {
     public CollectorResponse<TimeSeriesData> collectData(Lake lake, DataType type) {
         String dataSourceUrl;
         try {
-            dataSourceUrl = lake.dataSources().getUrl(type);
+            dataSourceUrl = lake.getDataSourceUrl(type);
         } catch (IllegalArgumentException e) {
             errorAggregator.add("No URL found for data type: " + type + " while collecting data", e, lake.id());
             throw new RuntimeException(e);

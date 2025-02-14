@@ -11,6 +11,5 @@ public record CurrentConditions(
         float oneDayChange,
         float twoWeekChange,
         float oneYearChange,
-        float differenceFromTenYearAverage,
-        String debugInfo
+        float differenceFromTenYearAverage
 ) {}

@@ -7,22 +7,21 @@ import java.util.Map;
 
 public record Lake(
         String id,
+        String name,
         String description,
         @Nullable LocalDate fillDate,
         String googleMapsLinkToDam,
         int fullPoolElevation,
         int minPowerPoolElevation,
         int deadPoolElevation,
-        DataSources dataSources,
+        Map<DataType, String> dataSources,  // Changed this to use Map directly
         Map<String, LakeRegion> regions
 ) {
-    public record DataSources(Map<DataType, String> sources) {
-        public String getUrl(DataType type) {
-            String url = sources.get(type);
-            if (url == null) {
-                throw new IllegalArgumentException("No URL found for data type: " + type);
-            }
-            return url;
+    public String getDataSourceUrl(DataType type) {  // Moved the getUrl method here
+        String url = dataSources.get(type);
+        if (url == null) {
+            throw new IllegalArgumentException("No URL found for data type: " + type);
         }
+        return url;
     }
 }
