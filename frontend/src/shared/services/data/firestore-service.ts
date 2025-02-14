@@ -101,20 +101,45 @@ export class FirestoreService implements DataService {
 
     // Update lake order
     async updateLakeOrder(lakeId: string, newOrder: number): Promise<void> {
-        const docRef = doc(this.db, this.systemCollection, lakeId);
-        await updateDoc(docRef, { sortOrder: newOrder });
+        // Get the lake and its status
+        const lakeRef = doc(this.db, this.systemCollection, lakeId);
+        const lakeSnap = await getDoc(lakeRef);
+        if (!lakeSnap.exists()) return;
+
+        const status = lakeSnap.data().status;
+
+        // Get all lakes in this status group
+        const statusLakes = await getDocs(query(
+            collection(this.db, this.systemCollection),
+            where('status', '==', status),
+            orderBy('sortOrder')
+        ));
+
+        const batch = writeBatch(this.db);
+
+        // Update sort orders - increment everything at or after the new position
+        statusLakes.docs.forEach(doc => {
+            const currentOrder = doc.data().sortOrder;
+            if (doc.id === lakeId) {
+                batch.update(doc.ref, { sortOrder: newOrder });
+            }
+            else if (currentOrder >= newOrder) {
+                batch.update(doc.ref, { sortOrder: currentOrder + 1 });
+            }
+        });
+
+        await batch.commit();
     }
 
     // Reorder multiple lakes at once
     async reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void> {
-        const batch = writeBatch(this.db);
+        // Handle lakes one at a time using our existing updateLakeOrder function
+        // Process them in order of their desired sortOrder to avoid conflicts
+        const sortedLakes = [...lakes].sort((a, b) => a.sortOrder - b.sortOrder);
 
-        lakes.forEach(({ lakeId, sortOrder }) => {
-            const docRef = doc(this.db, this.systemCollection, lakeId);
-            batch.update(docRef, { sortOrder });
-        });
-
-        await batch.commit();
+        for (const lake of sortedLakes) {
+            await this.updateLakeOrder(lake.lakeId, lake.sortOrder);
+        }
     }
 
     async getLakeInfo(lakeId: string): Promise<Lake | null> {
