@@ -2,11 +2,11 @@ package dev.webecke.lakestats.controller;
 
 import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.model.CurrentConditions;
+import dev.webecke.lakestats.model.SystemError;
 import dev.webecke.lakestats.service.DataCollectionService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/collector")
@@ -25,5 +25,13 @@ public class CollectorController {
         errorAggregator.flushErrors();
         int numOfErrors = service.dailyDataCollection();
         return "Collectors have been run with %d errors.".formatted(numOfErrors);
+    }
+
+    @GetMapping("/{lakeId}")
+    public String runCollectors(@PathVariable String lakeId) {
+        errorAggregator.flushErrors();
+        service.collectDataForLake(lakeId);
+        List<SystemError> errors = errorAggregator.flushErrors();
+        return "Collectors have been run for lake %s with %d errors.\n\n%s".formatted(lakeId, errors.size(), errors.toString());
     }
 }
