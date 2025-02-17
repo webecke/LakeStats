@@ -6,21 +6,65 @@ export class FirestoreService implements DataService {
     private db = getFirestoreDb();
     private systemCollection = 'system';
 
-    private convertMapToObject(map: Map<DataType, string>): Record<string, string> {
-        const obj: Record<string, string> = {};
-        map.forEach((value, key) => {
-            obj[key] = value;
-        });
-        return obj;
+
+    /////////////////////////
+    // PUBLIC READ METHODS //
+    /////////////////////////
+
+    // Get all lakes
+    async getAllLakes(): Promise<LakeSystemSettings[]> {
+        const querySnapshot = await getDocs(
+            query(
+                collection(this.db, this.systemCollection),
+                orderBy('sortOrder', 'asc')
+            )
+        );
+        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
     }
 
-    private convertObjectToMap(obj: Record<string, string>): Map<DataType, string> {
-        const map = new Map<DataType, string>();
-        Object.entries(obj).forEach(([key, value]) => {
-            map.set(key as DataType, value);
-        });
-        return map;
+    // Get a single lake
+    async getLakeSystemSetting(lakeId: string): Promise<LakeSystemSettings | null> {
+        const docRef = doc(this.db, this.systemCollection, lakeId);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            return null;
+        }
+
+        return docSnap.data() as LakeSystemSettings;
     }
+
+    // Get all lakes with a specific status
+    async getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]> {
+        const q = query(
+            collection(this.db, this.systemCollection),
+            where('status', '==', status),
+            orderBy('sortOrder', 'asc')
+        );
+
+        const querySnapshot = await getDocs(q);
+        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
+    }
+
+    async getLakeInfo(lakeId: string): Promise<Lake | null> {
+        const docRef = doc(this.db, lakeId, 'lake-info');
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+            return null;
+        }
+
+        const data = docSnap.data();
+
+        return {
+            ...data,
+            dataSources: this.convertObjectToMap(data.dataSources || {})
+        } as Lake;
+    }
+
+    //////////////////////////////
+    // ADMIN MANAGEMENT METHODS //
+    //////////////////////////////
 
     // Add a new lake (defaults to DISABLED)
     async addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void> {
@@ -62,41 +106,6 @@ export class FirestoreService implements DataService {
             status: newStatus,
             sortOrder: maxOrder + 1
         });
-    }
-
-    // Get all lakes with a specific status
-    async getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]> {
-        const q = query(
-            collection(this.db, this.systemCollection),
-            where('status', '==', status),
-            orderBy('sortOrder', 'asc')
-        );
-
-        const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
-    }
-
-    // Get all lakes
-    async getAllLakes(): Promise<LakeSystemSettings[]> {
-        const querySnapshot = await getDocs(
-            query(
-                collection(this.db, this.systemCollection),
-                orderBy('sortOrder', 'asc')
-            )
-        );
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
-    }
-
-    // Get a single lake
-    async getLakeSystemSetting(lakeId: string): Promise<LakeSystemSettings | null> {
-        const docRef = doc(this.db, this.systemCollection, lakeId);
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-            return null;
-        }
-
-        return docSnap.data() as LakeSystemSettings;
     }
 
     // Update lake order
@@ -142,39 +151,6 @@ export class FirestoreService implements DataService {
         }
     }
 
-    async getLakeInfo(lakeId: string): Promise<Lake | null> {
-        const docRef = doc(this.db, lakeId, 'lake-info');
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-            return null;
-        }
-
-        const data = docSnap.data();
-
-        return {
-            ...data,
-            dataSources: this.convertObjectToMap(data.dataSources || {})
-        } as Lake;
-    }
-
-    async updateLakeInfo(lakeId: string, lakeInfo: Omit<Lake, 'id'>): Promise<void> {
-        const docRef = doc(this.db, lakeId, 'lake-info');
-        await updateDoc(docRef, {
-            ...lakeInfo,
-            id: lakeId,
-            dataSources: this.convertMapToObject(lakeInfo.dataSources)
-        });
-    }
-
-    async updateLakeSystem(lakeId: string, systemConfig: Omit<LakeSystemSettings, 'lakeId'>): Promise<void> {
-        const docRef = doc(this.db, this.systemCollection, lakeId);
-        await updateDoc(docRef, {
-            ...systemConfig,
-            lakeId: lakeId
-        });
-    }
-
     async updateLake(lakeId: string, updates: {
         system?: Omit<LakeSystemSettings, 'lakeId'>,
         info?: Omit<Lake, 'id'>
@@ -216,5 +192,24 @@ export class FirestoreService implements DataService {
         }
 
         await batch.commit();
+    }
+
+    ////////////////////
+    // HELPER METHODS //
+    ////////////////////
+    private convertMapToObject(map: Map<DataType, string>): Record<string, string> {
+        const obj: Record<string, string> = {};
+        map.forEach((value, key) => {
+            obj[key] = value;
+        });
+        return obj;
+    }
+
+    private convertObjectToMap(obj: Record<string, string>): Map<DataType, string> {
+        const map = new Map<DataType, string>();
+        Object.entries(obj).forEach(([key, value]) => {
+            map.set(key as DataType, value);
+        });
+        return map;
     }
 }
