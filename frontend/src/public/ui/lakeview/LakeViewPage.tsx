@@ -5,17 +5,19 @@ import LoadingSpinner from '../../../shared/components/LoadingSpinner.tsx';
 import {useBasicLakeInfo} from '../../datahooks/useBasicLakeInfo';
 import {useCurrentConditions} from '../../datahooks/useCurrentConditions';
 import './LakeViewStyles.css';
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer.tsx";
 import {LakeSystemFeatures} from "../../../shared/services/data";
 import {PageTitle} from "../../components/PageTitle.tsx";
 
 const LakeViewPage: React.FC = () => {
+    const navigate = useNavigate();
+
     // Get lakeId from URL parameters
     const { lakeId } = useParams<{ lakeId: string }>();
 
     if (!lakeId) {
-        return <div>Lake ID is required</div>;
+        return <div>Lake ID is required. How did you get to this page?</div>;
     }
 
     // Use specialized hooks to fetch different pieces of data
@@ -38,14 +40,15 @@ const LakeViewPage: React.FC = () => {
 
     // Show error if lake info couldn't be loaded
     if (infoError || !lakeInfo) {
-        return <div className="lake-view-error">Error: {infoError || 'Failed to load lake information'}</div>;
+        navigate(`/404?source=${encodeURIComponent(lakeId)}`);
+        return null;
     }
 
     if (lakeInfo.status === 'DISABLED') {
         return <div className="lake-view-error">This lake is currently disabled</div>;
     }
 
-    // Use the accent color from lake settings if available
+    // Rest of your component remains the same
     const accentColorStyle = lakeInfo.accentColor ?
         { "--brand-accent": lakeInfo.accentColor } as React.CSSProperties :
         {};
