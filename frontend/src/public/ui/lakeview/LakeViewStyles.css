@@ -203,3 +203,25 @@
         height: 16px;
     }
 }
+
+/* Home icon styles */
+.lake-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.home-link {
+    position: absolute;
+    left: 0;
+}
+
+.home-icon:hover {
+    color: white;
+}
+
+.home-icon {
+    stroke-width: 1.5;
+    color: var(--action-accent);
+}

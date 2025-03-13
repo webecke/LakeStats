@@ -47,7 +47,7 @@ const LakeViewPage: React.FC = () => {
     return (
         <div className="lake-view" style={accentColorStyle}>
             <LakeViewHeader
-                lakeName={lakeInfo.brandedName || lakeInfo.lakeName || lakeId}
+                lakeName={lakeInfo.brandedName || (lakeInfo.lakeName ? lakeInfo.lakeName + "Stats" : lakeId + "Stats")}
                 date={formattedDate || 'No data available'}
             />
 
