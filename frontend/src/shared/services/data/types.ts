@@ -64,7 +64,6 @@ export interface CurrentConditions {
     twoWeekChange: number;
     oneYearChange: number;
     differenceFromTenYearAverage: number;
-    debugInfo: string;
 }
 
 export interface SystemError {
@@ -89,4 +88,5 @@ export interface DataService {
         system?: Omit<LakeSystemSettings, 'lakeId'>,
         info?: Omit<Lake, 'id'>
     }): Promise<void>
+    getCurrentConditions(lakeId: string): Promise<CurrentConditions | null>
 }

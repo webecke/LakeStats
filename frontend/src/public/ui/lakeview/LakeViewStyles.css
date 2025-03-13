@@ -1,0 +1,205 @@
+/* LakeViewStyles.css */
+@import '../../../styles/colors.css';
+
+/* Basic Layout Variables */
+:root {
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    /* Reduced font sizes for desktop */
+    --font-size-large: 48px;
+    --font-size-medium: 32px;
+    --font-size-small: 16px;
+    --border-radius: 8px;
+}
+
+/* Lake View Container */
+.lake-view {
+    background-color: var(--background-base);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: var(--spacing-md);
+    max-width: 500px; /* Reduced max width */
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+/* Lake Header Styles */
+.lake-header {
+    margin-bottom: var(--spacing-lg);
+}
+
+.lake-title {
+    color: var(--brand-cyan);
+    font-size: calc(var(--font-size-medium) * 1.5); /* Increased size */
+    margin: 0;
+    font-weight: bold;
+}
+
+.lake-date {
+    margin-top: 0px; /* Reduced space between title and date */
+    color: var(--text-secondary);
+    font-size: calc(var(--font-size-small) * 0.9); /* Made smaller */
+    opacity: 0.8; /* Slightly dimmed */
+}
+
+/* Current Conditions Styles */
+.current-conditions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md); /* Reduced gap */
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+.stat-item {
+    flex: 1;
+    padding: var(--spacing-sm) var(--spacing-md); /* Reduced vertical padding */
+    background-color: var(--background-elevated);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Make the current elevation bigger but not too big */
+.current-elevation {
+    padding: var(--spacing-md);
+}
+
+.current-elevation .stat-value {
+    font-size: var(--font-size-large);
+    color: var(--data-primary);
+}
+
+/* Stat Value and Label */
+.stat-value {
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    justify-content: center; /* Center the content */
+}
+
+.unit {
+    font-size: 40%;
+    font-weight: normal;
+    margin-left: 0px; /* No margin */
+    margin-right: 6px;
+    color: var(--text-muted);
+    align-self: flex-end; /* Bottom aligned */
+    margin-bottom: 8px; /* Push it down a bit */
+}
+
+.stat-label {
+    font-size: var(--font-size-small);
+    margin: var(--spacing-sm) 0 0 0;
+    color: var(--text-muted);
+}
+
+/* Trend colors */
+.positive {
+    color: var(--data-increasing);
+}
+
+.negative {
+    color: var(--data-decreasing);
+}
+
+.neutral {
+    color: var(--data-neutral);
+}
+
+/* Icon styling */
+.trend-icon {
+    stroke-width: 2.5;
+    width: 30px; /* Increased size */
+    height: 30px; /* Increased size */
+}
+
+.trend-up {
+    color: var(--data-increasing);
+}
+
+.trend-down {
+    color: var(--data-decreasing);
+}
+
+.trend-neutral {
+    color: var(--data-neutral);
+}
+
+/* Water level indicators */
+.water-level-indicator {
+    height: 8px;
+    width: 100%;
+    background-color: var(--background-higher);
+    border-radius: 4px;
+    margin: var(--spacing-md) 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.water-level-fill {
+    height: 100%;
+    border-radius: 4px;
+    background-color: var(--water-normal);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0.5s ease;
+}
+
+.water-level-critical .water-level-fill {
+    background-color: var(--water-critical);
+}
+
+.water-level-low .water-level-fill {
+    background-color: var(--water-low);
+}
+
+.water-level-full .water-level-fill {
+    background-color: var(--water-full);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    :root {
+        --font-size-large: 36px;
+        --font-size-medium: 24px;
+        --font-size-small: 12px;
+    }
+
+    .lake-view {
+        padding: var(--spacing-sm);
+        max-width: 100%;
+    }
+
+    /* Keep the side-by-side layout on mobile like in the screenshot */
+    .stat-row {
+        flex-direction: row;
+        gap: var(--spacing-sm);
+    }
+
+    .stat-item {
+        padding: var(--spacing-sm);
+    }
+
+    .current-elevation {
+        padding: var(--spacing-sm);
+    }
+
+    /* Adjust icon size for mobile */
+    .trend-icon {
+        width: 16px;
+        height: 16px;
+    }
+}

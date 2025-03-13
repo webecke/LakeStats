@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import {DataService, Lake, LakeStatus, LakeSystemSettings, DataType} from "./types.ts";
+import {DataService, Lake, LakeStatus, LakeSystemSettings, DataType, CurrentConditions} from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
@@ -60,6 +60,21 @@ export class FirestoreService implements DataService {
             ...data,
             dataSources: this.convertObjectToMap(data.dataSources || {})
         } as Lake;
+    }
+
+    // In firestore-service.ts
+    async getCurrentConditions(lakeId: string): Promise<CurrentConditions | null> {
+        const docRef = doc(this.db, lakeId, 'current_conditions');
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) return null;
+
+        const data = docSnap.data();
+        return {
+            ...data,
+            timeOfCollection: data.timeOfCollection.toDate(), // Convert Firestore Timestamp
+            date: new Date(data.date), // Convert date string
+        } as CurrentConditions;
     }
 
     //////////////////////////////
