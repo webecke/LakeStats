@@ -2,11 +2,12 @@ import React from 'react';
 import LakeViewHeader from './LakeViewHeader';
 import CurrentConditions from './CurrentConditions';
 import LoadingSpinner from '../../../shared/components/LoadingSpinner.tsx';
-import { useBasicLakeInfo } from '../../datahooks/useBasicLakeInfo';
-import { useCurrentConditions } from '../../datahooks/useCurrentConditions';
+import {useBasicLakeInfo} from '../../datahooks/useBasicLakeInfo';
+import {useCurrentConditions} from '../../datahooks/useCurrentConditions';
 import './LakeViewStyles.css';
 import {useParams} from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer.tsx";
+import {LakeSystemFeatures} from "../../../shared/services/data";
 
 const LakeViewPage: React.FC = () => {
     // Get lakeId from URL parameters
@@ -57,17 +58,19 @@ const LakeViewPage: React.FC = () => {
                 date={formattedDate || 'No data available'}
             />
 
-            <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
-                {(data) => (
-                    <CurrentConditions
-                        currentElevation={data.currentLevel}
-                        dayChange={data.oneDayChange}
-                        weekChange={data.twoWeekChange}
-                        yearChange={data.oneYearChange}
-                        tenYearDiff={data.differenceFromTenYearAverage}
-                    />
-                )}
-            </AsyncContainer>
+            {lakeInfo.features.includes(LakeSystemFeatures.CURRENT_CONDITIONS) && (
+                <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
+                    {(data) => (
+                        <CurrentConditions
+                            currentElevation={data.currentLevel}
+                            dayChange={data.oneDayChange}
+                            weekChange={data.twoWeekChange}
+                            yearChange={data.oneYearChange}
+                            tenYearDiff={data.differenceFromTenYearAverage}
+                        />
+                    )}
+                </AsyncContainer>
+            )}
         </div>
     );
 };
