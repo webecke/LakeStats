@@ -10,6 +10,8 @@ const LakeManager = lazy(() => import('./admin/pages/LakeManager.tsx'));
 // Public routes load normally
 import Home from './public/ui/Home.tsx';
 import LakeViewPage from './public/ui/lakeview/LakeViewPage.tsx';
+import StaticLayout from "./public/ui/static/StaticLayout.tsx";
+import Terms from "./public/ui/static/Terms.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -23,6 +25,16 @@ export const router = createBrowserRouter([
             {
                 path: ':lakeId',
                 element: <LakeViewPage />
+            }
+        ]
+    },
+    {
+        path: '/',
+        element: <StaticLayout />,
+        children: [
+            {
+                path: '/terms',
+                element: <Terms />
             }
         ]
     },
