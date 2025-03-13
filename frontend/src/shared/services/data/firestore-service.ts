@@ -62,7 +62,6 @@ export class FirestoreService implements DataService {
         } as Lake;
     }
 
-    // In firestore-service.ts
     async getCurrentConditions(lakeId: string): Promise<CurrentConditions | null> {
         const docRef = doc(this.db, lakeId, 'current_conditions');
         const docSnap = await getDoc(docRef);
@@ -72,8 +71,9 @@ export class FirestoreService implements DataService {
         const data = docSnap.data();
         return {
             ...data,
-            timeOfCollection: data.timeOfCollection.toDate(), // Convert Firestore Timestamp
-            date: new Date(data.date), // Convert date string
+            // Simply create Date objects from the ISO strings
+            timeOfCollection: new Date(data.timeOfCollection),
+            date: new Date(data.date)
         } as CurrentConditions;
     }
 
