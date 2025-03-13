@@ -5,19 +5,26 @@ import './LakeViewStyles.css';
 
 interface LakeViewHeaderProps {
     lakeName: string;
+    brandedName: string;
+    brandColor?: string;
     date: string;
 }
 
-const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, date }) => {
+const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, brandColor, date }) => {
+    const brandStyle = brandColor ? { color: brandColor } : {};
+
     return (
         <div className="lake-header">
             <div className="lake-header-content">
                 <Link to="/" className="home-link">
                     <Home className="home-icon" size={24} />
                 </Link>
-                <h1 className="lake-title">{lakeName}</h1>
+                <h1 className="lake-title">
+                    <span className="lake-branded-name" style={brandStyle}>{brandedName}</span>
+                </h1>
             </div>
-            <p className="lake-date">Data updated {date}</p>
+            <p>The latest data for {lakeName}</p>
+            <p className="lake-date">Last updated {date}</p>
         </div>
     );
 };

@@ -6,6 +6,7 @@ import { useBasicLakeInfo } from '../../datahooks/useBasicLakeInfo';
 import { useCurrentConditions } from '../../datahooks/useCurrentConditions';
 import './LakeViewStyles.css';
 import {useParams} from "react-router-dom";
+import AsyncContainer from "../../components/AsyncContainer.tsx";
 
 const LakeViewPage: React.FC = () => {
     // Get lakeId from URL parameters
@@ -29,14 +30,17 @@ const LakeViewPage: React.FC = () => {
         formattedDate
     } = useCurrentConditions(lakeId);
 
-    // Show loading state if any data is still loading
-    if (loadingInfo || loadingConditions) {
+    if (loadingInfo) {
         return <LoadingSpinner />;
     }
 
     // Show error if lake info couldn't be loaded
     if (infoError || !lakeInfo) {
         return <div className="lake-view-error">Error: {infoError || 'Failed to load lake information'}</div>;
+    }
+
+    if (lakeInfo.status === 'DISABLED') {
+        return <div className="lake-view-error">This lake is currently disabled</div>;
     }
 
     // Use the accent color from lake settings if available
@@ -47,25 +51,23 @@ const LakeViewPage: React.FC = () => {
     return (
         <div className="lake-view" style={accentColorStyle}>
             <LakeViewHeader
-                lakeName={lakeInfo.brandedName || (lakeInfo.lakeName ? lakeInfo.lakeName + "Stats" : lakeId + "Stats")}
+                lakeName={lakeInfo.lakeName}
+                brandColor={lakeInfo.accentColor}
+                brandedName={lakeInfo.brandedName}
                 date={formattedDate || 'No data available'}
             />
 
-            {conditionsError && (
-                <div className="lake-view-error">Error loading conditions: {conditionsError}</div>
-            )}
-
-            {!conditionsError && currentConditions ? (
-                <CurrentConditions
-                    currentElevation={currentConditions.currentLevel}
-                    dayChange={currentConditions.oneDayChange}
-                    weekChange={currentConditions.twoWeekChange}
-                    yearChange={currentConditions.oneYearChange}
-                    tenYearDiff={currentConditions.differenceFromTenYearAverage}
-                />
-            ) : (
-                <div className="lake-view-no-data">No current conditions available</div>
-            )}
+            <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
+                {(data) => (
+                    <CurrentConditions
+                        currentElevation={data.currentLevel}
+                        dayChange={data.oneDayChange}
+                        weekChange={data.twoWeekChange}
+                        yearChange={data.oneYearChange}
+                        tenYearDiff={data.differenceFromTenYearAverage}
+                    />
+                )}
+            </AsyncContainer>
         </div>
     );
 };
