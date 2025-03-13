@@ -12,8 +12,8 @@ interface LakeSystemSettings {
     sortOrder: number;
     accentColor: string;
 }
-import LoadingSpinner from '../../shared/components/LoadingSpinner';
 import './Home.css';
+import AsyncContainer from "../components/AsyncContainer.tsx";
 
 // Function to create a color gradient based on the accent color
 const getColorGradient = (accentColor: string) => {
@@ -28,7 +28,7 @@ const getColorGradient = (accentColor: string) => {
 
 export default function Home() {
     const [lakes, setLakes] = useState<LakeSystemSettings[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLakeListLoading, setIsLakeListLoading] = useState(true);
 
     useEffect(() => {
         const fetchLakes = async () => {
@@ -39,16 +39,12 @@ export default function Home() {
             } catch (error) {
                 console.error('Error fetching lakes:', error);
             } finally {
-                setIsLoading(false);
+                setIsLakeListLoading(false);
             }
         };
 
         fetchLakes();
     }, []);
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
 
     return (
         <div className="home-container">
@@ -57,30 +53,34 @@ export default function Home() {
                 <p className="home-subtitle">Monitor real-time water levels, access points, and conditions for major lakes</p>
             </header>
 
-            <section className="lakes-grid">
-                {lakes.length === 0 ? (
-                    <div className="no-lakes">
-                        <p>No lakes available at this time.</p>
-                    </div>
-                ) : (
-                    lakes.map((lake) => (
-                        <Link
-                            to={`/${lake.lakeId}`}
-                            key={lake.lakeId}
-                            className="lake-card"
-                        >
-                            <h2 className="lake-card-title">{lake.brandedName}</h2>
-                            <h3 className="lake-card-name">{lake.lakeName}</h3>
-                            <div
-                                className="lake-card-indicator"
-                                style={{
-                                    background: getColorGradient(lake.accentColor || '#3498db')
-                                }}
-                            ></div>
-                        </Link>
-                    ))
+            <AsyncContainer isLoading={isLakeListLoading} error={null} data={lakes}>
+                {(lakes) => (
+                    <section className="lakes-grid">
+                        {lakes.length === 0 ? (
+                            <div className="no-lakes">
+                                <p>No lakes available at this time.</p>
+                            </div>
+                        ) : (
+                            lakes.map((lake: LakeSystemSettings) => (
+                                <Link
+                                    to={`/${lake.lakeId}`}
+                                    key={lake.lakeId}
+                                    className="lake-card"
+                                >
+                                    <h2 className="lake-card-title">{lake.brandedName}</h2>
+                                    <h3 className="lake-card-name">{lake.lakeName}</h3>
+                                    <div
+                                        className="lake-card-indicator"
+                                        style={{
+                                            background: getColorGradient(lake.accentColor || '#3498db')
+                                        }}
+                                    ></div>
+                                </Link>
+                            ))
+                        )}
+                    </section>
                 )}
-            </section>
+            </AsyncContainer>
 
             <section className={'home-about'}>
                 <h2>What is LakeStats?</h2>
