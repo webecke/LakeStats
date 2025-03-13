@@ -42,16 +42,18 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
 
                 setCurrentConditions(conditions);
 
-                // Parse the ISO string timestamp
+                // Format the date
                 if (conditions.timeOfCollection) {
                     try {
-                        // Simple date parsing from ISO string
                         const date = new Date(conditions.timeOfCollection);
-                        const formatted = date.toLocaleDateString('en-US', {
+                        const options: Intl.DateTimeFormatOptions = {
                             year: 'numeric',
                             month: 'long',
-                            day: 'numeric'
-                        });
+                            day: 'numeric',
+                            timeZone: 'America/Denver' // Mountain Time (Utah)
+                        };
+
+                        const formatted = date.toLocaleDateString('en-US', options);
                         setFormattedDate(formatted);
                     } catch (err) {
                         console.error('Error formatting date:', err);

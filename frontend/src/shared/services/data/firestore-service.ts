@@ -69,11 +69,22 @@ export class FirestoreService implements DataService {
         if (!docSnap.exists()) return null;
 
         const data = docSnap.data();
+
+        // Parse the ISO string
+        let timeOfCollection;
+        if (data.timeOfCollection) {
+            timeOfCollection = new Date(data.timeOfCollection);
+        } else {
+            timeOfCollection = new Date();
+        }
+
+        // Handle date field similarly
+        let date = data.date ? new Date(data.date) : new Date();
+
         return {
             ...data,
-            // Simply create Date objects from the ISO strings
-            timeOfCollection: new Date(data.timeOfCollection),
-            date: new Date(data.date)
+            timeOfCollection: timeOfCollection,
+            date: date
         } as CurrentConditions;
     }
 
