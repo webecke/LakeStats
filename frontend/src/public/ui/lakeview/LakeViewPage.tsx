@@ -9,6 +9,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer.tsx";
 import {LakeSystemFeatures} from "../../../shared/services/data";
 import {PageTitle} from "../../components/PageTitle.tsx";
+import {handleNotFoundRedirect} from "../../../routes.tsx";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ const LakeViewPage: React.FC = () => {
 
     // Show error if lake info couldn't be loaded
     if (infoError || !lakeInfo) {
-        navigate(`/404?source=${encodeURIComponent(lakeId)}`);
+        handleNotFoundRedirect(lakeId, navigate);
         return null;
     }
 

@@ -75,3 +75,23 @@ export const router = createBrowserRouter([
         element: <Navigate to="/404" replace />
     }
 ]);
+
+export const handleNotFoundRedirect = (
+    sourcePath: string,
+    navigateFunction: (path: string) => void
+) => {
+    // Sanitize the URL by removing consecutive slashes
+    const sanitizeUrl = (url: string): string => {
+        // Handle protocol separately
+        if (url.includes('://')) {
+            const [protocol, rest] = url.split('://');
+            return `${protocol}://${rest.replace(/\/+/g, '/')}`;
+        }
+
+        // For paths without protocol, simply replace consecutive slashes
+        return url.replace(/\/+/g, '/');
+    };
+
+    const sanitizedPath = sanitizeUrl(sourcePath);
+    navigateFunction(`/404?source=${encodeURIComponent(sanitizedPath)}`);
+};
