@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { dataService } from '../../shared/services/data';
+import logoSvg from '../../assets/LakeStatsLogo-NoBackground.svg';
 
 // Updated interface to match your LakeSystemSettings
 interface LakeSystemSettings {
@@ -49,7 +50,10 @@ export default function Home() {
     return (
         <div className="home-container">
             <header className="home-header">
-                <h1 className="home-title">LakeStats</h1>
+                <div className="home-title-container">
+                    <img src={logoSvg} alt="LakeStats Logo" className="home-logo" />
+                    <h1 className="home-title">LakeStats</h1>
+                </div>
                 <p className="home-subtitle">Monitor real-time water levels, access points, and conditions for major lakes</p>
             </header>
 

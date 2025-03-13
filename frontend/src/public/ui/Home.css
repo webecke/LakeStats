@@ -13,10 +13,23 @@
     margin-bottom: 2.5rem;
 }
 
+.home-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.home-logo {
+    height: 40px;
+    width: auto;
+}
+
 .home-title {
     color: var(--action-primary);
     font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+    margin: 0;
     font-weight: bold;
 }
 
@@ -112,6 +125,10 @@
 
     .home-title {
         font-size: 3rem;
+    }
+
+    .home-logo {
+        height: 50px;
     }
 }
 
