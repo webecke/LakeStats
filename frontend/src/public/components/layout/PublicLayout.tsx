@@ -1,16 +1,14 @@
-import {Outlet} from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Footer from "./Footer.tsx";
+//import './PublicLayout.css';
 
 export default function PublicLayout() {
     return (
-        <div>
-            {/* Add your header, nav, etc. */}
-            <main>
+        <div className="public-layout">
+            <main className="main-content">
                 <Outlet />
             </main>
-            <footer>
-                <Footer />
-            </footer>
+            <Footer />
         </div>
     );
 }
