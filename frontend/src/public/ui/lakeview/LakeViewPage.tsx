@@ -8,6 +8,7 @@ import './LakeViewStyles.css';
 import {useParams} from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer.tsx";
 import {LakeSystemFeatures} from "../../../shared/services/data";
+import {PageTitle} from "../../components/PageTitle.tsx";
 
 const LakeViewPage: React.FC = () => {
     // Get lakeId from URL parameters
@@ -51,6 +52,7 @@ const LakeViewPage: React.FC = () => {
 
     return (
         <div className="lake-view" style={accentColorStyle}>
+            <PageTitle title={lakeInfo.lakeName + " Conditions"} />
             <LakeViewHeader
                 lakeName={lakeInfo.lakeName}
                 brandColor={lakeInfo.accentColor}

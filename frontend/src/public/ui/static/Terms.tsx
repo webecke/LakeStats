@@ -1,9 +1,11 @@
 import React from 'react';
 import './static.css';
+import {PageTitle} from "../../components/PageTitle.tsx";
 
 const Terms: React.FC = () => {
     return (
         <div className="static-container">
+            <PageTitle title={"Terms of Service"} />
             <h1>Terms of Service</h1>
 
             <div className="static-section">
