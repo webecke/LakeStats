@@ -1,7 +1,13 @@
-/* src/styles/colors.css */
+/* src/styles/semantic-colors.css */
 :root {
-    /* Brand Colors */
-    /* Don't uses these colors in stylesheets */
+    /* Primary Brand Colors */
+    --brand-white: #FFFFFF;
+    --brand-cyan: #00D3FF;
+    --brand-blue: #005B9B;
+    --brand-navy: #010035;
+    --brand-accent: #ff8000;
+
+    /* Brand Blue Scale */
     --brand-blue-100: #e6f3ff;
     --brand-blue-200: #b3d9ff;
     --brand-blue-300: #80bfff;
@@ -10,31 +16,62 @@
     --brand-blue-600: #0066cc;
     --brand-blue-700: #004d99;
 
+    /* Brand Orange Scale (Accent) */
     --brand-orange-100: #fff2e6;
+    --brand-orange-200: #ffe0cc;
     --brand-orange-300: #ffb366;
+    --brand-orange-400: #ff9933;
     --brand-orange-500: #ff8000;
-    --brand-orange-700: #cc6600;
+    --brand-orange-600: #cc6600;
+    --brand-orange-700: #994c00;
 
     /* Dark Theme Semantic Colors */
-    /* These are the colors you'll use in your stylesheets */
-    --background-base: #121212;      /* Main background */
-    --background-elevated: #1e1e1e;  /* Cards, headers */
-    --background-higher: #2d2d2d;    /* Hover states */
+    /* Base Backgrounds */
+    --background-base: #121212;        /* Main background */
+    --background-elevated: #1e1e1e;    /* Cards, headers */
+    --background-higher: #2d2d2d;      /* Hover states */
 
-    --text-primary: #ffffff;
+    /* Text Colors */
+    --text-primary: var(--brand-white);
     --text-secondary: rgba(255, 255, 255, 0.87);
     --text-muted: rgba(255, 255, 255, 0.60);
 
-    --action-primary: var(--brand-blue-400);
-    --action-secondary: var(--brand-blue-300);
-    --action-accent: var(--brand-orange-500);
+    /* Action Colors - Use these for buttons, links, and interactive elements */
+    --action-primary: var(--brand-cyan);     /* Primary actions, focus states */
+    --action-secondary: var(--brand-blue);   /* Secondary actions */
+    --action-accent: var(--brand-accent); /* Call-to-action, highlights */
+    --action-disabled: rgba(255, 255, 255, 0.3); /* Disabled state */
 
+    /* Border Colors */
     --border-light: rgba(255, 255, 255, 0.1);
     --border-medium: rgba(255, 255, 255, 0.2);
+    --border-heavy: rgba(255, 255, 255, 0.3);
 
-    /* Status Colors - Adjusted for dark theme */
-    --status-success: #2ecc71;
-    --status-warning: #f1c40f;
-    --status-error: #e74c3c;
-    --status-info: var(--brand-blue-400);
+    /* Status Colors */
+    --status-success: #2ecc71;         /* Success messages, positive changes */
+    --status-warning: #f1c40f;         /* Warning messages, alerts */
+    --status-error: #e74c3c;           /* Error messages, negative changes */
+    --status-info: var(--brand-cyan);  /* Informational messages */
+
+    /* Data Visualization Colors */
+    --data-increasing: var(--status-success);      /* Increasing values, uptrends */
+    --data-decreasing: var(--status-error);        /* Decreasing values, downtrends */
+    --data-neutral: #9e9e9e;                       /* Neutral or unchanged values */
+    --data-primary: var(--brand-cyan);             /* Primary data point */
+    --data-reference: var(--brand-navy);           /* Reference lines, thresholds */
+
+    /* Lake Specific Colors */
+    --water-full: var(--brand-blue);         /* Full pool water level */
+    --water-normal: var(--brand-cyan);       /* Normal water level */
+    --water-low: var(--brand-orange-500);    /* Low water level */
+    --water-critical: var(--status-error);   /* Critical water level */
 }
+
+/*
+Usage Guidelines:
+1. Use semantic color variables (--background-*, --text-*, etc.) in your components
+2. Avoid using raw brand color variables directly in components
+3. For data visualization, use the --data-* variables
+4. For water level indicators, use the --water-* variables
+5. Status colors should be used consistently for feedback and alerts
+*/
