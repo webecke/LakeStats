@@ -73,6 +73,10 @@ export default function LakeManager() {
                 showNotification('Elevation data source must be a valid USBR link', 'error');
                 return
             }
+            else if (!lakeData.deadPoolElevation || !lakeData.fullPoolElevation || !lakeData.minPowerPoolElevation) {
+                showNotification('Pool levels must be set for non-disabled lakes', 'error')
+                return
+            }
         }
 
         try {
