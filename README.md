@@ -27,6 +27,9 @@ Additionally, I just want to have a project to learn new technologies. This proj
 This is not an open source project. I retain all possible rights to this code. However, for testing purposes or my own future documentation, here's info about how to deploy this: [deployment.md](deployment.md)
 
 
+
+
+<!--
 # LakeStats Project Specification
 
 ## Project Overview
@@ -180,3 +183,5 @@ PUT /api/admin/lakes/{lakeId}
 - Mobile app development
 - Community features (user comments, photos)
 - Integration with marina booking systems
+
+-->
