@@ -36,7 +36,8 @@ export enum DataType {
 }
 
 export enum LakeSystemFeatures {
-    CURRENT_CONDITIONS = 'CURRENT_CONDITIONS',
+    //CURRENT_CONDITIONS = 'CURRENT_CONDITIONS',
+    NOT_A_REAL_FEATURE = 'NOT_A_REAL_FEATURE', // Placeholder for future features
 }
 
 export interface LakeRegion {

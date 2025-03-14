@@ -7,7 +7,6 @@ import {useCurrentConditions} from '../../datahooks/useCurrentConditions';
 import './LakeViewStyles.css';
 import {useParams, useNavigate} from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer.tsx";
-import {LakeSystemFeatures} from "../../../shared/services/data";
 import {PageTitle} from "../../components/PageTitle.tsx";
 import {handleNotFoundRedirect} from "../../../routes.tsx";
 
@@ -64,19 +63,17 @@ const LakeViewPage: React.FC = () => {
                 date={formattedDate || 'No data available'}
             />
 
-            {lakeInfo.features.includes(LakeSystemFeatures.CURRENT_CONDITIONS) && (
-                <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
-                    {(data) => (
-                        <CurrentConditions
-                            currentElevation={data.currentLevel}
-                            dayChange={data.oneDayChange}
-                            weekChange={data.twoWeekChange}
-                            yearChange={data.oneYearChange}
-                            tenYearDiff={data.differenceFromTenYearAverage}
-                        />
-                    )}
-                </AsyncContainer>
-            )}
+            <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
+                {(data) => (
+                    <CurrentConditions
+                        currentElevation={data.currentLevel}
+                        dayChange={data.oneDayChange}
+                        weekChange={data.twoWeekChange}
+                        yearChange={data.oneYearChange}
+                        tenYearDiff={data.differenceFromTenYearAverage}
+                    />
+                )}
+            </AsyncContainer>
         </div>
     );
 };

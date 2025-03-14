@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Button } from '../../shared/components/Button';
+import {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {Button} from '../../shared/components/Button';
 import './LakeManager.css';
-import { dataService, Lake, LakeSystemSettings } from "../../shared/services/data";
+import {dataService, DataType, Lake, LakeSystemSettings} from "../../shared/services/data";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
 import DataSources from "../components/lakeManager/DataSources";
-import { useNotifications } from '../../shared/components/Notification/NotificationContext';
+import {useNotifications} from '../../shared/components/Notification/NotificationContext';
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -64,6 +64,16 @@ export default function LakeManager() {
     const handleSave = async () => {
         if (!lakeId || !lakeData || !systemConfig) return;
 
+        if (systemConfig.status !== 'DISABLED') {
+            if (!lakeData.dataSources.has(DataType.ELEVATION)) {
+                showNotification('Non-disabled lakes must have an elevation data source', 'error');
+            }
+            else if (!lakeData.dataSources.get(DataType.ELEVATION)?.startsWith("https://www.usbr.gov/uc/water/hydrodata/reservoir_data/")) {
+                showNotification('Elevation data source must be a valid USBR link', 'error');
+            }
+            return
+        }
+
         try {
             await dataService.updateLake(lakeId, {
                 system: systemConfig,
@@ -73,6 +83,7 @@ export default function LakeManager() {
         } catch (error) {
             console.error('Error saving lake data:', error);
             showNotification('Failed to save changes', 'error');
+            return;
         }
     };
 
