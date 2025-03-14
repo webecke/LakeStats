@@ -11,5 +11,8 @@ public record CurrentConditions(
         float oneDayChange,
         float twoWeekChange,
         float oneYearChange,
-        float differenceFromTenYearAverage
+        float differenceFromTenYearAverage,
+        float differenceFromFullPool,
+        float differenceFromMinPowerPool,
+        float differenceFromDeadPool
 ) {}

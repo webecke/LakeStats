@@ -3,6 +3,7 @@ package dev.webecke.lakestats.aggregator;
 import dev.webecke.lakestats.model.CollectorResponse;
 import dev.webecke.lakestats.model.CurrentConditions;
 import dev.webecke.lakestats.model.TimeSeriesData;
+import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,12 @@ public class CurrentConditionsAggregator {
         this.errorAggregator = errorAggregator;
     }
 
-    public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse) {
+    public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse, Lake lake) {
         if (!collectorResponse.successful()) { return null; }
+        if (collectorResponse.data().lakeId() != lake.id()) {
+            errorAggregator.add("Lake ID mismatch: data is for %s, but got lake info for %s".formatted(lake.id(), collectorResponse.data().lakeId()), lake.id());
+            return null;
+        }
         if (collectorResponse.data().type() != DataType.ELEVATION) {
             errorAggregator.add("Unexpected data type received while aggregating current conditions: %s on %s"
                     .formatted(collectorResponse.data().type()), collectorResponse.data().lakeId());
@@ -45,7 +50,10 @@ public class CurrentConditionsAggregator {
                 oneDayChange,
                 twoWeekChange,
                 oneYearChange,
-                todayElevation - tenYearAverage
+                todayElevation - tenYearAverage,
+                todayElevation - lake.fullPoolElevation(),
+                todayElevation - lake.minPowerPoolElevation(),
+                todayElevation - lake.deadPoolElevation()
         );
     }
 

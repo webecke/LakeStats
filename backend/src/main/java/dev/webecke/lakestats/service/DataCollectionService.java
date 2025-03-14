@@ -64,7 +64,7 @@ public class DataCollectionService {
     public void collectDataForLake(Lake lake) {
         try {
             CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
-            CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData);
+            CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
 
             try {
                 databaseAccess.publishCurrentConditions(currentConditions);

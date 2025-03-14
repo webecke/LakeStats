@@ -67,11 +67,12 @@ export default function LakeManager() {
         if (systemConfig.status !== 'DISABLED') {
             if (!lakeData.dataSources.has(DataType.ELEVATION)) {
                 showNotification('Non-disabled lakes must have an elevation data source', 'error');
+                return
             }
             else if (!lakeData.dataSources.get(DataType.ELEVATION)?.startsWith("https://www.usbr.gov/uc/water/hydrodata/reservoir_data/")) {
                 showNotification('Elevation data source must be a valid USBR link', 'error');
+                return
             }
-            return
         }
 
         try {
