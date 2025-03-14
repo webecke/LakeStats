@@ -65,13 +65,7 @@ const LakeViewPage: React.FC = () => {
 
             <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
                 {(data) => (
-                    <CurrentConditions
-                        currentElevation={data.currentLevel}
-                        dayChange={data.oneDayChange}
-                        weekChange={data.twoWeekChange}
-                        yearChange={data.oneYearChange}
-                        tenYearDiff={data.differenceFromTenYearAverage}
-                    />
+                    <CurrentConditions data={data} />
                 )}
             </AsyncContainer>
         </div>

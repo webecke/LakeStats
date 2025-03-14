@@ -57,8 +57,10 @@
     gap: var(--spacing-md);
 }
 
+/* Style for all stat items */
 .stat-item {
     flex: 1;
+    min-width: 0; /* Prevents flex items from overflowing */
     padding: var(--spacing-sm) var(--spacing-md); /* Reduced vertical padding */
     background-color: var(--background-elevated);
     border-radius: var(--border-radius);
@@ -71,6 +73,8 @@
 /* Make the current elevation bigger but not too big */
 .current-elevation {
     padding: var(--spacing-md);
+    background-color: var(--background-elevated); /* Ensure background is applied */
+    border-radius: var(--border-radius); /* Ensure border radius is applied */
 }
 
 .current-elevation .stat-value {
@@ -170,6 +174,11 @@
     background-color: var(--water-full);
 }
 
+/* Make fonts smaller for the 3-item row to fit better */
+.stat-row:last-child .stat-value {
+    font-size: calc(var(--font-size-medium) * 0.85);
+}
+
 /* Responsive adjustments */
 @media (max-width: 480px) {
     :root {
@@ -201,6 +210,15 @@
     .trend-icon {
         width: 16px;
         height: 16px;
+    }
+
+    /* Make the 3-item row even smaller on mobile */
+    .stat-row:last-child .stat-value {
+        font-size: calc(var(--font-size-medium) * 0.7);
+    }
+
+    .stat-row:last-child .stat-label {
+        font-size: calc(var(--font-size-small) * 0.9);
     }
 }
 

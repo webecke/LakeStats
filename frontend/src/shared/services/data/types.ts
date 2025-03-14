@@ -65,6 +65,9 @@ export interface CurrentConditions {
     twoWeekChange: number;
     oneYearChange: number;
     differenceFromTenYearAverage: number;
+    differenceFromFullPool: number;
+    differenceFromMinPowerPool: number;
+    differenceFromDeadPool: number;
 }
 
 export interface SystemError {

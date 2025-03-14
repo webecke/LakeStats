@@ -1,28 +1,17 @@
 import React from 'react';
 import StatItem from './StatItem.tsx';
 import './LakeViewStyles.css';
-import {LakeMetaData} from "../../../shared/services/data";
+import type {CurrentConditions} from "../../../shared/services/data";
 
 interface CurrentConditionsProps {
-    currentElevation: number;
-    dayChange: number;
-    weekChange: number;
-    yearChange: number;
-    tenYearDiff: number;
-    lakeInfo: LakeMetaData;
+    data: CurrentConditions
 }
 
-const CurrentConditions: React.FC<CurrentConditionsProps> = ({
-                                                                 currentElevation,
-                                                                 dayChange,
-                                                                 weekChange,
-                                                                 yearChange,
-                                                                 tenYearDiff
-                                                             }) => {
+const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
     return (
         <div className="current-conditions">
             <StatItem
-                value={currentElevation}
+                value={data.currentLevel}
                 label="Current Elevation"
                 className="current-elevation"
                 isCurrentElevation={true}
@@ -30,12 +19,12 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
 
             <div className="stat-row">
                 <StatItem
-                    value={dayChange}
+                    value={data.oneDayChange}
                     label="Since Yesterday"
                     className="day-change"
                 />
                 <StatItem
-                    value={weekChange}
+                    value={data.twoWeekChange}
                     label="Last 2 Weeks"
                     className="week-change"
                 />
@@ -43,14 +32,32 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
 
             <div className="stat-row">
                 <StatItem
-                    value={yearChange}
+                    value={data.oneYearChange}
                     label="Since A Year Ago"
                     className="year-change"
                 />
                 <StatItem
-                    value={tenYearDiff}
+                    value={data.differenceFromTenYearAverage}
                     label="From 10 Year Avg"
                     className="ten-year-diff"
+                />
+            </div>
+
+            <div className="stat-row">
+                <StatItem
+                    value={data.differenceFromFullPool}
+                    label="VS Full Pool"
+                    isTrendStat={false}
+                />
+                <StatItem
+                    value={data.differenceFromMinPowerPool}
+                    label="VS Power Pool"
+                    isTrendStat={false}
+                />
+                <StatItem
+                    value={data.differenceFromDeadPool}
+                    label="VS Dead Pool"
+                    isTrendStat={false}
                 />
             </div>
         </div>
