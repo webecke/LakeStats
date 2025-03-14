@@ -1,13 +1,14 @@
 import React from 'react';
-import StatItem from './StatItem.tsx';
+import StatItem from './StatItem';
 import './LakeViewStyles.css';
-import type {CurrentConditions} from "../../../shared/services/data";
+import type {CurrentConditions as CurrentConditionsType} from "../../../shared/services/data";
 
 interface CurrentConditionsProps {
-    data: CurrentConditions
+    data: CurrentConditionsType
 }
 
 const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
+    const dateString = data.date.toLocaleString('default', { month: 'long' }) + ' ' +  data.date.getDate()
     return (
         <div className="current-conditions">
             <StatItem
@@ -15,6 +16,12 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
                 label="Current Elevation"
                 className="current-elevation"
                 isCurrentElevation={true}
+                tooltip={
+                    <div>
+                        <strong>Lake Elevation</strong>
+                        <p>The current surface elevation of the lake, measured in feet above sea level at 11:59PM on {dateString}</p>
+                    </div>
+                }
             />
 
             <div className="stat-row">
@@ -22,11 +29,13 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
                     value={data.oneDayChange}
                     label="Since Yesterday"
                     className="day-change"
+                    tooltip="Change in lake level since yesterday's reading"
                 />
                 <StatItem
                     value={data.twoWeekChange}
                     label="Last 2 Weeks"
                     className="week-change"
+                    tooltip="Change in lake level over the past two weeks"
                 />
             </div>
 
@@ -35,29 +44,49 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
                     value={data.oneYearChange}
                     label="Since A Year Ago"
                     className="year-change"
+                    tooltip="Change in lake level compared to the same date last year"
                 />
                 <StatItem
                     value={data.differenceFromTenYearAverage}
                     label="From 10 Year Avg"
                     className="ten-year-diff"
+                    tooltip={<p>Difference between the current level and 10-year average for this date: {dateString}</p>}
                 />
             </div>
 
-            <div className="stat-row">
+            <div className="stat-row pool-levels">
                 <StatItem
                     value={data.differenceFromFullPool}
-                    label="VS Full Pool"
+                    label="vs Full Pool"
                     isTrendStat={false}
+                    tooltip={
+                        <div>
+                            <strong>Full Pool</strong>
+                            <p>Distance from the dam's designed capacity</p>
+                        </div>
+                    }
                 />
                 <StatItem
                     value={data.differenceFromMinPowerPool}
-                    label="VS Power Pool"
+                    label="vs Power Pool"
                     isTrendStat={false}
+                    tooltip={
+                        <div>
+                            <strong>Min Power Pool</strong>
+                            <p>Distance from the lowest level that the dam can generate electricity</p>
+                        </div>
+                    }
                 />
                 <StatItem
                     value={data.differenceFromDeadPool}
-                    label="VS Dead Pool"
+                    label="vs Dead Pool"
                     isTrendStat={false}
+                    tooltip={
+                        <div>
+                            <strong>Dead Pool</strong>
+                            <p>Distance from the lowest level that lets water out of the dam</p>
+                        </div>
+                    }
                 />
             </div>
         </div>

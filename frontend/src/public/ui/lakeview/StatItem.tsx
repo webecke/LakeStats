@@ -1,6 +1,7 @@
 import React from 'react';
 import { TrendingDown, TrendingUp, MinusCircle } from 'lucide-react';
 import './LakeViewStyles.css';
+import Tooltip from '../../components/Tooltip.tsx';
 
 interface StatItemProps {
     value: number;
@@ -8,6 +9,7 @@ interface StatItemProps {
     className?: string;
     isCurrentElevation?: boolean;
     isTrendStat?: boolean;
+    tooltip?: React.ReactNode | null;
 }
 
 const StatItem: React.FC<StatItemProps> = ({
@@ -15,7 +17,8 @@ const StatItem: React.FC<StatItemProps> = ({
                                                label,
                                                className = '',
                                                isCurrentElevation = false,
-                                               isTrendStat = true
+                                               isTrendStat = true,
+                                               tooltip = null
                                            }) => {
     // Determine if value is positive, negative, or zero
     let icon;
@@ -49,12 +52,26 @@ const StatItem: React.FC<StatItemProps> = ({
         prefix = value < 0 ? "-" : "";
     }
 
-    return (
-        <div className={`stat-item ${className}`}>
+    // Create the inner content
+    const innerContent = (
+        <>
             <p className={`stat-value ${numberClass}`}>
                 {prefix}{displayValue}<span className="unit">ft</span>{!isCurrentElevation && isTrendStat && icon}
             </p>
             <p className="stat-label">{label}</p>
+        </>
+    );
+
+    // If tooltip is provided, wrap the inner content with Tooltip, but always preserve the stat-item div as the outermost container
+    return (
+        <div className={`stat-item ${className}`}>
+            {tooltip !== null ? (
+                <Tooltip content={tooltip}>
+                    <div className="stat-item-inner">
+                        {innerContent}
+                    </div>
+                </Tooltip>
+            ) : innerContent}
         </div>
     );
 };

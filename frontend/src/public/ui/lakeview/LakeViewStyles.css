@@ -243,3 +243,45 @@
     stroke-width: 1.5;
     color: var(--text-primary);
 }
+
+/* Ensure tooltip integration doesn't break the layout */
+.pool-levels {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+    width: 100%;
+}
+
+/* Make tooltips appear with cursor pointer style */
+.stat-item {
+    cursor: default;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 480px) {
+    .pool-levels {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .pool-levels .stat-item {
+        padding: var(--spacing-sm);
+    }
+
+    /* Make tooltips more mobile-friendly */
+    .tooltip__content {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.5rem;
+        max-width: 200px;
+    }
+}
+
+.stat-item-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
