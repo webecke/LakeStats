@@ -31,7 +31,6 @@ const LakeViewPage: React.FC = () => {
         loading: loadingConditions,
         error: conditionsError,
         currentConditions,
-        formattedDate
     } = useCurrentConditions(lakeId);
 
     if (loadingInfo) {
@@ -60,7 +59,6 @@ const LakeViewPage: React.FC = () => {
                 lakeName={lakeInfo.lakeName}
                 brandColor={lakeInfo.accentColor}
                 brandedName={lakeInfo.brandedName}
-                date={formattedDate || 'No data available'}
             />
 
             <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>

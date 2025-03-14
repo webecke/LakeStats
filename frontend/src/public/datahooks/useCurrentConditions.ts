@@ -5,7 +5,6 @@ interface CurrentConditionsResult {
     loading: boolean;
     error: string | null;
     currentConditions: CurrentConditions | null;
-    formattedDate: string;
 }
 
 /**
@@ -16,7 +15,6 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentConditions, setCurrentConditions] = useState<CurrentConditions | null>(null);
-    const [formattedDate, setFormattedDate] = useState<string>('');
 
     useEffect(() => {
         const fetchCurrentConditions = async () => {
@@ -36,30 +34,11 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
                 if (!conditions) {
                     console.warn(`No current conditions found for lake ${lakeId}`);
                     setCurrentConditions(null);
-                    setFormattedDate('');
                     return;
                 }
 
                 setCurrentConditions(conditions);
 
-                // Format the date
-                if (conditions.timeOfCollection) {
-                    try {
-                        const date = new Date(conditions.timeOfCollection);
-                        const options: Intl.DateTimeFormatOptions = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            timeZone: 'America/Denver' // Mountain Time (Utah)
-                        };
-
-                        const formatted = date.toLocaleDateString('en-US', options);
-                        setFormattedDate(formatted);
-                    } catch (err) {
-                        console.error('Error formatting date:', err);
-                        setFormattedDate('');
-                    }
-                }
             } catch (err) {
                 console.error('Error fetching current conditions:', err);
                 setError(err instanceof Error ? err.message : 'Failed to load current conditions');
@@ -71,5 +50,5 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
         fetchCurrentConditions();
     }, [lakeId]);
 
-    return { loading, error, currentConditions, formattedDate };
+    return { loading, error, currentConditions };
 };

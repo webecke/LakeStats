@@ -7,10 +7,9 @@ interface LakeViewHeaderProps {
     lakeName: string;
     brandedName: string;
     brandColor?: string;
-    date: string;
 }
 
-const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, brandColor, date }) => {
+const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, brandColor }) => {
     const brandStyle = brandColor ? { color: brandColor } : {};
 
     return (
@@ -24,7 +23,6 @@ const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, 
                 </h1>
             </div>
             <p>The latest data for {lakeName}</p>
-            <p className="lake-date">Last updated {date}</p>
         </div>
     );
 };

@@ -6,6 +6,7 @@ import Tooltip from '../../components/Tooltip.tsx';
 interface StatItemProps {
     value: number;
     label: string;
+    secondaryLabel?: string;
     className?: string;
     isCurrentElevation?: boolean;
     isTrendStat?: boolean;
@@ -15,6 +16,7 @@ interface StatItemProps {
 const StatItem: React.FC<StatItemProps> = ({
                                                value,
                                                label,
+                                               secondaryLabel,
                                                className = '',
                                                isCurrentElevation = false,
                                                isTrendStat = true,
@@ -59,6 +61,7 @@ const StatItem: React.FC<StatItemProps> = ({
                 {prefix}{displayValue}<span className="unit">ft</span>{!isCurrentElevation && isTrendStat && icon}
             </p>
             <p className="stat-label">{label}</p>
+            {secondaryLabel && <p className="stat-label">{secondaryLabel}</p>}
         </>
     );
 

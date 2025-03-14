@@ -8,13 +8,13 @@ interface CurrentConditionsProps {
 }
 
 const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
-    const dateString = data.date.toLocaleString('default', { month: 'long' }) + ' ' +  data.date.getDate()
-    console.log(data.date)
+    const dateString = data.date.toLocaleDateString('default', { month: 'long', day: '2-digit' })
     return (
         <div className="current-conditions">
             <StatItem
                 value={data.currentLevel}
                 label="Current Elevation"
+                secondaryLabel={"Last reading: " + data.date.toLocaleDateString('default', { month: 'long', day: '2-digit', year: 'numeric' })}
                 className="current-elevation"
                 isCurrentElevation={true}
                 tooltip={
