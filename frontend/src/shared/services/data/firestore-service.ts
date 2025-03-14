@@ -1,5 +1,5 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import {DataService, Lake, LakeStatus, LakeSystemSettings, DataType, CurrentConditions} from "./types.ts";
+import {DataService, LakeMetaData, LakeStatus, LakeSystemSettings, DataType, CurrentConditions} from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
@@ -46,7 +46,7 @@ export class FirestoreService implements DataService {
         return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
     }
 
-    async getLakeInfo(lakeId: string): Promise<Lake | null> {
+    async getLakeInfo(lakeId: string): Promise<LakeMetaData | null> {
         const docRef = doc(this.db, lakeId, 'lake-info');
         const docSnap = await getDoc(docRef);
 
@@ -59,7 +59,7 @@ export class FirestoreService implements DataService {
         return {
             ...data,
             dataSources: this.convertObjectToMap(data.dataSources || {})
-        } as Lake;
+        } as LakeMetaData;
     }
 
     async getCurrentConditions(lakeId: string): Promise<CurrentConditions | null> {
@@ -179,7 +179,7 @@ export class FirestoreService implements DataService {
 
     async updateLake(lakeId: string, updates: {
         system?: Omit<LakeSystemSettings, 'lakeId'>,
-        info?: Omit<Lake, 'id'>
+        info?: Omit<LakeMetaData, 'id'>
     }): Promise<void> {
         const batch = writeBatch(this.db);
 

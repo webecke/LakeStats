@@ -1,6 +1,7 @@
 import React from 'react';
 import StatItem from './StatItem.tsx';
 import './LakeViewStyles.css';
+import {LakeMetaData} from "../../../shared/services/data";
 
 interface CurrentConditionsProps {
     currentElevation: number;
@@ -8,6 +9,7 @@ interface CurrentConditionsProps {
     weekChange: number;
     yearChange: number;
     tenYearDiff: number;
+    lakeInfo: LakeMetaData;
 }
 
 const CurrentConditions: React.FC<CurrentConditionsProps> = ({

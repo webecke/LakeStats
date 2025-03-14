@@ -1,10 +1,10 @@
 import React from 'react';
 import './LakeDetails.css';
-import { Lake } from '../../../shared/services/data';
+import { LakeMetaData } from '../../../shared/services/data';
 
 interface LakeDetailsProps {
-    lake: Lake;
-    setLake: (value: (((prevState: Lake | null) => Lake | null) | Lake | null)) => void;
+    lake: LakeMetaData;
+    setLake: (value: (((prevState: LakeMetaData | null) => LakeMetaData | null) | LakeMetaData | null)) => void;
 }
 
 export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {

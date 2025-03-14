@@ -1,4 +1,4 @@
-export interface Lake {
+export interface LakeMetaData {
     id: string;
     description: string;
     fillDate: string;
@@ -84,10 +84,10 @@ export interface DataService {
     getLakeSystemSetting(lakeId: string): Promise<LakeSystemSettings | null>
     updateLakeOrder(lakeId: string, newOrder: number): Promise<void>
     reorderLakes(lakes: { lakeId: string; sortOrder: number }[]): Promise<void>
-    getLakeInfo(lakeId: string): Promise<Lake | null>
+    getLakeInfo(lakeId: string): Promise<LakeMetaData | null>
     updateLake(lakeId: string, updates: {
         system?: Omit<LakeSystemSettings, 'lakeId'>,
-        info?: Omit<Lake, 'id'>
+        info?: Omit<LakeMetaData, 'id'>
     }): Promise<void>
     getCurrentConditions(lakeId: string): Promise<CurrentConditions | null>
 }

@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {Button} from '../../shared/components/Button';
 import './LakeManager.css';
-import {dataService, DataType, Lake, LakeSystemSettings} from "../../shared/services/data";
+import {dataService, DataType, LakeMetaData, LakeSystemSettings} from "../../shared/services/data";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
@@ -12,7 +12,7 @@ import {useNotifications} from '../../shared/components/Notification/Notificatio
 export default function LakeManager() {
     const { lakeId } = useParams();
     const [systemConfig, setSystemConfig] = useState<LakeSystemSettings | null>(null);
-    const [lakeData, setLakeData] = useState<Lake | null>(null);
+    const [lakeData, setLakeData] = useState<LakeMetaData | null>(null);
     const [activeTab, setActiveTab] = useState('overview');
     const [isLoading, setIsLoading] = useState(true);
     const { showNotification } = useNotifications();
@@ -33,7 +33,7 @@ export default function LakeManager() {
                 }
 
                 if (!lakeDetails) {
-                    const newLake: Lake = {
+                    const newLake: LakeMetaData = {
                         id: lakeId,
                         description: '',
                         fillDate: '',
@@ -46,7 +46,7 @@ export default function LakeManager() {
                     };
                     setLakeData(newLake);
                 } else {
-                    setLakeData(lakeDetails as Lake);
+                    setLakeData(lakeDetails as LakeMetaData);
                 }
 
                 setSystemConfig(systemData);
