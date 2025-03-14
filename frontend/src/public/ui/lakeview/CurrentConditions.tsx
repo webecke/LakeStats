@@ -9,6 +9,7 @@ interface CurrentConditionsProps {
 
 const CurrentConditions: React.FC<CurrentConditionsProps> = ({data}) => {
     const dateString = data.date.toLocaleString('default', { month: 'long' }) + ' ' +  data.date.getDate()
+    console.log(data.date)
     return (
         <div className="current-conditions">
             <StatItem

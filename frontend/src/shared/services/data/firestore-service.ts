@@ -71,15 +71,8 @@ export class FirestoreService implements DataService {
         const data = docSnap.data();
 
         // Parse the ISO string
-        let timeOfCollection;
-        if (data.timeOfCollection) {
-            timeOfCollection = new Date(data.timeOfCollection);
-        } else {
-            timeOfCollection = new Date();
-        }
-
-        // Handle date field similarly
-        let date = data.date ? new Date(data.date) : new Date();
+        const timeOfCollection = this.parseISODate(data.timeOfCollection);
+        const date = this.parseISODate(data.date);
 
         return {
             ...data,
@@ -237,5 +230,31 @@ export class FirestoreService implements DataService {
             map.set(key as DataType, value);
         });
         return map;
+    }
+
+    /**
+     * Parses a date string in YYYY-MM-DD format into a Date object
+     * that preserves the correct date regardless of timezone.
+     *
+     * @param dateString - Date string in YYYY-MM-DD format or undefined
+     * @returns Date object with the correct date in local timezone
+     */
+    private parseISODate(dateString: string | undefined | null): Date {
+        // Return current date if input is missing
+        if (!dateString) {
+            return new Date();
+        }
+
+        // Check if it matches YYYY-MM-DD format
+        const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+        if (typeof dateString === 'string' && isoDatePattern.test(dateString)) {
+            // Parse the components and create a date in the local timezone
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day); // month is 0-indexed in JavaScript
+        }
+
+        // Fallback to standard parsing if it's not a simple YYYY-MM-DD string
+        return new Date(dateString);
     }
 }
