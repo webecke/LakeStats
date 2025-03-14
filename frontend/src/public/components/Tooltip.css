@@ -1,0 +1,147 @@
+.tooltip-container {
+    position: relative;
+    display: inherit;
+    width: 100%;
+    height: 100%;
+}
+
+.tooltip {
+    position: absolute;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    animation: tooltip-fade-in 0.2s ease-out forwards;
+    max-width: 250px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tooltip__content {
+    background-color: var(--background-higher);
+    color: var(--text-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+/* Arrow styling */
+.tooltip__arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+/* Top position (arrow at bottom) */
+.tooltip--top .tooltip__arrow--top {
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-color: var(--background-higher) transparent transparent;
+}
+
+/* Bottom position (arrow at top) */
+.tooltip--bottom .tooltip__arrow--bottom {
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 6px 6px;
+    border-color: transparent transparent var(--background-higher);
+}
+
+/* Left position (arrow at right) */
+.tooltip--left .tooltip__arrow--left {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-color: transparent transparent transparent var(--background-higher);
+}
+
+/* Right position (arrow at left) */
+.tooltip--right .tooltip__arrow--right {
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 6px 6px 6px 0;
+    border-color: transparent var(--background-higher) transparent transparent;
+}
+
+/* Add some styles for different tooltip types */
+.tooltip--info .tooltip__content {
+    background-color: var(--status-info);
+}
+
+.tooltip--info .tooltip__arrow--top {
+    border-top-color: var(--status-info);
+}
+
+.tooltip--info .tooltip__arrow--bottom {
+    border-bottom-color: var(--status-info);
+}
+
+.tooltip--info .tooltip__arrow--left {
+    border-left-color: var(--status-info);
+}
+
+.tooltip--info .tooltip__arrow--right {
+    border-right-color: var(--status-info);
+}
+
+/* Warning tooltip */
+.tooltip--warning .tooltip__content {
+    background-color: var(--status-warning);
+    color: var(--background-base);
+}
+
+.tooltip--warning .tooltip__arrow--top {
+    border-top-color: var(--status-warning);
+}
+
+.tooltip--warning .tooltip__arrow--bottom {
+    border-bottom-color: var(--status-warning);
+}
+
+.tooltip--warning .tooltip__arrow--left {
+    border-left-color: var(--status-warning);
+}
+
+.tooltip--warning .tooltip__arrow--right {
+    border-right-color: var(--status-warning);
+}
+
+/* Success tooltip */
+.tooltip--success .tooltip__content {
+    background-color: var(--status-success);
+    color: var(--background-base);
+}
+
+.tooltip--success .tooltip__arrow--top {
+    border-top-color: var(--status-success);
+}
+
+.tooltip--success .tooltip__arrow--bottom {
+    border-bottom-color: var(--status-success);
+}
+
+.tooltip--success .tooltip__arrow--left {
+    border-left-color: var(--status-success);
+}
+
+.tooltip--success .tooltip__arrow--right {
+    border-right-color: var(--status-success);
+}
