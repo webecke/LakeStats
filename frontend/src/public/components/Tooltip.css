@@ -5,30 +5,25 @@
     height: 100%;
 }
 
-.tooltip {
-    position: absolute;
-    z-index: 100;
-    pointer-events: none;
-    opacity: 0;
-    animation: tooltip-fade-in 0.2s ease-out forwards;
-    max-width: 250px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+/* Mobile specific styles */
+.tooltip-container--mobile {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
-@keyframes tooltip-fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.tooltip {
+    position: absolute;
+    z-index: 1000; /* Higher z-index to ensure visibility */
+    max-width: 250px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    animation: tooltip-fade-in 0.2s ease-out forwards;
+    /* Important to allow clicks on mobile */
+    pointer-events: auto;
 }
 
 .tooltip__content {
-    background-color: var(--background-higher);
-    color: var(--text-primary);
+    background-color: var(--background-higher, #2d2d2d);
+    color: var(--text-primary, white);
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -46,102 +41,134 @@
 }
 
 /* Top position (arrow at bottom) */
-.tooltip--top .tooltip__arrow--top {
+.tooltip--top .tooltip__arrow {
     bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
     border-width: 6px 6px 0;
-    border-color: var(--background-higher) transparent transparent;
+    border-color: var(--background-higher, #2d2d2d) transparent transparent;
 }
 
 /* Bottom position (arrow at top) */
-.tooltip--bottom .tooltip__arrow--bottom {
+.tooltip--bottom .tooltip__arrow {
     top: -6px;
     left: 50%;
     transform: translateX(-50%);
     border-width: 0 6px 6px;
-    border-color: transparent transparent var(--background-higher);
+    border-color: transparent transparent var(--background-higher, #2d2d2d);
 }
 
 /* Left position (arrow at right) */
-.tooltip--left .tooltip__arrow--left {
+.tooltip--left .tooltip__arrow {
     right: -6px;
     top: 50%;
     transform: translateY(-50%);
     border-width: 6px 0 6px 6px;
-    border-color: transparent transparent transparent var(--background-higher);
+    border-color: transparent transparent transparent var(--background-higher, #2d2d2d);
 }
 
 /* Right position (arrow at left) */
-.tooltip--right .tooltip__arrow--right {
+.tooltip--right .tooltip__arrow {
     left: -6px;
     top: 50%;
     transform: translateY(-50%);
     border-width: 6px 6px 6px 0;
-    border-color: transparent var(--background-higher) transparent transparent;
+    border-color: transparent var(--background-higher, #2d2d2d) transparent transparent;
 }
 
-/* Add some styles for different tooltip types */
+/* Animations */
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile optimizations */
+@media (hover: none), (pointer: coarse) {
+    .tooltip__content {
+        font-size: 1rem; /* Larger text on mobile */
+        padding: 0.75rem 1rem; /* More padding for easier touch */
+    }
+
+    /* Add ability to scroll tooltip content on mobile if needed */
+    .tooltip__content {
+        max-height: 200px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Support for stat items */
+    .stat-item-inner {
+        cursor: pointer;
+    }
+}
+
+/* Info tooltip */
 .tooltip--info .tooltip__content {
-    background-color: var(--status-info);
+    background-color: var(--status-info, #3498db);
 }
 
 .tooltip--info .tooltip__arrow--top {
-    border-top-color: var(--status-info);
+    border-top-color: var(--status-info, #3498db);
 }
 
 .tooltip--info .tooltip__arrow--bottom {
-    border-bottom-color: var(--status-info);
+    border-bottom-color: var(--status-info, #3498db);
 }
 
 .tooltip--info .tooltip__arrow--left {
-    border-left-color: var(--status-info);
+    border-left-color: var(--status-info, #3498db);
 }
 
 .tooltip--info .tooltip__arrow--right {
-    border-right-color: var(--status-info);
+    border-right-color: var(--status-info, #3498db);
 }
 
 /* Warning tooltip */
 .tooltip--warning .tooltip__content {
-    background-color: var(--status-warning);
-    color: var(--background-base);
+    background-color: var(--status-warning, #f1c40f);
+    color: var(--background-base, #121212);
 }
 
 .tooltip--warning .tooltip__arrow--top {
-    border-top-color: var(--status-warning);
+    border-top-color: var(--status-warning, #f1c40f);
 }
 
 .tooltip--warning .tooltip__arrow--bottom {
-    border-bottom-color: var(--status-warning);
+    border-bottom-color: var(--status-warning, #f1c40f);
 }
 
 .tooltip--warning .tooltip__arrow--left {
-    border-left-color: var(--status-warning);
+    border-left-color: var(--status-warning, #f1c40f);
 }
 
 .tooltip--warning .tooltip__arrow--right {
-    border-right-color: var(--status-warning);
+    border-right-color: var(--status-warning, #f1c40f);
 }
 
 /* Success tooltip */
 .tooltip--success .tooltip__content {
-    background-color: var(--status-success);
-    color: var(--background-base);
+    background-color: var(--status-success, #2ecc71);
+    color: var(--background-base, #121212);
 }
 
 .tooltip--success .tooltip__arrow--top {
-    border-top-color: var(--status-success);
+    border-top-color: var(--status-success, #2ecc71);
 }
 
 .tooltip--success .tooltip__arrow--bottom {
-    border-bottom-color: var(--status-success);
+    border-bottom-color: var(--status-success, #2ecc71);
 }
 
 .tooltip--success .tooltip__arrow--left {
-    border-left-color: var(--status-success);
+    border-left-color: var(--status-success, #2ecc71);
 }
 
 .tooltip--success .tooltip__arrow--right {
-    border-right-color: var(--status-success);
+    border-right-color: var(--status-success, #2ecc71);
 }
