@@ -6,17 +6,12 @@ import dev.webecke.lakestats.collector.BureauOfReclamationDataCollector;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
 import dev.webecke.lakestats.model.*;
-import dev.webecke.lakestats.model.geography.AccessPoint;
-import dev.webecke.lakestats.model.geography.AccessType;
+import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.geography.Lake;
-import dev.webecke.lakestats.model.geography.LakeRegion;
 import dev.webecke.lakestats.model.measurements.DataType;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DataCollectionService {

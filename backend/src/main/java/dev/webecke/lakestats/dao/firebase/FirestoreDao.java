@@ -3,7 +3,7 @@ package dev.webecke.lakestats.dao.firebase;
 import com.google.cloud.firestore.DocumentReference;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
-import dev.webecke.lakestats.model.CurrentConditions;
+import dev.webecke.lakestats.model.features.CurrentConditions;
 
 import com.google.cloud.firestore.Firestore;
 import dev.webecke.lakestats.model.LakeSystemSettings;

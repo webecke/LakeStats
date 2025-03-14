@@ -1,5 +1,7 @@
 package dev.webecke.lakestats.model;
 
+import dev.webecke.lakestats.model.features.LakeSystemFeatures;
+
 import java.util.List;
 
 public record LakeSystemSettings(

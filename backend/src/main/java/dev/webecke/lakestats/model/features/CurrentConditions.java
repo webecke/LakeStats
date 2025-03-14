@@ -1,4 +1,4 @@
-package dev.webecke.lakestats.model;
+package dev.webecke.lakestats.model.features;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

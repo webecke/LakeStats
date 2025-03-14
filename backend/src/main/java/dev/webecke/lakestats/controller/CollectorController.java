@@ -1,7 +1,6 @@
 package dev.webecke.lakestats.controller;
 
 import dev.webecke.lakestats.aggregator.ErrorAggregator;
-import dev.webecke.lakestats.model.CurrentConditions;
 import dev.webecke.lakestats.model.SystemError;
 import dev.webecke.lakestats.service.DataCollectionService;
 import org.springframework.web.bind.annotation.*;

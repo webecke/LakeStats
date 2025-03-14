@@ -1,7 +1,7 @@
 package dev.webecke.lakestats.aggregator;
 
 import dev.webecke.lakestats.model.CollectorResponse;
-import dev.webecke.lakestats.model.CurrentConditions;
+import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.TimeSeriesData;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
