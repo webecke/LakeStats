@@ -1,0 +1,22 @@
+package dev.webecke.lakestats.model;
+
+public enum ResultStatus {
+    /**
+     * Operation was successful. No errors occurred
+     */
+    SUCCESS,
+    /**
+     * Operation was successful, but the source of the data hasn't been updated.
+     * The system should retry the operation later when the data source has been updated.
+     */
+    SOURCE_DATA_NOT_UPDATED,
+    /**
+     * Operation was not successful due to an error in the configuration of the system.
+     * This could be due to missing or incorrect settings.
+     */
+    CONFIGURATION_ERROR,
+    /**
+     * Operation was not successful due to some sort of exception or error that occurred during the operation.
+     */
+    SYSTEM_EXCEPTION,
+}
