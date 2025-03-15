@@ -11,6 +11,7 @@ import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.utils.SystemTimer;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class DataCollectionService {
         SystemTimer timer = new SystemTimer();
         List<String> lakeIds = databaseAccess.getAllLakeIds();
         List<RunLakeCollectorResult> lakeCollectorResults = new ArrayList<>();
+        ResultStatus status = ResultStatus.SUCCESS;
 
         for (String lakeId : lakeIds) {
             LakeSystemSettings settings = databaseAccess.getLakeSystemSettings(lakeId);
@@ -42,9 +44,10 @@ public class DataCollectionService {
 
             RunLakeCollectorResult result = collectDataForLake(lakeId);
             lakeCollectorResults.add(result);
+            status = ResultStatus.getMoreSevereStatus(status, result.status());
         }
 
-        return new RunSystemResult(LocalDateTime.now(), ResultStatus.SUCCESS, "Data collection completed",
+        return new RunSystemResult(LocalDateTime.now(), status, "Data collection completed without exploding",
                 timer.end(), lakeCollectorResults);
     }
 
@@ -88,6 +91,13 @@ public class DataCollectionService {
                 resultMessage = "Error while publishing data to the database";
                 logger.errorForLake(resultMessage, lake.id(), e);
             }
+
+            if (currentConditions.date().isBefore(LocalDate.now().minusDays(1))) {
+                status = ResultStatus.SOURCE_DATA_NOT_UPDATED;
+                resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.date());
+                logger.warnForLake(resultMessage, lake.id());
+            }
+
         } catch (LakeStatsException e) {
             status = e.getType();
             resultMessage = e.getMessage();

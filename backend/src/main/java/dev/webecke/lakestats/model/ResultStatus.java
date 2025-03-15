@@ -22,5 +22,21 @@ public enum ResultStatus {
     /**
      * Operation was successful, but there was an error while publishing the data to the database.
      */
-    PUBLICATION_ERROR
+    PUBLICATION_ERROR;
+
+    public static ResultStatus getMoreSevereStatus(ResultStatus status1, ResultStatus status2) {
+        if (status1 == ResultStatus.SYSTEM_EXCEPTION || status2 == ResultStatus.SYSTEM_EXCEPTION) {
+            return ResultStatus.SYSTEM_EXCEPTION;
+        }
+        if (status1 == ResultStatus.CONFIGURATION_ERROR || status2 == ResultStatus.CONFIGURATION_ERROR) {
+            return ResultStatus.CONFIGURATION_ERROR;
+        }
+        if (status1 == ResultStatus.PUBLICATION_ERROR || status2 == ResultStatus.PUBLICATION_ERROR) {
+            return ResultStatus.PUBLICATION_ERROR;
+        }
+        if (status1 == ResultStatus.SOURCE_DATA_NOT_UPDATED || status2 == ResultStatus.SOURCE_DATA_NOT_UPDATED) {
+            return ResultStatus.SOURCE_DATA_NOT_UPDATED;
+        }
+        return ResultStatus.SUCCESS;
+    }
 }
