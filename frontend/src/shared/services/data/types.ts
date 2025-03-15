@@ -36,6 +36,7 @@ export enum DataType {
 }
 
 export enum LakeSystemFeatures {
+    REGIONS = "REGIONS",
     ACCESS_POINTS = "ACCESS_POINTS",
 }
 

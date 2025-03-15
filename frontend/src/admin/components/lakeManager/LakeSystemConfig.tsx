@@ -119,9 +119,6 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                                 </label>
                             </div>
                         ))}
-                        <p>
-                            <em>The Current Conditions feature is always enabled</em>
-                        </p>
                     </div>
                 </div>
             </div>

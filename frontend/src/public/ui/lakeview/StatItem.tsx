@@ -24,7 +24,7 @@ const StatItem: React.FC<StatItemProps> = ({
 }) => {
     // Determine if value is positive, negative, or zero
     let icon;
-    let numberClass ;
+    let numberClass;
 
     if (value > 0) {
         icon = <TrendingUp className="trend-icon trend-up" />;

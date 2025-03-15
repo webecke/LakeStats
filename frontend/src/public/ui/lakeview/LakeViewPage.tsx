@@ -86,7 +86,7 @@ const LakeViewPage: React.FC = () => {
                         <CurrentConditions data={data} />
 
                         {/* Regions and Access Points Section - using direct children */}
-                        {hasRegions && (
+                        {lakeInfo?.features.includes(LakeSystemFeatures.REGIONS) && hasRegions && (
                             <RegionSelector regions={lakeDetails.regions}>
                                 {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
                                     <AccessPointList currentElevation={data.currentLevel} />
