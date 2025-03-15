@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface DatabaseAccess {
     void publishCurrentConditions(CurrentConditions conditions) throws DataAccessException;
-    void publishErrors(List<SystemError> errors) throws DataAccessException;
     void publishLakeInfo(Lake lake) throws DataAccessException;
     List<String> getAllLakeIds() throws DataAccessException;
     LakeSystemSettings getLakeSystemSettings(String lakeId) throws DataAccessException;

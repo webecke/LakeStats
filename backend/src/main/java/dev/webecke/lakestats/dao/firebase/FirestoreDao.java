@@ -38,47 +38,6 @@ public class FirestoreDao implements DatabaseAccess {
     }
 
     @Override
-    public void publishErrors(List<SystemError> errors) throws DataAccessException {
-        if (errors.isEmpty()) {
-            // Get all lake IDs that have recent errors
-            firestore.collection(SYSTEM_ERRORS_ID)
-                    .document("recent")
-                    .listCollections()
-                    .forEach(collection -> {
-                        // Delete the errors document for each lake
-                        collection.document("errors").delete();
-                    });
-            return;
-        }
-
-        Map<String, List<SystemError>> errorsByLake = errors.stream()
-                .collect(Collectors.groupingBy(
-                        SystemError::lakeId
-                ));
-
-        // Get timestamp for archiving
-        String timestamp = LocalDateTime.now().toString();
-
-        errorsByLake.forEach((lakeId, lakeErrors) -> {
-            Map<String, Object> errorData = Map.of("errors", lakeErrors);
-
-            // First, move 'recent' to archived
-            firestore.collection(SYSTEM_ERRORS_ID)
-                    .document(timestamp)
-                    .collection(lakeId)  // new collection named with timestamp
-                    .document("errors")
-                    .set(serializer.serializeToMap(errorData));
-
-            // Then clear and update 'recent'
-            firestore.collection(SYSTEM_ERRORS_ID)
-                    .document("recent")
-                    .collection(lakeId)
-                    .document("errors")
-                    .set(serializer.serializeToMap(errorData));
-        });
-    }
-
-    @Override
     public void publishLakeInfo(Lake lake) throws DataAccessException {
         firestore.collection(lake.id()).document(LAKE_INFO_ID).set(serializer.serializeToMap(lake));
     }
