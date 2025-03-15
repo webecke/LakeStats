@@ -1,0 +1,157 @@
+.access-point-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-radius: 6px;
+    background-color: var(--background-elevated, #1e1e1e);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+/* Left border for status indication */
+.access-point-item.status-open::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--status-success, #2ecc71);
+}
+
+.access-point-item.status-closed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--status-error, #e74c3c);
+}
+
+.access-point-item.status-caution::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 4px;
+    background-color: var(--status-warning, #f1c40f);
+}
+
+.access-point-content {
+    flex: 1;
+    min-width: 0; /* Allows text truncation */
+    padding-left: 8px; /* Add some padding since we removed the icon */
+    text-align: left;
+}
+
+.access-point-name {
+    font-weight: 500;
+    color: var(--text-primary, #ffffff);
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.access-point-type {
+    font-size: 0.8rem;
+    color: var(--text-muted, rgba(255, 255, 255, 0.6));
+    text-align: left;
+}
+
+.map-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: 8px;
+    transition: all 0.2s ease;
+}
+
+.map-button:hover {
+    color: var(--text-primary, #ffffff);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.access-point-details {
+    text-align: right;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.status-text.status-open {
+    color: var(--status-success, #2ecc71);
+}
+
+.status-text.status-closed {
+    color: var(--status-error, #e74c3c);
+}
+
+.status-text.status-caution {
+    color: var(--status-warning, #f1c40f);
+}
+
+.elevation-difference {
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+/* Elevation difference colors now match status */
+.elevation-difference.status-open {
+    color: var(--status-success, #2ecc71);
+}
+
+.elevation-difference.status-closed {
+    color: var(--status-error, #e74c3c);
+}
+
+.elevation-difference.status-caution {
+    color: var(--status-warning, #f1c40f);
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .access-point-item {
+        padding: 10px;
+    }
+
+    .access-point-name {
+        font-size: 1rem;
+    }
+
+    .access-point-type {
+        font-size: 0.75rem;
+    }
+
+    .status-text {
+        font-size: 0.9rem;
+    }
+
+    .elevation-difference {
+        font-size: 0.9rem;
+    }
+
+    .map-button {
+        width: 28px;
+        height: 28px;
+    }
+}

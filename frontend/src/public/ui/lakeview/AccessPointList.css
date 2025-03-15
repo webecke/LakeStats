@@ -1,0 +1,60 @@
+.access-point-list {
+    width: 100%;
+    padding: 12px 8px;
+    background-color: var(--background-base, #121212);
+    border-radius: 8px;
+    margin-top: 0;
+}
+
+.access-point-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px; /* Reduced spacing below header */
+}
+
+.access-point-list-title {
+    font-size: 1.5rem; /* Smaller font size for header */
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    margin: 0;
+}
+
+.access-point-stats {
+    font-size: 1rem; /* Slightly smaller stats text */
+    color: var(--text-secondary, rgba(255, 255, 255, 0.87));
+}
+
+.open-count {
+    color: var(--status-success, #2ecc71);
+    font-weight: 500;
+}
+
+.access-point-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.no-access-points {
+    text-align: center;
+    padding: 16px;
+    color: var(--text-secondary, rgba(255, 255, 255, 0.87));
+    background-color: var(--background-elevated, #1e1e1e);
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* Responsive styles */
+@media (max-width: 480px) {
+    .access-point-list {
+        padding: 8px 6px;
+    }
+
+    .access-point-list-title {
+        font-size: 1.25rem;
+    }
+
+    .access-point-stats {
+        font-size: 0.9rem;
+    }
+}
