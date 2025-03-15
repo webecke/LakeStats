@@ -47,11 +47,28 @@ public class CollectorController {
         }
     }
 
-//    @GetMapping("/{lakeId}")
-//    public ResponseEntity<RunLakeCollectorResult> runCollectors(@PathVariable String lakeId) {
-//        errorAggregator.flushErrors();
-//        service.collectDataForLake(lakeId);
-//        List<SystemError> errors = errorAggregator.flushErrors();
-//        return "Collectors have been run for lake %s with %d errors.\n\n%s".formatted(lakeId, errors.size(), errors.toString());
-//    }
+    @GetMapping("/{lakeId}")
+    public ResponseEntity<RunLakeCollectorResult> runCollector(@PathVariable String lakeId) {
+        logger.info("Running collector for lake: %s".formatted(lakeId));
+
+        RunLakeCollectorResult result = service.collectDataForLake(lakeId);
+
+        switch (result.status()) {
+            case SUCCESS -> {
+                logger.info("Collector completed successfully for lake %s in %d milliseconds"
+                        .formatted(lakeId, result.durationInMillis()));
+                return ResponseEntity.ok(result);
+            }
+            case SOURCE_DATA_NOT_UPDATED -> {
+                return ResponseEntity.status(503).body(result);
+            }
+            case CONFIGURATION_ERROR -> {
+                return ResponseEntity.badRequest().body(result);
+            }
+            case SYSTEM_EXCEPTION -> {
+                return ResponseEntity.status(500).body(result);
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + result.status());
+        }
+    }
 }
