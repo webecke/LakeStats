@@ -137,9 +137,6 @@ export default function LakeManager() {
             case 'regions':
                 return (
                     <div className="content-panel">
-                        <div className="content-panel__header">
-                            <h2 className="content-panel__title">Regions</h2>
-                        </div>
                         <div className="content-panel__content">
                             <RegionManager
                                 lakeData={lakeData!}

@@ -1,182 +1,185 @@
+/* RegionManager.css - Styling for the region management interface */
+
+/* Container layout */
 .region-manager {
     display: flex;
     flex-direction: column;
     width: 100%;
+    gap: 16px;
+    background-color: #1a1a1a; /* Darker background */
+    padding: 24px;
+    border-radius: 8px;
 }
 
+/* Header section with title and add button */
 .region-manager__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    position: relative; /* For absolute positioning of the button */
 }
 
 .region-manager__title {
-    font-size: 1.25rem;
-    font-weight: 600;
     margin: 0;
+    color: var(--text-primary);
+    width: 100%;
+    text-align: center; /* Center the title */
 }
 
+/* Two-column layout for content */
 .region-manager__content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 280px 1fr;
     gap: 20px;
-    min-height: 400px;
 }
 
+/* Sidebar styles */
 .region-manager__sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    background-color: var(--background-higher);
+    background-color: var(--background-elevated);
     border-radius: 8px;
-    padding: 12px;
-}
-
-.region-manager__detail {
-    flex: 1;
-    background-color: var(--background-higher);
-    border-radius: 8px;
-    padding: 20px;
+    overflow: hidden;
+    border: 1px solid #333; /* Add subtle border */
 }
 
 .region-manager__empty {
-    color: var(--text-secondary);
+    padding: 20px;
     text-align: center;
-    padding: 20px 12px;
-    font-style: italic;
-    background-color: var(--background-base);
-    border-radius: 6px;
+    color: var(--text-secondary);
 }
 
 .region-manager__list {
-    list-style-type: none;
-    padding: 0;
+    list-style: none;
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    padding: 0;
 }
 
 .region-manager__list-item {
     display: flex;
+    border-bottom: 1px solid var(--border-light);
     align-items: center;
-    justify-content: space-between;
-    background-color: var(--background-base);
-    border-radius: 6px;
-    overflow: hidden;
-    transition: background-color 0.2s;
+}
+
+.region-manager__list-item:last-child {
+    border-bottom: none;
 }
 
 .region-manager__list-item.active {
-    background-color: var(--background-elevated);
-    border-left: 3px solid var(--action-primary);
+    background-color: var(--background-higher);
 }
 
 .region-manager__list-button {
     flex: 1;
-    padding: 10px 12px;
+    padding: 12px;
     text-align: left;
-    border: none;
     background: none;
+    border: none;
     color: var(--text-primary);
     cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: color 0.2s;
 }
 
 .region-manager__list-button:hover {
-    color: var(--action-primary);
+    background-color: var(--background-higher);
 }
 
-.region-manager__list-actions {
+/* Reordering buttons */
+.region-manager__list-order-buttons {
     display: flex;
-    padding-right: 6px;
+    flex-direction: column;
+    margin-left: 8px;
 }
 
 .region-manager__action-button {
     background: none;
     border: none;
     color: var(--text-secondary);
-    padding: 6px;
-    border-radius: 4px;
     cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.region-manager__action-button:hover {
+.region-manager__action-button:hover:not(:disabled) {
+    background-color: var(--background-higher);
     color: var(--text-primary);
-    background-color: var(--background-elevated);
-}
-
-.region-manager__action-button--delete:hover {
-    color: var(--status-error);
 }
 
 .region-manager__action-button:disabled {
-    opacity: 0.5;
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
+.region-manager__action-button--delete:hover:not(:disabled) {
+    color: var(--status-error);
+}
+
+.region-manager__list-actions {
+    display: flex;
+    margin-right: 8px;
+    gap: 4px;
+}
+
+/* Main content area */
+.region-manager__detail {
+    background-color: var(--background-elevated);
+    padding: 24px;
+    border-radius: 8px;
+    min-height: 400px;
+    border: 1px solid #333; /* Add subtle border */
+}
+
 .region-manager__select-prompt {
-    color: var(--text-secondary);
     text-align: center;
-    padding: 40px 20px;
+    padding: 40px 0;
+    color: var(--text-secondary);
 }
 
-/* Region Form Styles */
-.region-form {
-    max-width: 100%;
-}
-
-.region-form h3 {
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
+/* Generic form styling for RegionForm */
 .form-field {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .form-field label {
     display: block;
-    margin-bottom: 6px;
-    font-size: 0.875rem;
+    margin-bottom: 8px;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-primary);
 }
 
 .form-field input,
-.form-field textarea {
+.form-field textarea,
+.form-field select {
     width: 100%;
-    padding: 10px 12px;
+    padding: 10px;
     background-color: var(--background-base);
     border: 1px solid var(--border-medium);
-    border-radius: 6px;
+    border-radius: 4px;
     color: var(--text-primary);
-    font-size: 0.875rem;
+    font-size: 0.9rem;
 }
 
 .form-field input:focus,
-.form-field textarea:focus {
+.form-field textarea:focus,
+.form-field select:focus {
     outline: none;
     border-color: var(--action-primary);
 }
 
-.form-field input.error,
-.form-field textarea.error {
+.form-field input.error {
     border-color: var(--status-error);
 }
 
 .error-message {
-    color: var(--status-error);
-    font-size: 0.75rem;
     margin-top: 4px;
+    color: var(--status-error);
+    font-size: 0.85rem;
 }
 
-.form-field input:disabled {
-    background-color: var(--background-elevated);
-    opacity: 0.7;
-    cursor: not-allowed;
+.form-field-help {
+    margin-top: 4px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
 }
 
 .form-actions {
