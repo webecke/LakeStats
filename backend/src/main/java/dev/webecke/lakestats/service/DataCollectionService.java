@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +94,8 @@ public class DataCollectionService {
                 logger.errorForLake(resultMessage, lake.id(), e);
             }
 
-            if (currentConditions.date().isBefore(LocalDate.now().minusDays(1))) {
+            LocalDate utahToday = ZonedDateTime.now(ZoneId.of("America/Denver")).toLocalDate();
+            if (currentConditions.date().isBefore(utahToday.minusDays(1))) {
                 status = ResultStatus.SOURCE_DATA_NOT_UPDATED;
                 resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.date());
                 logger.warnForLake(resultMessage, lake.id());
