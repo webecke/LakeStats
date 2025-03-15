@@ -24,7 +24,6 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
         minSafeElevation: 0,
         minUsableElevation: 0,
         googleMapsLink: '',
-        sortOrder: 0 // This will be set automatically in the parent component
     };
 
     // Initialize with access point data if available, otherwise use defaults

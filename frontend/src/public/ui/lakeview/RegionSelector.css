@@ -9,7 +9,6 @@
     background-color: var(--background-higher);
     border-radius: 8px;
     overflow: hidden;
-    margin-bottom: 8px; /* Reduced gap between tabs and access points list */
 }
 
 .region-tab {

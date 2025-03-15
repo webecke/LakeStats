@@ -15,16 +15,8 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
     const [isAddingAccessPoint, setIsAddingAccessPoint] = useState(false);
     const [isEditingAccessPoint, setIsEditingAccessPoint] = useState(false);
 
-    // Sort access points by sortOrder
-    const sortedAccessPoints = [...(region.accessPoints || [])].sort(
-        (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)
-    );
-
-    // Calculate max sort order for new access points
-    const getMaxSortOrder = () => {
-        if (sortedAccessPoints.length === 0) return 0;
-        return Math.max(...sortedAccessPoints.map(ap => ap.sortOrder || 0));
-    };
+    // Simply use the accessPoints array in its current order
+    const accessPoints = region.accessPoints || [];
 
     const handleAddAccessPoint = () => {
         setIsAddingAccessPoint(true);
@@ -43,7 +35,8 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
             return;
         }
 
-        const updatedAccessPoints = region.accessPoints.filter(point => point.id !== id);
+        // Filter out the deleted access point
+        const updatedAccessPoints = accessPoints.filter(point => point.id !== id);
         onUpdateAccessPoints(updatedAccessPoints);
 
         if (selectedAccessPointId === id) {
@@ -52,82 +45,52 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
         }
     };
 
-    // Handle moving an access point up in sort order
+    // Move an access point up in the array
     const handleMoveUp = (id: string) => {
-        const currentIndex = sortedAccessPoints.findIndex(ap => ap.id === id);
+        const currentIndex = accessPoints.findIndex(ap => ap.id === id);
 
         if (currentIndex <= 0) return; // Already at the top
 
-        const currentAP = sortedAccessPoints[currentIndex];
-        const previousAP = sortedAccessPoints[currentIndex - 1];
+        // Create a new array with the items swapped
+        const updatedAccessPoints = [...accessPoints];
 
-        // Swap sort orders
-        const updatedAccessPoints = [...region.accessPoints];
+        // Swap the items
+        [updatedAccessPoints[currentIndex], updatedAccessPoints[currentIndex - 1]] =
+            [updatedAccessPoints[currentIndex - 1], updatedAccessPoints[currentIndex]];
 
-        // Find the actual indices in the original array
-        const currentOrig = updatedAccessPoints.findIndex(ap => ap.id === currentAP.id);
-        const prevOrig = updatedAccessPoints.findIndex(ap => ap.id === previousAP.id);
-
-        // Swap sort orders
-        updatedAccessPoints[currentOrig] = {
-            ...updatedAccessPoints[currentOrig],
-            sortOrder: previousAP.sortOrder || 0
-        };
-
-        updatedAccessPoints[prevOrig] = {
-            ...updatedAccessPoints[prevOrig],
-            sortOrder: currentAP.sortOrder || 0
-        };
-
+        // Update with the new array order
         onUpdateAccessPoints(updatedAccessPoints);
     };
 
-    // Handle moving an access point down in sort order
+    // Move an access point down in the array
     const handleMoveDown = (id: string) => {
-        const currentIndex = sortedAccessPoints.findIndex(ap => ap.id === id);
+        const currentIndex = accessPoints.findIndex(ap => ap.id === id);
 
-        if (currentIndex === -1 || currentIndex === sortedAccessPoints.length - 1) return; // Already at the bottom
+        if (currentIndex === -1 || currentIndex === accessPoints.length - 1) return; // Already at the bottom
 
-        const currentAP = sortedAccessPoints[currentIndex];
-        const nextAP = sortedAccessPoints[currentIndex + 1];
+        // Create a new array with the items swapped
+        const updatedAccessPoints = [...accessPoints];
 
-        // Swap sort orders
-        const updatedAccessPoints = [...region.accessPoints];
+        // Swap the items
+        [updatedAccessPoints[currentIndex], updatedAccessPoints[currentIndex + 1]] =
+            [updatedAccessPoints[currentIndex + 1], updatedAccessPoints[currentIndex]];
 
-        // Find the actual indices in the original array
-        const currentOrig = updatedAccessPoints.findIndex(ap => ap.id === currentAP.id);
-        const nextOrig = updatedAccessPoints.findIndex(ap => ap.id === nextAP.id);
-
-        // Swap sort orders
-        updatedAccessPoints[currentOrig] = {
-            ...updatedAccessPoints[currentOrig],
-            sortOrder: nextAP.sortOrder || 0
-        };
-
-        updatedAccessPoints[nextOrig] = {
-            ...updatedAccessPoints[nextOrig],
-            sortOrder: currentAP.sortOrder || 0
-        };
-
+        // Update with the new array order
         onUpdateAccessPoints(updatedAccessPoints);
     };
 
     const handleSaveAccessPoint = (accessPoint: AccessPoint) => {
+        // Check if we're adding or editing
+        const existingIndex = accessPoints.findIndex(point => point.id === accessPoint.id);
+
         let updatedAccessPoints: AccessPoint[];
 
-        // Check if this is a new access point or an edit
-        const existingIndex = region.accessPoints.findIndex(point => point.id === accessPoint.id);
-
         if (existingIndex === -1) {
-            // For new access points, automatically assign the next highest sort order
-            accessPoint = {
-                ...accessPoint,
-                sortOrder: getMaxSortOrder() + 1
-            };
-            updatedAccessPoints = [...region.accessPoints, accessPoint];
+            // For new access points, add to the end of the array
+            updatedAccessPoints = [...accessPoints, accessPoint];
         } else {
-            // For existing access points, update while preserving sort order
-            updatedAccessPoints = region.accessPoints.map(point =>
+            // For existing access points, update in place
+            updatedAccessPoints = accessPoints.map(point =>
                 point.id === accessPoint.id ? accessPoint : point
             );
         }
@@ -143,6 +106,7 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
         setIsEditingAccessPoint(false);
     };
 
+    // Rest of the component remains largely the same
     return (
         <div className="access-point-manager">
             <div className="access-point-manager__header">
@@ -161,13 +125,13 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
 
             <div className="access-point-manager__content">
                 <div className="access-point-manager__sidebar">
-                    {sortedAccessPoints.length === 0 ? (
+                    {accessPoints.length === 0 ? (
                         <div className="access-point-manager__empty">
                             No access points defined for this region yet.
                         </div>
                     ) : (
                         <ul className="access-point-manager__list">
-                            {sortedAccessPoints.map((accessPoint, index) => (
+                            {accessPoints.map((accessPoint, index) => (
                                 <li
                                     key={accessPoint.id}
                                     className={`access-point-manager__list-item ${
@@ -186,7 +150,7 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
                                         <button
                                             className="access-point-manager__action-button"
                                             onClick={() => handleMoveDown(accessPoint.id)}
-                                            disabled={index === sortedAccessPoints.length - 1 || isAddingAccessPoint || isEditingAccessPoint}
+                                            disabled={index === accessPoints.length - 1 || isAddingAccessPoint || isEditingAccessPoint}
                                             title="Move down"
                                         >
                                             <ChevronDown size={14} />
@@ -228,20 +192,21 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
                 </div>
 
                 <div className="access-point-manager__detail">
+                    {/* Rest of the component remains the same */}
                     {isAddingAccessPoint && (
                         <AccessPointForm
                             onSave={handleSaveAccessPoint}
                             onCancel={handleCancelAccessPoint}
-                            existingIds={region.accessPoints.map(point => point.id)}
+                            existingIds={accessPoints.map(point => point.id)}
                         />
                     )}
 
                     {isEditingAccessPoint && selectedAccessPointId && (
                         <AccessPointForm
-                            accessPoint={region.accessPoints.find(point => point.id === selectedAccessPointId)}
+                            accessPoint={accessPoints.find(point => point.id === selectedAccessPointId)}
                             onSave={handleSaveAccessPoint}
                             onCancel={handleCancelAccessPoint}
-                            existingIds={region.accessPoints
+                            existingIds={accessPoints
                                 .filter(point => point.id !== selectedAccessPointId)
                                 .map(point => point.id)}
                         />
@@ -250,12 +215,12 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
                     {!isAddingAccessPoint && !isEditingAccessPoint && selectedAccessPointId && (
                         <div className="access-point-manager__view">
                             {renderAccessPointDetails(
-                                region.accessPoints.find(point => point.id === selectedAccessPointId)!
+                                accessPoints.find(point => point.id === selectedAccessPointId)!
                             )}
                         </div>
                     )}
 
-                    {!isAddingAccessPoint && !isEditingAccessPoint && !selectedAccessPointId && sortedAccessPoints.length > 0 && (
+                    {!isAddingAccessPoint && !isEditingAccessPoint && !selectedAccessPointId && accessPoints.length > 0 && (
                         <div className="access-point-manager__select-prompt">
                             Select an access point from the list to view details, or add a new access point.
                         </div>
@@ -266,7 +231,7 @@ const AccessPointManager: React.FC<AccessPointManagerProps> = ({ region, onUpdat
     );
 };
 
-// Helper function to render access point details
+// Helper function to render access point details (unchanged)
 const renderAccessPointDetails = (accessPoint: AccessPoint) => {
     return (
         <div className="access-point-details">

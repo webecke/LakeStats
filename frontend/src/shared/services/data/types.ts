@@ -54,7 +54,6 @@ export interface AccessPoint {
     minSafeElevation: number;
     minUsableElevation: number;
     googleMapsLink: string;
-    sortOrder: number;
 }
 
 export interface CurrentConditions {
@@ -81,6 +80,7 @@ export interface SystemError {
 }
 
 export interface DataService {
+    updateLakeRegionAccessPoints(lakeId: string, regionId: string, accessPoints: AccessPoint[]): Promise<void>
     addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void>
     updateLakeStatus(lakeId: string, newStatus: LakeStatus): Promise<void>
     getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]>

@@ -1,5 +1,13 @@
 import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
-import {DataService, LakeMetaData, LakeStatus, LakeSystemSettings, DataType, CurrentConditions} from "./types.ts";
+import {
+    DataService,
+    LakeMetaData,
+    LakeStatus,
+    LakeSystemSettings,
+    DataType,
+    CurrentConditions,
+    AccessPoint
+} from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
@@ -84,6 +92,43 @@ export class FirestoreService implements DataService {
     //////////////////////////////
     // ADMIN MANAGEMENT METHODS //
     //////////////////////////////
+
+    // In firestore-service.ts or similar
+    async updateLakeRegionAccessPoints(
+        lakeId: string,
+        regionId: string,
+        accessPoints: AccessPoint[]
+    ): Promise<void> {
+        const regionRef = doc(this.db, lakeId, 'lake-info');
+
+        try {
+            // Get current data
+            const lakeDoc = await getDoc(regionRef);
+            if (!lakeDoc.exists()) {
+                throw new Error(`Lake info not found for ${lakeId}`);
+            }
+
+            const lakeData = lakeDoc.data();
+            const regions = {...lakeData.regions};
+
+            // Update the region's access points array directly
+            if (regions[regionId]) {
+                regions[regionId] = {
+                    ...regions[regionId],
+                    accessPoints: accessPoints // Store the array in the correct order
+                };
+
+                // Update the document
+                await updateDoc(regionRef, { regions });
+                console.log('Access points updated successfully');
+            } else {
+                throw new Error(`Region ${regionId} not found`);
+            }
+        } catch (error) {
+            console.error('Error updating access points:', error);
+            throw error;
+        }
+    }
 
     // Add a new lake (defaults to DISABLED)
     async addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void> {

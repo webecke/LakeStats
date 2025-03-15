@@ -163,6 +163,7 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
             ...lakeData,
             regions: updatedRegions
         });
+        console.log("ACCESS POINTS UPDATED", lakeData.regions)
     };
 
     return (
