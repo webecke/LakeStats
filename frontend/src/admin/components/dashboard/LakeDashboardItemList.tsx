@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {dataService, LakeSystemSettings} from "../../../shared/services/data";
+import { useEffect, useState } from "react";
+import { dataService, LakeSystemSettings } from "../../../shared/services/data";
 import LakeDashboardItem from "./LakeDashboardItem.tsx";
 import "./LakeDashboardItemList.css";
 
@@ -16,7 +16,7 @@ export default function LakeDashboardItemList() {
             const allLakes = await dataService.getAllLakes();
             setLakes(allLakes);
         } catch (error) {
-            console.error('Error loading lakes:', error);
+            console.error("Error loading lakes:", error);
         } finally {
             setIsLoading(false);
         }
@@ -24,39 +24,51 @@ export default function LakeDashboardItemList() {
 
     const handleMoveUp = async (lake: LakeSystemSettings) => {
         const sameCategoryLakes = lakes
-            .filter(l => l.status === lake.status)
+            .filter((l) => l.status === lake.status)
             .sort((a, b) => a.sortOrder - b.sortOrder);
 
-        const currentIndex = sameCategoryLakes.findIndex(l => l.lakeId === lake.lakeId);
+        const currentIndex = sameCategoryLakes.findIndex((l) => l.lakeId === lake.lakeId);
         if (currentIndex <= 0) return;
 
         try {
             await dataService.reorderLakes([
-                { lakeId: lake.lakeId, sortOrder: sameCategoryLakes[currentIndex - 1].sortOrder },
-                { lakeId: sameCategoryLakes[currentIndex - 1].lakeId, sortOrder: lake.sortOrder }
+                {
+                    lakeId: lake.lakeId,
+                    sortOrder: sameCategoryLakes[currentIndex - 1].sortOrder,
+                },
+                {
+                    lakeId: sameCategoryLakes[currentIndex - 1].lakeId,
+                    sortOrder: lake.sortOrder,
+                },
             ]);
             await loadLakes(); // Refresh the list
         } catch (error) {
-            console.error('Error reordering lakes:', error);
+            console.error("Error reordering lakes:", error);
         }
     };
 
     const handleMoveDown = async (lake: LakeSystemSettings) => {
         const sameCategoryLakes = lakes
-            .filter(l => l.status === lake.status)
+            .filter((l) => l.status === lake.status)
             .sort((a, b) => a.sortOrder - b.sortOrder);
 
-        const currentIndex = sameCategoryLakes.findIndex(l => l.lakeId === lake.lakeId);
+        const currentIndex = sameCategoryLakes.findIndex((l) => l.lakeId === lake.lakeId);
         if (currentIndex === -1 || currentIndex === sameCategoryLakes.length - 1) return;
 
         try {
             await dataService.reorderLakes([
-                { lakeId: lake.lakeId, sortOrder: sameCategoryLakes[currentIndex + 1].sortOrder },
-                { lakeId: sameCategoryLakes[currentIndex + 1].lakeId, sortOrder: lake.sortOrder }
+                {
+                    lakeId: lake.lakeId,
+                    sortOrder: sameCategoryLakes[currentIndex + 1].sortOrder,
+                },
+                {
+                    lakeId: sameCategoryLakes[currentIndex + 1].lakeId,
+                    sortOrder: lake.sortOrder,
+                },
             ]);
             await loadLakes(); // Refresh the list
         } catch (error) {
-            console.error('Error reordering lakes:', error);
+            console.error("Error reordering lakes:", error);
         }
     };
 
@@ -65,13 +77,13 @@ export default function LakeDashboardItemList() {
     }
 
     const enabledLakes = lakes
-        .filter(lake => lake.status === 'ENABLED')
+        .filter((lake) => lake.status === "ENABLED")
         .sort((a, b) => a.sortOrder - b.sortOrder);
     const testingLakes = lakes
-        .filter(lake => lake.status === 'TESTING')
+        .filter((lake) => lake.status === "TESTING")
         .sort((a, b) => a.sortOrder - b.sortOrder);
     const disabledLakes = lakes
-        .filter(lake => lake.status === 'DISABLED')
+        .filter((lake) => lake.status === "DISABLED")
         .sort((a, b) => a.sortOrder - b.sortOrder);
 
     const renderLakeItems = (lakesList: LakeSystemSettings[]) => {

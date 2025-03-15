@@ -22,7 +22,7 @@ const __dirname = dirname(__filename);
 const outputPath = join(__dirname, 'src', 'buildInfo.ts');
 
 const content = `// This file is auto-generated. Do not edit directly.
-export const BUILD_TIME: string = '${buildTime}';
+export const BUILD_TIME: string = "${buildTime}";
 `;
 
 writeFileSync(outputPath, content);

@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useReducer, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { NotificationContainer } from './NotificationContainer.tsx';
+import React, { createContext, useContext, useReducer, useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { NotificationContainer } from "./NotificationContainer.tsx";
 
-export type NotificationType = 'success' | 'error' | 'info' | 'warning';
+export type NotificationType = "success" | "error" | "info" | "warning";
 
 export interface Notification {
     id: string;
@@ -19,16 +19,16 @@ interface NotificationContextType {
 
 // Action types
 type NotificationAction =
-    | { type: 'SHOW_NOTIFICATION'; payload: Notification }
-    | { type: 'HIDE_NOTIFICATION'; payload: string };
+    | { type: "SHOW_NOTIFICATION"; payload: Notification }
+    | { type: "HIDE_NOTIFICATION"; payload: string };
 
 // Reducer
 function notificationReducer(state: Notification[], action: NotificationAction): Notification[] {
     switch (action.type) {
-        case 'SHOW_NOTIFICATION':
+        case "SHOW_NOTIFICATION":
             return [...state, action.payload];
-        case 'HIDE_NOTIFICATION':
-            return state.filter(notification => notification.id !== action.payload);
+        case "HIDE_NOTIFICATION":
+            return state.filter((notification) => notification.id !== action.payload);
         default:
             return state;
     }
@@ -43,23 +43,26 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
     const hideNotification = useCallback((id: string) => {
         dispatch({
-            type: 'HIDE_NOTIFICATION',
-            payload: id
+            type: "HIDE_NOTIFICATION",
+            payload: id,
         });
     }, []);
 
-    const showNotification = useCallback((message: string, type: NotificationType, duration = 3000) => {
-        const id = uuidv4();
-        dispatch({
-            type: 'SHOW_NOTIFICATION',
-            payload: { id, message, type, duration }
-        });
+    const showNotification = useCallback(
+        (message: string, type: NotificationType, duration = 3000) => {
+            const id = uuidv4();
+            dispatch({
+                type: "SHOW_NOTIFICATION",
+                payload: { id, message, type, duration },
+            });
 
-        // Auto-dismiss
-        setTimeout(() => {
-            hideNotification(id);
-        }, duration);
-    }, [hideNotification]);
+            // Auto-dismiss
+            setTimeout(() => {
+                hideNotification(id);
+            }, duration);
+        },
+        [hideNotification]
+    );
 
     return (
         <NotificationContext.Provider value={{ notifications, showNotification, hideNotification }}>
@@ -73,7 +76,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 export function useNotifications() {
     const context = useContext(NotificationContext);
     if (context === undefined) {
-        throw new Error('useNotifications must be used within a NotificationProvider');
+        throw new Error("useNotifications must be used within a NotificationProvider");
     }
     return context;
 }

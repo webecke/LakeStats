@@ -1,4 +1,16 @@
-import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, orderBy, limit, writeBatch } from 'firebase/firestore';
+import {
+    doc,
+    getDoc,
+    setDoc,
+    updateDoc,
+    collection,
+    query,
+    where,
+    getDocs,
+    orderBy,
+    limit,
+    writeBatch,
+} from "firebase/firestore";
 import {
     DataService,
     LakeMetaData,
@@ -6,14 +18,13 @@ import {
     LakeSystemSettings,
     DataType,
     CurrentConditions,
-    AccessPoint
+    AccessPoint,
 } from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
 export class FirestoreService implements DataService {
     private db = getFirestoreDb();
-    private systemCollection = 'system';
-
+    private systemCollection = "system";
 
     /////////////////////////
     // PUBLIC READ METHODS //
@@ -22,12 +33,9 @@ export class FirestoreService implements DataService {
     // Get all lakes
     async getAllLakes(): Promise<LakeSystemSettings[]> {
         const querySnapshot = await getDocs(
-            query(
-                collection(this.db, this.systemCollection),
-                orderBy('sortOrder', 'asc')
-            )
+            query(collection(this.db, this.systemCollection), orderBy("sortOrder", "asc"))
         );
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
+        return querySnapshot.docs.map((doc) => doc.data() as LakeSystemSettings);
     }
 
     // Get a single lake
@@ -46,16 +54,16 @@ export class FirestoreService implements DataService {
     async getLakesByStatus(status: LakeStatus): Promise<LakeSystemSettings[]> {
         const q = query(
             collection(this.db, this.systemCollection),
-            where('status', '==', status),
-            orderBy('sortOrder', 'asc')
+            where("status", "==", status),
+            orderBy("sortOrder", "asc")
         );
 
         const querySnapshot = await getDocs(q);
-        return querySnapshot.docs.map(doc => doc.data() as LakeSystemSettings);
+        return querySnapshot.docs.map((doc) => doc.data() as LakeSystemSettings);
     }
 
     async getLakeInfo(lakeId: string): Promise<LakeMetaData | null> {
-        const docRef = doc(this.db, lakeId, 'lake-info');
+        const docRef = doc(this.db, lakeId, "lake-info");
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -66,12 +74,12 @@ export class FirestoreService implements DataService {
 
         return {
             ...data,
-            dataSources: this.convertObjectToMap(data.dataSources || {})
+            dataSources: this.convertObjectToMap(data.dataSources || {}),
         } as LakeMetaData;
     }
 
     async getCurrentConditions(lakeId: string): Promise<CurrentConditions | null> {
-        const docRef = doc(this.db, lakeId, 'current_conditions');
+        const docRef = doc(this.db, lakeId, "current_conditions");
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) return null;
@@ -85,7 +93,7 @@ export class FirestoreService implements DataService {
         return {
             ...data,
             timeOfCollection: timeOfCollection,
-            date: date
+            date: date,
         } as CurrentConditions;
     }
 
@@ -99,7 +107,7 @@ export class FirestoreService implements DataService {
         regionId: string,
         accessPoints: AccessPoint[]
     ): Promise<void> {
-        const regionRef = doc(this.db, lakeId, 'lake-info');
+        const regionRef = doc(this.db, lakeId, "lake-info");
 
         try {
             // Get current data
@@ -109,46 +117,48 @@ export class FirestoreService implements DataService {
             }
 
             const lakeData = lakeDoc.data();
-            const regions = {...lakeData.regions};
+            const regions = { ...lakeData.regions };
 
             // Update the region's access points array directly
             if (regions[regionId]) {
                 regions[regionId] = {
                     ...regions[regionId],
-                    accessPoints: accessPoints // Store the array in the correct order
+                    accessPoints: accessPoints, // Store the array in the correct order
                 };
 
                 // Update the document
                 await updateDoc(regionRef, { regions });
-                console.log('Access points updated successfully');
+                console.log("Access points updated successfully");
             } else {
                 throw new Error(`Region ${regionId} not found`);
             }
         } catch (error) {
-            console.error('Error updating access points:', error);
+            console.error("Error updating access points:", error);
             throw error;
         }
     }
 
     // Add a new lake (defaults to DISABLED)
-    async addNewLake(lake: Omit<LakeSystemSettings, 'status' | 'features' | 'sortOrder'>): Promise<void> {
+    async addNewLake(
+        lake: Omit<LakeSystemSettings, "status" | "features" | "sortOrder">
+    ): Promise<void> {
         // Get current max order for disabled lakes
         const q = query(
             collection(this.db, this.systemCollection),
-            where('status', '==', 'DISABLED'),
-            orderBy('sortOrder', 'desc'),
+            where("status", "==", "DISABLED"),
+            orderBy("sortOrder", "desc"),
             limit(1)
         );
 
         const snapshot = await getDocs(q);
-        const maxOrder = snapshot.empty ? 0 : (snapshot.docs[0].data().sortOrder || 0);
+        const maxOrder = snapshot.empty ? 0 : snapshot.docs[0].data().sortOrder || 0;
 
         const docRef = doc(this.db, this.systemCollection, lake.lakeId);
         await setDoc(docRef, {
             ...lake,
             features: [],
-            status: 'DISABLED' as LakeStatus,
-            sortOrder: maxOrder + 1
+            status: "DISABLED" as LakeStatus,
+            sortOrder: maxOrder + 1,
         });
     }
 
@@ -157,18 +167,18 @@ export class FirestoreService implements DataService {
         // Get max order for new status group
         const q = query(
             collection(this.db, this.systemCollection),
-            where('status', '==', newStatus),
-            orderBy('sortOrder', 'desc'),
+            where("status", "==", newStatus),
+            orderBy("sortOrder", "desc"),
             limit(1)
         );
 
         const snapshot = await getDocs(q);
-        const maxOrder = snapshot.empty ? 0 : (snapshot.docs[0].data().sortOrder || 0);
+        const maxOrder = snapshot.empty ? 0 : snapshot.docs[0].data().sortOrder || 0;
 
         const docRef = doc(this.db, this.systemCollection, lakeId);
         await updateDoc(docRef, {
             status: newStatus,
-            sortOrder: maxOrder + 1
+            sortOrder: maxOrder + 1,
         });
     }
 
@@ -182,21 +192,22 @@ export class FirestoreService implements DataService {
         const status = lakeSnap.data().status;
 
         // Get all lakes in this status group
-        const statusLakes = await getDocs(query(
-            collection(this.db, this.systemCollection),
-            where('status', '==', status),
-            orderBy('sortOrder')
-        ));
+        const statusLakes = await getDocs(
+            query(
+                collection(this.db, this.systemCollection),
+                where("status", "==", status),
+                orderBy("sortOrder")
+            )
+        );
 
         const batch = writeBatch(this.db);
 
         // Update sort orders - increment everything at or after the new position
-        statusLakes.docs.forEach(doc => {
+        statusLakes.docs.forEach((doc) => {
             const currentOrder = doc.data().sortOrder;
             if (doc.id === lakeId) {
                 batch.update(doc.ref, { sortOrder: newOrder });
-            }
-            else if (currentOrder >= newOrder) {
+            } else if (currentOrder >= newOrder) {
                 batch.update(doc.ref, { sortOrder: currentOrder + 1 });
             }
         });
@@ -215,10 +226,13 @@ export class FirestoreService implements DataService {
         }
     }
 
-    async updateLake(lakeId: string, updates: {
-        system?: Omit<LakeSystemSettings, 'lakeId'>,
-        info?: Omit<LakeMetaData, 'id'>
-    }): Promise<void> {
+    async updateLake(
+        lakeId: string,
+        updates: {
+            system?: Omit<LakeSystemSettings, "lakeId">;
+            info?: Omit<LakeMetaData, "id">;
+        }
+    ): Promise<void> {
         const batch = writeBatch(this.db);
 
         if (updates.system) {
@@ -227,7 +241,7 @@ export class FirestoreService implements DataService {
 
             const systemData = {
                 ...updates.system,
-                lakeId: lakeId
+                lakeId: lakeId,
             };
 
             if (!systemDoc.exists()) {
@@ -238,14 +252,14 @@ export class FirestoreService implements DataService {
         }
 
         if (updates.info) {
-            const infoRef = doc(this.db, lakeId, 'lake-info');
+            const infoRef = doc(this.db, lakeId, "lake-info");
             const infoDoc = await getDoc(infoRef);
 
             const infoData = {
                 ...updates.info,
                 id: lakeId,
                 // fillDate is already a string, no conversion needed
-                dataSources: this.convertMapToObject(updates.info.dataSources)
+                dataSources: this.convertMapToObject(updates.info.dataSources),
             };
 
             if (!infoDoc.exists()) {
@@ -293,9 +307,9 @@ export class FirestoreService implements DataService {
         // Check if it matches YYYY-MM-DD format
         const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-        if (typeof dateString === 'string' && isoDatePattern.test(dateString)) {
+        if (typeof dateString === "string" && isoDatePattern.test(dateString)) {
             // Parse the components and create a date in the local timezone
-            const [year, month, day] = dateString.split('-').map(Number);
+            const [year, month, day] = dateString.split("-").map(Number);
             return new Date(year, month - 1, day); // month is 0-indexed in JavaScript
         }
 

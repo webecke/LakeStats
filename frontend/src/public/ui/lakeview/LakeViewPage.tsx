@@ -1,18 +1,18 @@
-import React from 'react';
-import LakeViewHeader from './LakeViewHeader';
-import CurrentConditions from './CurrentConditions';
-import RegionSelector from './RegionSelector';
-import AccessPointList from './AccessPointList';
-import LoadingSpinner from '../../../shared/components/LoadingSpinner';
-import {useBasicLakeInfo} from '../../datahooks/useBasicLakeInfo';
-import {useLakeDetails} from '../../datahooks/useLakeDetails';
-import {useCurrentConditions} from '../../datahooks/useCurrentConditions';
-import './LakeViewStyles.css';
-import {useNavigate, useParams} from "react-router-dom";
+import React from "react";
+import LakeViewHeader from "./LakeViewHeader";
+import CurrentConditions from "./CurrentConditions";
+import RegionSelector from "./RegionSelector";
+import AccessPointList from "./AccessPointList";
+import LoadingSpinner from "../../../shared/components/LoadingSpinner";
+import { useBasicLakeInfo } from "../../datahooks/useBasicLakeInfo";
+import { useLakeDetails } from "../../datahooks/useLakeDetails";
+import { useCurrentConditions } from "../../datahooks/useCurrentConditions";
+import "./LakeViewStyles.css";
+import { useNavigate, useParams } from "react-router-dom";
 import AsyncContainer from "../../components/AsyncContainer";
-import {PageTitle} from "../../components/PageTitle";
-import {handleNotFoundRedirect} from "../../../routes";
-import {LakeSystemFeatures} from "../../../shared/services/data";
+import { PageTitle } from "../../components/PageTitle";
+import { handleNotFoundRedirect } from "../../../routes";
+import { LakeSystemFeatures } from "../../../shared/services/data";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -20,23 +20,11 @@ const LakeViewPage: React.FC = () => {
     // Get lakeId from URL parameters
     const { lakeId } = useParams<{ lakeId: string }>();
 
-    if (!lakeId) {
-        return <div>Lake ID is required</div>;
-    }
-
     // Fetch basic lake info (name, status, etc.)
-    const {
-        loading: loadingInfo,
-        error: infoError,
-        lakeInfo
-    } = useBasicLakeInfo(lakeId);
+    const { loading: loadingInfo, error: infoError, lakeInfo } = useBasicLakeInfo(lakeId);
 
     // Fetch detailed lake data including regions
-    const {
-        loading: loadingDetails,
-        error: detailsError,
-        lakeDetails
-    } = useLakeDetails(lakeId);
+    const { loading: loadingDetails, error: detailsError, lakeDetails } = useLakeDetails(lakeId);
 
     // Fetch current conditions data
     const {
@@ -44,6 +32,10 @@ const LakeViewPage: React.FC = () => {
         error: conditionsError,
         currentConditions,
     } = useCurrentConditions(lakeId);
+
+    if (!lakeId) {
+        return <div>Lake ID is required</div>;
+    }
 
     // Show loading state if any data is still loading
     if (loadingInfo || loadingDetails) {
@@ -62,14 +54,14 @@ const LakeViewPage: React.FC = () => {
     }
 
     // Check if lake is disabled
-    if (lakeInfo.status === 'DISABLED') {
+    if (lakeInfo.status === "DISABLED") {
         return <div className="lake-view-error">This lake is currently disabled</div>;
     }
 
     // Custom accent color style
-    const accentColorStyle = lakeInfo.accentColor ?
-        { "--brand-accent": lakeInfo.accentColor } as React.CSSProperties :
-        {};
+    const accentColorStyle = lakeInfo.accentColor
+        ? ({ "--brand-accent": lakeInfo.accentColor } as React.CSSProperties)
+        : {};
 
     // Determine if regions section should be shown
     const hasRegions = lakeDetails.regions && Object.keys(lakeDetails.regions).length > 0;
@@ -83,7 +75,11 @@ const LakeViewPage: React.FC = () => {
                 brandedName={lakeInfo.brandedName}
             />
 
-            <AsyncContainer isLoading={loadingConditions} error={conditionsError} data={currentConditions}>
+            <AsyncContainer
+                isLoading={loadingConditions}
+                error={conditionsError}
+                data={currentConditions}
+            >
                 {(data) => (
                     <>
                         {/* Current Conditions Section */}

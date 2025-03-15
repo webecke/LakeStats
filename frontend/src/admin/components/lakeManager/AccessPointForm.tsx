@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { AccessPoint } from '../../../shared/services/data';
-import { Button } from '../../../shared/components/Button';
-import './AccessPointManager.css';
+import React, { useState } from "react";
+import { AccessPoint } from "../../../shared/services/data";
+import { Button } from "../../../shared/components/Button";
+import "./AccessPointManager.css";
 
 interface AccessPointFormProps {
     accessPoint?: AccessPoint;
@@ -11,19 +11,19 @@ interface AccessPointFormProps {
 }
 
 const AccessPointForm: React.FC<AccessPointFormProps> = ({
-                                                             accessPoint,
-                                                             onSave,
-                                                             onCancel,
-                                                             existingIds
-                                                         }) => {
+    accessPoint,
+    onSave,
+    onCancel,
+    existingIds,
+}) => {
     // Default form data
     const defaultFormData: AccessPoint = {
-        id: '',
-        name: '',
-        type: 'BOAT_RAMP',
+        id: "",
+        name: "",
+        type: "BOAT_RAMP",
         minSafeElevation: 0,
         minUsableElevation: 0,
-        googleMapsLink: '',
+        googleMapsLink: "",
     };
 
     // Initialize with access point data if available, otherwise use defaults
@@ -33,28 +33,26 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
 
-        if (type === 'number') {
-            setFormData(prev => ({
+        if (type === "number") {
+            setFormData((prev) => ({
                 ...prev,
-                [name]: parseFloat(value)
+                [name]: parseFloat(value),
             }));
         } else {
-            setFormData(prev => ({
+            setFormData((prev) => ({
                 ...prev,
-                [name]: value
+                [name]: value,
             }));
         }
 
         // Clear error when field is edited
         if (errors[name]) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
                 ...prev,
-                [name]: ''
+                [name]: "",
             }));
         }
     };
@@ -63,25 +61,26 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
         const newErrors: Record<string, string> = {};
 
         if (!formData.id.trim()) {
-            newErrors.id = 'Access point ID is required';
+            newErrors.id = "Access point ID is required";
         } else if (existingIds.includes(formData.id)) {
-            newErrors.id = 'Access point ID must be unique';
+            newErrors.id = "Access point ID must be unique";
         }
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Access point name is required';
+            newErrors.name = "Access point name is required";
         }
 
         if (isNaN(formData.minSafeElevation)) {
-            newErrors.minSafeElevation = 'Minimum safe elevation must be a number';
+            newErrors.minSafeElevation = "Minimum safe elevation must be a number";
         }
 
         if (isNaN(formData.minUsableElevation)) {
-            newErrors.minUsableElevation = 'Minimum usable elevation must be a number';
+            newErrors.minUsableElevation = "Minimum usable elevation must be a number";
         }
 
         if (formData.minUsableElevation > formData.minSafeElevation) {
-            newErrors.minUsableElevation = 'Minimum usable elevation must be less than or equal to minimum safe elevation';
+            newErrors.minUsableElevation =
+                "Minimum usable elevation must be less than or equal to minimum safe elevation";
         }
 
         setErrors(newErrors);
@@ -96,14 +95,14 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                 ...formData,
                 id: formData.id.trim(),
                 name: formData.name.trim(),
-                googleMapsLink: formData.googleMapsLink.trim()
+                googleMapsLink: formData.googleMapsLink.trim(),
             });
         }
     };
 
     return (
         <div className="access-point-form">
-            <h3>{accessPoint ? 'Edit Access Point' : 'Add New Access Point'}</h3>
+            <h3>{accessPoint ? "Edit Access Point" : "Add New Access Point"}</h3>
 
             <form onSubmit={handleSubmit}>
                 <div className="form-field">
@@ -116,7 +115,7 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         onChange={handleChange}
                         disabled={!!accessPoint} // Disable editing ID for existing access points
                         placeholder="e.g., north-ramp, east-marina"
-                        className={errors.id ? 'error' : ''}
+                        className={errors.id ? "error" : ""}
                     />
                     {errors.id && <div className="error-message">{errors.id}</div>}
                 </div>
@@ -130,19 +129,14 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="e.g., North Boat Ramp"
-                        className={errors.name ? 'error' : ''}
+                        className={errors.name ? "error" : ""}
                     />
                     {errors.name && <div className="error-message">{errors.name}</div>}
                 </div>
 
                 <div className="form-field">
                     <label htmlFor="type">Access Point Type</label>
-                    <select
-                        id="type"
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                    >
+                    <select id="type" name="type" value={formData.type} onChange={handleChange}>
                         <option value="BOAT_RAMP">Boat Ramp</option>
                         <option value="PRIMITIVE_LAUNCH">Primitive Launch</option>
                         <option value="CHANNEL">Channel</option>
@@ -160,10 +154,11 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         onChange={handleChange}
                         step="0.1"
                         placeholder="e.g., 3500.0"
-                        className={errors.minSafeElevation ? 'error' : ''}
+                        className={errors.minSafeElevation ? "error" : ""}
                     />
                     <div className="form-field-help">
-                        The minimum lake elevation at which this access point is considered safe to use
+                        The minimum lake elevation at which this access point is considered safe to
+                        use
                     </div>
                     {errors.minSafeElevation && (
                         <div className="error-message">{errors.minSafeElevation}</div>
@@ -180,10 +175,11 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         onChange={handleChange}
                         step="0.1"
                         placeholder="e.g., 3498.0"
-                        className={errors.minUsableElevation ? 'error' : ''}
+                        className={errors.minUsableElevation ? "error" : ""}
                     />
                     <div className="form-field-help">
-                        The minimum lake elevation at which this access point can be used (may be hazardous)
+                        The minimum lake elevation at which this access point can be used (may be
+                        hazardous)
                     </div>
                     {errors.minUsableElevation && (
                         <div className="error-message">{errors.minUsableElevation}</div>
@@ -196,7 +192,7 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         type="text"
                         id="googleMapsLink"
                         name="googleMapsLink"
-                        value={formData.googleMapsLink || ''}
+                        value={formData.googleMapsLink || ""}
                         onChange={handleChange}
                         placeholder="https://goo.gl/maps/..."
                     />
@@ -210,7 +206,7 @@ const AccessPointForm: React.FC<AccessPointFormProps> = ({
                         Cancel
                     </Button>
                     <Button variant="primary" type="submit">
-                        {accessPoint ? 'Save Changes' : 'Add Access Point'}
+                        {accessPoint ? "Save Changes" : "Add Access Point"}
                     </Button>
                 </div>
             </form>

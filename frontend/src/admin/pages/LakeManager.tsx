@@ -1,20 +1,25 @@
-import {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {Button} from '../../shared/components/Button';
-import './LakeManager.css';
-import {dataService, DataType, LakeMetaData, LakeSystemSettings} from "../../shared/services/data";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "../../shared/components/Button";
+import "./LakeManager.css";
+import {
+    dataService,
+    DataType,
+    LakeMetaData,
+    LakeSystemSettings,
+} from "../../shared/services/data";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
 import DataSources from "../components/lakeManager/DataSources";
 import RegionManager from "../components/lakeManager/RegionManager";
-import {useNotifications} from '../../shared/components/Notification/NotificationContext';
+import { useNotifications } from "../../shared/components/Notification/NotificationContext";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
     const [systemConfig, setSystemConfig] = useState<LakeSystemSettings | null>(null);
     const [lakeData, setLakeData] = useState<LakeMetaData | null>(null);
-    const [activeTab, setActiveTab] = useState('overview');
+    const [activeTab, setActiveTab] = useState("overview");
     const [isLoading, setIsLoading] = useState(true);
     const { showNotification } = useNotifications();
 
@@ -26,7 +31,7 @@ export default function LakeManager() {
                 setIsLoading(true);
                 const [systemData, lakeDetails] = await Promise.all([
                     dataService.getLakeSystemSetting(lakeId),
-                    dataService.getLakeInfo(lakeId)
+                    dataService.getLakeInfo(lakeId),
                 ]);
 
                 if (!systemData) {
@@ -36,14 +41,14 @@ export default function LakeManager() {
                 if (!lakeDetails) {
                     const newLake: LakeMetaData = {
                         id: lakeId,
-                        description: '',
-                        fillDate: '',
-                        googleMapsLinkToDam: '',
+                        description: "",
+                        fillDate: "",
+                        googleMapsLinkToDam: "",
                         fullPoolElevation: 0,
                         minPowerPoolElevation: 0,
                         deadPoolElevation: 0,
                         dataSources: new Map(),
-                        regions: {}
+                        regions: {},
                     };
                     setLakeData(newLake);
                 } else {
@@ -52,60 +57,66 @@ export default function LakeManager() {
 
                 setSystemConfig(systemData);
             } catch (error) {
-                console.error('Error loading lake data:', error);
-                showNotification('Failed to load lake data', 'error');
+                console.error("Error loading lake data:", error);
+                showNotification("Failed to load lake data", "error");
             } finally {
                 setIsLoading(false);
             }
         }
 
         loadData();
-    }, [lakeId]);
+    }, [lakeId, showNotification]);
 
     const handleSave = async () => {
         if (!lakeId || !lakeData || !systemConfig) return;
 
-        if (systemConfig.status !== 'DISABLED') {
+        if (systemConfig.status !== "DISABLED") {
             if (!lakeData.dataSources.has(DataType.ELEVATION)) {
-                showNotification('Non-disabled lakes must have an elevation data source', 'error');
-                return
-            }
-            else if (!lakeData.dataSources.get(DataType.ELEVATION)?.startsWith("https://www.usbr.gov/uc/water/hydrodata/reservoir_data/")) {
-                showNotification('Elevation data source must be a valid USBR link', 'error');
-                return
-            }
-            else if (!lakeData.deadPoolElevation || !lakeData.fullPoolElevation || !lakeData.minPowerPoolElevation) {
-                showNotification('Pool levels must be set for non-disabled lakes', 'error')
-                return
+                showNotification("Non-disabled lakes must have an elevation data source", "error");
+                return;
+            } else if (
+                !lakeData.dataSources
+                    .get(DataType.ELEVATION)
+                    ?.startsWith("https://www.usbr.gov/uc/water/hydrodata/reservoir_data/")
+            ) {
+                showNotification("Elevation data source must be a valid USBR link", "error");
+                return;
+            } else if (
+                !lakeData.deadPoolElevation ||
+                !lakeData.fullPoolElevation ||
+                !lakeData.minPowerPoolElevation
+            ) {
+                showNotification("Pool levels must be set for non-disabled lakes", "error");
+                return;
             }
         }
 
         try {
             await dataService.updateLake(lakeId, {
                 system: systemConfig,
-                info: lakeData
+                info: lakeData,
             });
-            showNotification('Changes saved successfully', 'success');
+            showNotification("Changes saved successfully", "success");
         } catch (error) {
-            console.error('Error saving lake data:', error);
-            showNotification('Failed to save changes', 'error');
+            console.error("Error saving lake data:", error);
+            showNotification("Failed to save changes", "error");
             return;
         }
     };
 
     if (isLoading) {
-        return <LoadingSpinner/>;
+        return <LoadingSpinner />;
     }
 
     const tabs = [
-        { id: 'overview', label: 'Overview' },
-        { id: 'dataSources', label: 'Data Sources' },
-        { id: 'regions', label: 'Regions' }
+        { id: "overview", label: "Overview" },
+        { id: "dataSources", label: "Data Sources" },
+        { id: "regions", label: "Regions" },
     ];
 
     const renderContent = () => {
         switch (activeTab) {
-            case 'overview':
+            case "overview":
                 return (
                     <div className="content-panel">
                         <div className="content-panel__header">
@@ -117,7 +128,7 @@ export default function LakeManager() {
                         </div>
                     </div>
                 );
-            case 'dataSources':
+            case "dataSources":
                 return (
                     <div className="content-panel">
                         <div className="content-panel__header">
@@ -126,22 +137,25 @@ export default function LakeManager() {
                         <div className="content-panel__content">
                             <DataSources
                                 sources={lakeData!.dataSources}
-                                onChange={(newSources) => setLakeData(prev => prev ? {
-                                    ...prev,
-                                    dataSources: newSources
-                                } : prev)}
+                                onChange={(newSources) =>
+                                    setLakeData((prev) =>
+                                        prev
+                                            ? {
+                                                  ...prev,
+                                                  dataSources: newSources,
+                                              }
+                                            : prev
+                                    )
+                                }
                             />
                         </div>
                     </div>
                 );
-            case 'regions':
+            case "regions":
                 return (
                     <div className="content-panel">
                         <div className="content-panel__content">
-                            <RegionManager
-                                lakeData={lakeData!}
-                                onLakeDataChange={setLakeData}
-                            />
+                            <RegionManager lakeData={lakeData!} onLakeDataChange={setLakeData} />
                         </div>
                     </div>
                 );
@@ -151,9 +165,7 @@ export default function LakeManager() {
     return (
         <div className="lake-manager">
             <div className="lake-manager__header">
-                <h1 className="lake-manager__title">
-                    {lakeId}
-                </h1>
+                <h1 className="lake-manager__title">{lakeId}</h1>
                 <Button variant="outline" onClick={handleSave}>
                     Save Changes
                 </Button>
@@ -161,11 +173,11 @@ export default function LakeManager() {
 
             <div className="tabs">
                 <div className="tabs__list">
-                    {tabs.map(tab => (
+                    {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             className={`tabs__trigger ${
-                                activeTab === tab.id ? 'tabs__trigger--active' : ''
+                                activeTab === tab.id ? "tabs__trigger--active" : ""
                             }`}
                             onClick={() => setActiveTab(tab.id)}
                         >

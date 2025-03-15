@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { LakeRegion } from '../../../shared/services/data';
-import { Button } from '../../../shared/components/Button';
+import React, { useState } from "react";
+import { LakeRegion } from "../../../shared/services/data";
+import { Button } from "../../../shared/components/Button";
 
 interface RegionFormProps {
     region?: LakeRegion;
@@ -9,45 +9,40 @@ interface RegionFormProps {
     existingRegionIds: string[];
 }
 
-const RegionForm: React.FC<RegionFormProps> = ({
-                                                   region,
-                                                   onSave,
-                                                   onCancel,
-                                                   existingRegionIds
-                                               }) => {
+const RegionForm: React.FC<RegionFormProps> = ({ region, onSave, onCancel, existingRegionIds }) => {
     // Create default form data, being careful with optional region
     const defaultFormData: LakeRegion = {
-        id: '',
-        name: '',
-        description: '',
-        sortOrder: 0,  // This will be overridden in the parent component
-        accessPoints: []
+        id: "",
+        name: "",
+        description: "",
+        sortOrder: 0, // This will be overridden in the parent component
+        accessPoints: [],
     };
 
     // Initialize with region data if available, otherwise use defaults
     const [formData, setFormData] = useState<LakeRegion>(
-        region ? {
-            ...defaultFormData,
-            ...region
-        } : defaultFormData
+        region
+            ? {
+                  ...defaultFormData,
+                  ...region,
+              }
+            : defaultFormData
     );
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
 
         // Clear error when field is edited
         if (errors[name]) {
-            setErrors(prev => ({
+            setErrors((prev) => ({
                 ...prev,
-                [name]: ''
+                [name]: "",
             }));
         }
     };
@@ -56,13 +51,13 @@ const RegionForm: React.FC<RegionFormProps> = ({
         const newErrors: Record<string, string> = {};
 
         if (!formData.id.trim()) {
-            newErrors.id = 'Region ID is required';
+            newErrors.id = "Region ID is required";
         } else if (existingRegionIds.includes(formData.id)) {
-            newErrors.id = 'Region ID must be unique';
+            newErrors.id = "Region ID must be unique";
         }
 
         if (!formData.name.trim()) {
-            newErrors.name = 'Region name is required';
+            newErrors.name = "Region name is required";
         }
 
         setErrors(newErrors);
@@ -78,14 +73,14 @@ const RegionForm: React.FC<RegionFormProps> = ({
                 id: formData.id.trim(),
                 name: formData.name.trim(),
                 description: formData.description.trim(),
-                accessPoints: formData.accessPoints || []
+                accessPoints: formData.accessPoints || [],
             });
         }
     };
 
     return (
         <div className="region-form">
-            <h3>{region ? 'Edit Region' : 'Add New Region'}</h3>
+            <h3>{region ? "Edit Region" : "Add New Region"}</h3>
 
             <form onSubmit={handleSubmit}>
                 <div className="form-field">
@@ -98,7 +93,7 @@ const RegionForm: React.FC<RegionFormProps> = ({
                         onChange={handleChange}
                         disabled={!!region} // Disable editing ID for existing regions
                         placeholder="e.g., north, south"
-                        className={errors.id ? 'error' : ''}
+                        className={errors.id ? "error" : ""}
                     />
                     {errors.id && <div className="error-message">{errors.id}</div>}
                 </div>
@@ -112,7 +107,7 @@ const RegionForm: React.FC<RegionFormProps> = ({
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="e.g., North Lake, South Lake"
-                        className={errors.name ? 'error' : ''}
+                        className={errors.name ? "error" : ""}
                     />
                     {errors.name && <div className="error-message">{errors.name}</div>}
                 </div>
@@ -134,7 +129,7 @@ const RegionForm: React.FC<RegionFormProps> = ({
                         Cancel
                     </Button>
                     <Button variant="primary" type="submit">
-                        {region ? 'Save Changes' : 'Add Region'}
+                        {region ? "Save Changes" : "Add Region"}
                     </Button>
                 </div>
             </form>

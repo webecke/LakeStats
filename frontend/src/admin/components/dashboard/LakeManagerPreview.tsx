@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Button } from "../../../shared/components/Button";
 import "./LakeManagerPreview.css";
 import { Plus } from "lucide-react";
-import {dataService} from "../../../shared/services/data";
+import { dataService } from "../../../shared/services/data";
 import LakeDashboardItemList from "./LakeDashboardItemList.tsx";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function LakeManagerPreview() {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [formData, setFormData] = useState({
-        lakeName: '',
-        lakeId: '',
-        brandedName: ''
+        lakeName: "",
+        lakeId: "",
+        brandedName: "",
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -21,18 +21,18 @@ export default function LakeManagerPreview() {
             lakeName: formData.lakeName,
             lakeId: formData.lakeId,
             brandedName: formData.brandedName,
-            accentColor: "#ffffff"
-        })
-        navigate('/admin/' + formData.lakeId);
+            accentColor: "#ffffff",
+        });
+        navigate("/admin/" + formData.lakeId);
         setIsOpen(false);
-        setFormData({ lakeName: '', lakeId: '', brandedName: '' }); // Reset form
+        setFormData({ lakeName: "", lakeId: "", brandedName: "" }); // Reset form
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
+        setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: value,
         }));
     };
 
@@ -53,7 +53,6 @@ export default function LakeManagerPreview() {
             </div>
 
             <LakeDashboardItemList />
-
 
             {isOpen && (
                 <div className="modal-backdrop" onClick={handleBackdropClick}>
@@ -103,7 +102,10 @@ export default function LakeManagerPreview() {
                                 />
                             </div>
                             <div>
-                                <p>This lake will be added with no active features and listed as "DISABLED"</p>
+                                <p>
+                                    This lake will be added with no active features and listed as
+                                    "DISABLED"
+                                </p>
                             </div>
                             <div className="modal-footer">
                                 <Button
@@ -113,9 +115,7 @@ export default function LakeManagerPreview() {
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit">
-                                    Add Lake
-                                </Button>
+                                <Button type="submit">Add Lake</Button>
                             </div>
                         </form>
                     </div>

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { dataService, LakeMetaData } from '../../shared/services/data';
+import { useState, useEffect } from "react";
+import { dataService, LakeMetaData } from "../../shared/services/data";
 
 interface LakeDetailsResult {
     loading: boolean;
@@ -11,7 +11,7 @@ interface LakeDetailsResult {
  * Custom hook to fetch detailed lake information including regions
  * @param lakeId - The ID of the lake to fetch details for
  */
-export const useLakeDetails = (lakeId: string): LakeDetailsResult => {
+export const useLakeDetails = (lakeId: string | undefined): LakeDetailsResult => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [lakeDetails, setLakeDetails] = useState<LakeMetaData | null>(null);
@@ -19,7 +19,7 @@ export const useLakeDetails = (lakeId: string): LakeDetailsResult => {
     useEffect(() => {
         const fetchLakeDetails = async () => {
             if (!lakeId) {
-                setError('Lake ID is required');
+                setError("Lake ID is required");
                 setLoading(false);
                 return;
             }
@@ -37,8 +37,8 @@ export const useLakeDetails = (lakeId: string): LakeDetailsResult => {
 
                 setLakeDetails(details);
             } catch (err) {
-                console.error('Error fetching lake details:', err);
-                setError(err instanceof Error ? err.message : 'Failed to load lake details');
+                console.error("Error fetching lake details:", err);
+                setError(err instanceof Error ? err.message : "Failed to load lake details");
             } finally {
                 setLoading(false);
             }

@@ -1,4 +1,4 @@
-import './Dashboard.css'
+import "./Dashboard.css";
 import LakeManagerPreview from "../components/dashboard/LakeManagerPreview.tsx";
 
 export default function Dashboard() {

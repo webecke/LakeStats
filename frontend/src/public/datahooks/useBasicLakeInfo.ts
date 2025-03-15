@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { dataService, LakeSystemSettings } from '../../shared/services/data';
+import { useState, useEffect } from "react";
+import { dataService, LakeSystemSettings } from "../../shared/services/data";
 
 interface BasicLakeInfoResult {
     loading: boolean;
@@ -11,7 +11,7 @@ interface BasicLakeInfoResult {
  * Custom hook to fetch basic lake information using the dataService
  * @param lakeId - The ID of the lake to fetch information for
  */
-export const useBasicLakeInfo = (lakeId: string): BasicLakeInfoResult => {
+export const useBasicLakeInfo = (lakeId: string | undefined): BasicLakeInfoResult => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [lakeInfo, setLakeInfo] = useState<LakeSystemSettings | null>(null);
@@ -19,7 +19,7 @@ export const useBasicLakeInfo = (lakeId: string): BasicLakeInfoResult => {
     useEffect(() => {
         const fetchLakeInfo = async () => {
             if (!lakeId) {
-                setError('Lake ID is required');
+                setError("Lake ID is required");
                 setLoading(false);
                 return;
             }
@@ -37,8 +37,8 @@ export const useBasicLakeInfo = (lakeId: string): BasicLakeInfoResult => {
 
                 setLakeInfo(settings);
             } catch (err) {
-                console.error('Error fetching lake info:', err);
-                setError(err instanceof Error ? err.message : 'Failed to load lake information');
+                console.error("Error fetching lake info:", err);
+                setError(err instanceof Error ? err.message : "Failed to load lake information");
             } finally {
                 setLoading(false);
             }

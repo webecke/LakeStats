@@ -12,12 +12,12 @@ interface LakePreviewProps {
 }
 
 export default function LakeDashboardItem({
-      lake,
-      onMoveUp,
-      onMoveDown,
-      isFirst = false,
-      isLast = false
-  }: LakePreviewProps) {
+    lake,
+    onMoveUp,
+    onMoveDown,
+    isFirst = false,
+    isLast = false,
+}: LakePreviewProps) {
     return (
         <div className="lake-preview">
             <div className="lake-preview__content">
@@ -55,11 +55,7 @@ export default function LakeDashboardItem({
                             <ChevronDown className="w-4 h-4" />
                         </Button>
                     </div>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        href={`/admin/${lake.lakeId}`}
-                    >
+                    <Button variant="ghost" size="sm" href={`/admin/${lake.lakeId}`}>
                         <Settings className="w-4 h-4" />
                     </Button>
                 </div>

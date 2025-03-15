@@ -1,28 +1,28 @@
-@import './styles/colors.css';
+@import "./styles/colors.css";
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 }
 
 /* Apply dark background to body */
 body {
-  background-color: var(--background-base);
-  color: var(--text-primary);
+    background-color: var(--background-base);
+    color: var(--text-primary);
 }
 
 /* App-specific layout */
 .app-container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Main content area */
 .main-content {
-  flex: 1;
+    flex: 1;
 }
 
 /* General link styling - covers both HTML <a> and React Router <Link> */
@@ -30,16 +30,16 @@ a,
 a[href],
 Link,
 .Link {
-  color: var(--brand-blue-400);
-  text-decoration: none;
-  transition: color 0.2s;
+    color: var(--brand-blue-400);
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
 a:hover,
 a[href]:hover,
 Link:hover,
 .Link:hover {
-  color: var(--brand-blue-300);
+    color: var(--brand-blue-300);
 }
 
 /* Focus styles for both */
@@ -47,6 +47,6 @@ a:focus-visible,
 a[href]:focus-visible,
 Link:focus-visible,
 .Link:focus-visible {
-  outline: 2px solid var(--brand-blue-400);
-  outline-offset: 2px;
+    outline: 2px solid var(--brand-blue-400);
+    outline-offset: 2px;
 }

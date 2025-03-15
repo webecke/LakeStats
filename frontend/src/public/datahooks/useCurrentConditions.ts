@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { dataService, CurrentConditions } from '../../shared/services/data';
+import { useState, useEffect } from "react";
+import { dataService, CurrentConditions } from "../../shared/services/data";
 
 interface CurrentConditionsResult {
     loading: boolean;
@@ -11,7 +11,7 @@ interface CurrentConditionsResult {
  * Custom hook to fetch current conditions for a lake using the dataService
  * @param lakeId - The ID of the lake to fetch conditions for
  */
-export const useCurrentConditions = (lakeId: string): CurrentConditionsResult => {
+export const useCurrentConditions = (lakeId: string | undefined): CurrentConditionsResult => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [currentConditions, setCurrentConditions] = useState<CurrentConditions | null>(null);
@@ -19,7 +19,7 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
     useEffect(() => {
         const fetchCurrentConditions = async () => {
             if (!lakeId) {
-                setError('Lake ID is required');
+                setError("Lake ID is required");
                 setLoading(false);
                 return;
             }
@@ -38,10 +38,9 @@ export const useCurrentConditions = (lakeId: string): CurrentConditionsResult =>
                 }
 
                 setCurrentConditions(conditions);
-
             } catch (err) {
-                console.error('Error fetching current conditions:', err);
-                setError(err instanceof Error ? err.message : 'Failed to load current conditions');
+                console.error("Error fetching current conditions:", err);
+                setError(err instanceof Error ? err.message : "Failed to load current conditions");
             } finally {
                 setLoading(false);
             }

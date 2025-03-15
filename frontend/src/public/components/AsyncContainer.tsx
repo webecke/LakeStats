@@ -1,6 +1,6 @@
-import { ReactElement } from 'react';
-import LoadingSpinner from '../../shared/components/LoadingSpinner';
-import './AsyncContainer.css';
+import { ReactElement } from "react";
+import LoadingSpinner from "../../shared/components/LoadingSpinner";
+import "./AsyncContainer.css";
 
 interface AsyncContainerProps<T> {
     isLoading: boolean;
@@ -10,11 +10,11 @@ interface AsyncContainerProps<T> {
 }
 
 export default function AsyncContainer<T>({
-                                              isLoading,
-                                              error,
-                                              data,
-                                              children
-                                          }: AsyncContainerProps<T>) {
+    isLoading,
+    error,
+    data,
+    children,
+}: AsyncContainerProps<T>) {
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -22,9 +22,7 @@ export default function AsyncContainer<T>({
     if (error) {
         return (
             <div className="async-container-error">
-                <div className="async-container-error-message">
-                    {error}
-                </div>
+                <div className="async-container-error-message">{error}</div>
             </div>
         );
     }

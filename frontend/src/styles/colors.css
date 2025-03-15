@@ -1,9 +1,9 @@
 /* src/styles/semantic-colors.css */
 :root {
     /* Primary Brand Colors */
-    --brand-white: #FFFFFF;
-    --brand-cyan: #00D3FF;
-    --brand-blue: #005B9B;
+    --brand-white: #ffffff;
+    --brand-cyan: #00d3ff;
+    --brand-blue: #005b9b;
     --brand-navy: #010035;
     --brand-accent: #ff8000;
 
@@ -27,18 +27,18 @@
 
     /* Dark Theme Semantic Colors */
     /* Base Backgrounds */
-    --background-base: #121212;        /* Main background */
-    --background-elevated: #1e1e1e;    /* Cards, headers */
-    --background-higher: #2d2d2d;      /* Hover states */
+    --background-base: #121212; /* Main background */
+    --background-elevated: #1e1e1e; /* Cards, headers */
+    --background-higher: #2d2d2d; /* Hover states */
 
     /* Text Colors */
     --text-primary: var(--brand-white);
     --text-secondary: rgba(255, 255, 255, 0.87);
-    --text-muted: rgba(255, 255, 255, 0.60);
+    --text-muted: rgba(255, 255, 255, 0.6);
 
     /* Action Colors - Use these for buttons, links, and interactive elements */
-    --action-primary: var(--brand-cyan);     /* Primary actions, focus states */
-    --action-secondary: var(--brand-blue);   /* Secondary actions */
+    --action-primary: var(--brand-cyan); /* Primary actions, focus states */
+    --action-secondary: var(--brand-blue); /* Secondary actions */
     --action-accent: var(--brand-accent); /* Call-to-action, highlights */
     --action-disabled: rgba(255, 255, 255, 0.3); /* Disabled state */
 
@@ -48,23 +48,23 @@
     --border-heavy: rgba(255, 255, 255, 0.3);
 
     /* Status Colors */
-    --status-success: #2ecc71;         /* Success messages, positive changes */
-    --status-warning: #f1c40f;         /* Warning messages, alerts */
-    --status-error: #e74c3c;           /* Error messages, negative changes */
-    --status-info: var(--brand-cyan);  /* Informational messages */
+    --status-success: #2ecc71; /* Success messages, positive changes */
+    --status-warning: #f1c40f; /* Warning messages, alerts */
+    --status-error: #e74c3c; /* Error messages, negative changes */
+    --status-info: var(--brand-cyan); /* Informational messages */
 
     /* Data Visualization Colors */
-    --data-increasing: var(--status-success);      /* Increasing values, uptrends */
-    --data-decreasing: var(--status-error);        /* Decreasing values, downtrends */
-    --data-neutral: #9e9e9e;                       /* Neutral or unchanged values */
-    --data-primary: var(--brand-cyan);             /* Primary data point */
-    --data-reference: var(--brand-navy);           /* Reference lines, thresholds */
+    --data-increasing: var(--status-success); /* Increasing values, uptrends */
+    --data-decreasing: var(--status-error); /* Decreasing values, downtrends */
+    --data-neutral: #9e9e9e; /* Neutral or unchanged values */
+    --data-primary: var(--brand-cyan); /* Primary data point */
+    --data-reference: var(--brand-navy); /* Reference lines, thresholds */
 
     /* Lake Specific Colors */
-    --water-full: var(--brand-blue);         /* Full pool water level */
-    --water-normal: var(--brand-cyan);       /* Normal water level */
-    --water-low: var(--brand-orange-500);    /* Low water level */
-    --water-critical: var(--status-error);   /* Critical water level */
+    --water-full: var(--brand-blue); /* Full pool water level */
+    --water-normal: var(--brand-cyan); /* Normal water level */
+    --water-low: var(--brand-orange-500); /* Low water level */
+    --water-critical: var(--status-error); /* Critical water level */
 }
 
 /*

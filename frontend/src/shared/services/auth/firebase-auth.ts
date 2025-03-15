@@ -2,11 +2,11 @@ import {
     signInWithEmailAndPassword,
     signOut as firebaseSignOut,
     onAuthStateChanged as firebaseOnAuthStateChanged,
-    type User as FirebaseUser
-} from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
-import { app } from '../../../firebase/config.ts';
-import { AuthService, User } from './types.ts';
+    type User as FirebaseUser,
+} from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { app } from "../../../firebase/config.ts";
+import { AuthService, User } from "./types.ts";
 
 export class FirebaseAuthService implements AuthService {
     private auth = getAuth(app);
@@ -23,7 +23,7 @@ export class FirebaseAuthService implements AuthService {
     async signIn(email: string, password: string): Promise<User> {
         const result = await signInWithEmailAndPassword(this.auth, email, password);
         const user = this.transformFirebaseUser(result.user);
-        if (!user) throw new Error('Failed to sign in');
+        if (!user) throw new Error("Failed to sign in");
         return user;
     }
 

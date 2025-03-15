@@ -1,5 +1,5 @@
-import React, { createContext, useContext } from 'react';
-import { LakeRegion } from '../../../shared/services/data';
+import React, { createContext, useContext } from "react";
+import { LakeRegion } from "../../../shared/services/data";
 
 interface RegionContextProps {
     selectedRegion: LakeRegion;
@@ -13,7 +13,7 @@ const RegionContext = createContext<RegionContextProps | undefined>(undefined);
 export const useSelectedRegion = () => {
     const context = useContext(RegionContext);
     if (context === undefined) {
-        throw new Error('useSelectedRegion must be used within a RegionProvider');
+        throw new Error("useSelectedRegion must be used within a RegionProvider");
     }
     return context;
 };
@@ -25,9 +25,5 @@ interface RegionProviderProps {
 }
 
 export const RegionProvider: React.FC<RegionProviderProps> = ({ children, value }) => {
-    return (
-        <RegionContext.Provider value={value}>
-            {children}
-        </RegionContext.Provider>
-    );
+    return <RegionContext.Provider value={value}>{children}</RegionContext.Provider>;
 };

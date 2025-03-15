@@ -1,4 +1,4 @@
-@import '../../styles/colors.css';
+@import "../../styles/colors.css";
 
 .home-container {
     padding: 1.5rem;
@@ -60,7 +60,8 @@
     overflow: hidden;
 }
 
-.lake-card:hover, .lake-card:focus {
+.lake-card:hover,
+.lake-card:focus {
     background-color: var(--background-higher);
     transform: translateY(-2px);
     border-color: var(--border-medium);

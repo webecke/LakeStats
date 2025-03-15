@@ -1,50 +1,50 @@
-import {createBrowserRouter, Navigate} from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import PublicLayout from './public/components/layout/PublicLayout';
-import LoadingSpinner from './shared/components/LoadingSpinner.tsx';
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import PublicLayout from "./public/components/layout/PublicLayout";
+import LoadingSpinner from "./shared/components/LoadingSpinner.tsx";
 
-const AdminLayout = lazy(() => import('./admin/components/layout/AdminLayout'));
-const AdminDashboard = lazy(() => import('./admin/pages/Dashboard.tsx'));
-const LakeManager = lazy(() => import('./admin/pages/LakeManager.tsx'));
-const StaticLayout = lazy(() => import('./public/ui/static/StaticLayout.tsx'));
-const Terms = lazy(() => import('./public/ui/static/Terms.tsx'));
+const AdminLayout = lazy(() => import("./admin/components/layout/AdminLayout"));
+const AdminDashboard = lazy(() => import("./admin/pages/Dashboard.tsx"));
+const LakeManager = lazy(() => import("./admin/pages/LakeManager.tsx"));
+const StaticLayout = lazy(() => import("./public/ui/static/StaticLayout.tsx"));
+const Terms = lazy(() => import("./public/ui/static/Terms.tsx"));
 
 // load these components everytime
-import Home from './public/ui/Home.tsx';
-import LakeViewPage from './public/ui/lakeview/LakeViewPage.tsx';
+import Home from "./public/ui/Home.tsx";
+import LakeViewPage from "./public/ui/lakeview/LakeViewPage.tsx";
 import NotFound from "./public/ui/static/NotFound.tsx";
 
 export const router = createBrowserRouter([
     {
-        path: '/',
+        path: "/",
         element: <PublicLayout />,
         children: [
             {
                 index: true,
-                element: <Home />
+                element: <Home />,
             },
             {
-                path: ':lakeId',
-                element: <LakeViewPage />
-            }
-        ]
+                path: ":lakeId",
+                element: <LakeViewPage />,
+            },
+        ],
     },
     {
-        path: '/',
+        path: "/",
         element: <StaticLayout />,
         children: [
             {
-                path: '/404',
-                element: <NotFound />
+                path: "/404",
+                element: <NotFound />,
             },
             {
-                path: '/terms',
-                element: <Terms />
-            }
-        ]
+                path: "/terms",
+                element: <Terms />,
+            },
+        ],
     },
     {
-        path: '/admin',
+        path: "/admin",
         element: (
             <Suspense fallback={<LoadingSpinner />}>
                 <AdminLayout />
@@ -57,23 +57,23 @@ export const router = createBrowserRouter([
                     <Suspense fallback={<LoadingSpinner />}>
                         <AdminDashboard />
                     </Suspense>
-                )
+                ),
             },
             {
-                path: ':lakeId',
+                path: ":lakeId",
                 element: (
                     <Suspense fallback={<LoadingSpinner />}>
                         <LakeManager />
                     </Suspense>
-                )
-            }
-        ]
+                ),
+            },
+        ],
     },
     // Fallback route for any unmatched paths
     {
-        path: '*',
-        element: <Navigate to="/404" replace />
-    }
+        path: "*",
+        element: <Navigate to="/404" replace />,
+    },
 ]);
 
 export const handleNotFoundRedirect = (
@@ -83,13 +83,13 @@ export const handleNotFoundRedirect = (
     // Sanitize the URL by removing consecutive slashes
     const sanitizeUrl = (url: string): string => {
         // Handle protocol separately
-        if (url.includes('://')) {
-            const [protocol, rest] = url.split('://');
-            return `${protocol}://${rest.replace(/\/+/g, '/')}`;
+        if (url.includes("://")) {
+            const [protocol, rest] = url.split("://");
+            return `${protocol}://${rest.replace(/\/+/g, "/")}`;
         }
 
         // For paths without protocol, simply replace consecutive slashes
-        return url.replace(/\/+/g, '/');
+        return url.replace(/\/+/g, "/");
     };
 
     const sanitizedPath = sanitizeUrl(sourcePath);

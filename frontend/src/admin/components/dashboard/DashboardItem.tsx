@@ -1,4 +1,4 @@
-import './LakeManagerPreview.css'
+import "./LakeManagerPreview.css";
 interface DashboardItemProps {
     children: React.ReactNode;
     title?: string;

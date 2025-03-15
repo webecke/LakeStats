@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { LakeMetaData, LakeRegion } from '../../../shared/services/data';
-import './RegionManager.css';
-import { Button } from '../../../shared/components/Button';
-import { Plus, Edit, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
-import AccessPointManager from './AccessPointManager';
-import RegionForm from './RegionForm';
+import React, { useState } from "react";
+import { AccessPoint, LakeMetaData, LakeRegion } from "../../../shared/services/data";
+import "./RegionManager.css";
+import { Button } from "../../../shared/components/Button";
+import { Plus, Edit, Trash2, ChevronUp, ChevronDown } from "lucide-react";
+import AccessPointManager from "./AccessPointManager";
+import RegionForm from "./RegionForm";
 
 interface RegionManagerProps {
     lakeData: LakeMetaData;
@@ -17,13 +17,14 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
     const [isEditingRegion, setIsEditingRegion] = useState(false);
 
     // Get array of regions from the record
-    const regionsList = Object.values(lakeData.regions || {})
-        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    const regionsList = Object.values(lakeData.regions || {}).sort(
+        (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0)
+    );
 
     // Calculate max sort order for new regions
     const getMaxSortOrder = () => {
         if (regionsList.length === 0) return 0;
-        return Math.max(...regionsList.map(region => region.sortOrder || 0));
+        return Math.max(...regionsList.map((region) => region.sortOrder || 0));
     };
 
     // Handle adding a new region
@@ -42,7 +43,11 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
 
     // Handle deleting a region
     const handleDeleteRegion = (regionId: string) => {
-        if (!window.confirm(`Are you sure you want to delete this region and all its access points?`)) {
+        if (
+            !window.confirm(
+                `Are you sure you want to delete this region and all its access points?`
+            )
+        ) {
             return;
         }
 
@@ -51,7 +56,7 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
 
         onLakeDataChange({
             ...lakeData,
-            regions: updatedRegions
+            regions: updatedRegions,
         });
 
         if (selectedRegionId === regionId) {
@@ -63,7 +68,7 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
     // Handle moving a region up in sort order
     const handleMoveUp = (regionId: string) => {
         const sortedRegions = regionsList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-        const currentIndex = sortedRegions.findIndex(r => r.id === regionId);
+        const currentIndex = sortedRegions.findIndex((r) => r.id === regionId);
 
         if (currentIndex <= 0) return; // Already at the top
 
@@ -74,23 +79,23 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
         const updatedRegions = { ...lakeData.regions };
         updatedRegions[currentRegion.id] = {
             ...currentRegion,
-            sortOrder: previousRegion.sortOrder || 0
+            sortOrder: previousRegion.sortOrder || 0,
         };
         updatedRegions[previousRegion.id] = {
             ...previousRegion,
-            sortOrder: currentRegion.sortOrder || 0
+            sortOrder: currentRegion.sortOrder || 0,
         };
 
         onLakeDataChange({
             ...lakeData,
-            regions: updatedRegions
+            regions: updatedRegions,
         });
     };
 
     // Handle moving a region down in sort order
     const handleMoveDown = (regionId: string) => {
         const sortedRegions = regionsList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-        const currentIndex = sortedRegions.findIndex(r => r.id === regionId);
+        const currentIndex = sortedRegions.findIndex((r) => r.id === regionId);
 
         if (currentIndex === -1 || currentIndex === sortedRegions.length - 1) return; // Already at the bottom
 
@@ -101,16 +106,16 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
         const updatedRegions = { ...lakeData.regions };
         updatedRegions[currentRegion.id] = {
             ...currentRegion,
-            sortOrder: nextRegion.sortOrder || 0
+            sortOrder: nextRegion.sortOrder || 0,
         };
         updatedRegions[nextRegion.id] = {
             ...nextRegion,
-            sortOrder: currentRegion.sortOrder || 0
+            sortOrder: currentRegion.sortOrder || 0,
         };
 
         onLakeDataChange({
             ...lakeData,
-            regions: updatedRegions
+            regions: updatedRegions,
         });
     };
 
@@ -120,18 +125,18 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
         if (!lakeData.regions[region.id]) {
             region = {
                 ...region,
-                sortOrder: getMaxSortOrder() + 1
+                sortOrder: getMaxSortOrder() + 1,
             };
         }
 
         const updatedRegions = {
             ...lakeData.regions,
-            [region.id]: region
+            [region.id]: region,
         };
 
         onLakeDataChange({
             ...lakeData,
-            regions: updatedRegions
+            regions: updatedRegions,
         });
 
         setSelectedRegionId(region.id);
@@ -146,24 +151,24 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
     };
 
     // Handle updating access points in a region
-    const handleUpdateAccessPoints = (regionId: string, accessPoints: any[]) => {
+    const handleUpdateAccessPoints = (regionId: string, accessPoints: AccessPoint[]) => {
         if (!lakeData.regions[regionId]) return;
 
         const updatedRegion = {
             ...lakeData.regions[regionId],
-            accessPoints
+            accessPoints,
         };
 
         const updatedRegions = {
             ...lakeData.regions,
-            [regionId]: updatedRegion
+            [regionId]: updatedRegion,
         };
 
         onLakeDataChange({
             ...lakeData,
-            regions: updatedRegions
+            regions: updatedRegions,
         });
-        console.log("ACCESS POINTS UPDATED", lakeData.regions)
+        console.log("ACCESS POINTS UPDATED", lakeData.regions);
     };
 
     return (
@@ -191,13 +196,15 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                             {regionsList.map((region, index) => (
                                 <li
                                     key={region.id}
-                                    className={`region-manager__list-item ${selectedRegionId === region.id ? 'active' : ''}`}
+                                    className={`region-manager__list-item ${selectedRegionId === region.id ? "active" : ""}`}
                                 >
                                     <div className="region-manager__list-order-buttons">
                                         <button
                                             className="region-manager__action-button"
                                             onClick={() => handleMoveUp(region.id)}
-                                            disabled={index === 0 || isAddingRegion || isEditingRegion}
+                                            disabled={
+                                                index === 0 || isAddingRegion || isEditingRegion
+                                            }
                                             title="Move up"
                                         >
                                             <ChevronUp size={14} />
@@ -205,7 +212,11 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                                         <button
                                             className="region-manager__action-button"
                                             onClick={() => handleMoveDown(region.id)}
-                                            disabled={index === regionsList.length - 1 || isAddingRegion || isEditingRegion}
+                                            disabled={
+                                                index === regionsList.length - 1 ||
+                                                isAddingRegion ||
+                                                isEditingRegion
+                                            }
                                             title="Move down"
                                         >
                                             <ChevronDown size={14} />
@@ -257,7 +268,9 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                             region={lakeData.regions[selectedRegionId]}
                             onSave={handleSaveRegion}
                             onCancel={handleCancelRegion}
-                            existingRegionIds={Object.keys(lakeData.regions || {}).filter(id => id !== selectedRegionId)}
+                            existingRegionIds={Object.keys(lakeData.regions || {}).filter(
+                                (id) => id !== selectedRegionId
+                            )}
                         />
                     )}
 
@@ -270,11 +283,15 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                         />
                     )}
 
-                    {!isAddingRegion && !isEditingRegion && !selectedRegionId && regionsList.length > 0 && (
-                        <div className="region-manager__select-prompt">
-                            Select a region from the list to manage its access points, or add a new region.
-                        </div>
-                    )}
+                    {!isAddingRegion &&
+                        !isEditingRegion &&
+                        !selectedRegionId &&
+                        regionsList.length > 0 && (
+                            <div className="region-manager__select-prompt">
+                                Select a region from the list to manage its access points, or add a
+                                new region.
+                            </div>
+                        )}
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
-import React from 'react';
-import { TrendingDown, TrendingUp, MinusCircle } from 'lucide-react';
-import './LakeViewStyles.css';
-import Tooltip from '../../components/Tooltip.tsx';
+import React from "react";
+import { TrendingDown, TrendingUp, MinusCircle } from "lucide-react";
+import "./LakeViewStyles.css";
+import Tooltip from "../../components/Tooltip.tsx";
 
 interface StatItemProps {
     value: number;
@@ -14,17 +14,17 @@ interface StatItemProps {
 }
 
 const StatItem: React.FC<StatItemProps> = ({
-                                               value,
-                                               label,
-                                               secondaryLabel,
-                                               className = '',
-                                               isCurrentElevation = false,
-                                               isTrendStat = true,
-                                               tooltip = null
-                                           }) => {
+    value,
+    label,
+    secondaryLabel,
+    className = "",
+    isCurrentElevation = false,
+    isTrendStat = true,
+    tooltip = null,
+}) => {
     // Determine if value is positive, negative, or zero
     let icon;
-    let numberClass = "";
+    let numberClass ;
 
     if (value > 0) {
         icon = <TrendingUp className="trend-icon trend-up" />;
@@ -41,7 +41,7 @@ const StatItem: React.FC<StatItemProps> = ({
     const displayValue = Math.abs(value).toFixed(2);
 
     // Determine prefix based on component type
-    let prefix = "";
+    let prefix;
 
     if (isCurrentElevation) {
         // Current elevation: no prefix
@@ -58,7 +58,10 @@ const StatItem: React.FC<StatItemProps> = ({
     const innerContent = (
         <>
             <p className={`stat-value ${numberClass}`}>
-                {prefix}{displayValue}<span className="unit">ft</span>{!isCurrentElevation && isTrendStat && icon}
+                {prefix}
+                {displayValue}
+                <span className="unit">ft</span>
+                {!isCurrentElevation && isTrendStat && icon}
             </p>
             <p className="stat-label">{label}</p>
             {secondaryLabel && <p className="stat-label">{secondaryLabel}</p>}
@@ -70,11 +73,11 @@ const StatItem: React.FC<StatItemProps> = ({
         <div className={`stat-item ${className}`}>
             {tooltip !== null ? (
                 <Tooltip content={tooltip}>
-                    <div className="stat-item-inner">
-                        {innerContent}
-                    </div>
+                    <div className="stat-item-inner">{innerContent}</div>
                 </Tooltip>
-            ) : innerContent}
+            ) : (
+                innerContent
+            )}
         </div>
     );
 };

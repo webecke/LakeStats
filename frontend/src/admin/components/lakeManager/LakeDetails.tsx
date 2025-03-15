@@ -1,36 +1,38 @@
-import React from 'react';
-import './LakeDetails.css';
-import { LakeMetaData } from '../../../shared/services/data';
+import React from "react";
+import "./LakeDetails.css";
+import { LakeMetaData } from "../../../shared/services/data";
 
 interface LakeDetailsProps {
     lake: LakeMetaData;
-    setLake: (value: (((prevState: LakeMetaData | null) => LakeMetaData | null) | LakeMetaData | null)) => void;
+    setLake: (
+        value: ((prevState: LakeMetaData | null) => LakeMetaData | null) | LakeMetaData | null
+    ) => void;
 }
 
 export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
-        setLake(prev => {
+        setLake((prev) => {
             if (!prev) return prev;
 
-            if (type === 'number') {
+            if (type === "number") {
                 return {
                     ...prev,
-                    [name]: parseFloat(value)
+                    [name]: parseFloat(value),
                 };
             }
 
-            if (type === 'date') {
+            if (type === "date") {
                 // The value is already in YYYY-MM-DD format from the input
                 return {
                     ...prev,
-                    [name]: value
+                    [name]: value,
                 };
             }
 
             return {
                 ...prev,
-                [name]: value
+                [name]: value,
             };
         });
     };
@@ -41,7 +43,9 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                 <h3>Lake Details</h3>
 
                 <div className="lake-form__field">
-                    <label className="lake-form__label" htmlFor="description">Description</label>
+                    <label className="lake-form__label" htmlFor="description">
+                        Description
+                    </label>
                     <input
                         className="lake-form__input"
                         id="description"
@@ -52,7 +56,9 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                 </div>
 
                 <div className="lake-form__field">
-                    <label className="lake-form__label" htmlFor="fillDate">Fill Date</label>
+                    <label className="lake-form__label" htmlFor="fillDate">
+                        Fill Date
+                    </label>
                     <input
                         className="lake-form__input"
                         type="date"

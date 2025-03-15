@@ -1,36 +1,49 @@
 /* Modern CSS Reset */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-  font-size: 16px;
-  -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    font-family:
+        system-ui,
+        -apple-system,
+        sans-serif;
 }
 
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
 }
 
-input, button, textarea, select {
-  font: inherit;
+input,
+button,
+textarea,
+select {
+    font: inherit;
 }
 
 /* Remove list styles on ul, ol elements */
-ul, ol {
-  list-style: none;
+ul,
+ol {
+    list-style: none;
 }
 
 /* A elements that don't have a class get default styles */
 a:not([class]) {
-  text-decoration-skip-ink: auto;
+    text-decoration-skip-ink: auto;
 }

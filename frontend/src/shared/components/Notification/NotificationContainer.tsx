@@ -1,5 +1,5 @@
-import './Notification.css';
-import {Notification, useNotifications} from './NotificationContext';
+import "./Notification.css";
+import { Notification, useNotifications } from "./NotificationContext";
 
 function NotificationItem({ notification }: { notification: Notification }) {
     return (
@@ -14,7 +14,7 @@ export function NotificationContainer() {
 
     return (
         <div className="notification-container">
-            {notifications.map(notification => (
+            {notifications.map((notification) => (
                 <NotificationItem key={notification.id} notification={notification} />
             ))}
         </div>

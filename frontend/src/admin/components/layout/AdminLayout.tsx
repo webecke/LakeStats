@@ -1,8 +1,8 @@
-import {useEffect, useState} from 'react';
-import {Outlet, useNavigate} from 'react-router-dom';
-import {authService, User} from '../../../shared/services/auth';
-import {Button} from '../../../shared/components/Button';
-import {LoginForm} from "../login/LoginForm.tsx";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { authService, User } from "../../../shared/services/auth";
+import { Button } from "../../../shared/components/Button";
+import { LoginForm } from "../login/LoginForm.tsx";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner.tsx";
 
 export default function AdminLayout() {
@@ -35,15 +35,10 @@ export default function AdminLayout() {
         <div>
             <div className="admin-header">
                 <h1>LakeStats Admin Panel</h1>
-                <Button
-                    variant="outline"
-                    onClick={() => navigate("/admin")} >
+                <Button variant="outline" onClick={() => navigate("/admin")}>
                     Dashboard
                 </Button>
-                <Button
-                    variant="outline"
-                    onClick={() => authService.signOut()}
-                >
+                <Button variant="outline" onClick={() => authService.signOut()}>
                     Sign Out
                 </Button>
             </div>

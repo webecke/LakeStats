@@ -1,32 +1,35 @@
-import './LakeSystemConfig.css';
-import {LakeSystemFeatures, LakeSystemSettings} from "../../../shared/services/data";
+import "./LakeSystemConfig.css";
+import { LakeSystemFeatures, LakeSystemSettings } from "../../../shared/services/data";
 
 interface LakeSystemConfigProps {
     config: LakeSystemSettings;
     onChange: (newConfig: LakeSystemSettings) => void;
 }
 
+type FieldValue = string | number | boolean | string[];
+
 export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigProps) {
-    const handleChange = (field: keyof LakeSystemSettings, value: any) => {
+    const handleChange = (field: keyof LakeSystemSettings, value: FieldValue) => {
         onChange({
             ...config,
-            [field]: value
+            [field]: value,
         });
     };
 
     const handleFeatureToggle = (feature: LakeSystemFeatures) => {
         const newFeatures = config.features.includes(feature)
-            ? config.features.filter(f => f !== feature)
+            ? config.features.filter((f) => f !== feature)
             : [...config.features, feature];
 
-        handleChange('features', newFeatures);
+        handleChange("features", newFeatures);
     };
 
     // Helper to convert enum values to display text
     const formatFeatureName = (feature: string): string => {
-        return feature.split('_')
-            .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-            .join(' ');
+        return feature
+            .split("_")
+            .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+            .join(" ");
     };
 
     return (
@@ -43,7 +46,7 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                             id="lakeName"
                             className="lake-system-config__input"
                             value={config.lakeName}
-                            onChange={(e) => handleChange('lakeName', e.target.value)}
+                            onChange={(e) => handleChange("lakeName", e.target.value)}
                         />
                     </div>
 
@@ -55,7 +58,7 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                             id="brandedName"
                             className="lake-system-config__input"
                             value={config.brandedName}
-                            onChange={(e) => handleChange('brandedName', e.target.value)}
+                            onChange={(e) => handleChange("brandedName", e.target.value)}
                         />
                     </div>
                 </div>
@@ -70,14 +73,14 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                             id="accentColor"
                             type="color"
                             className="lake-system-config__input lake-system-config__input--color"
-                            value={config.accentColor || '#000000'}
-                            onChange={(e) => handleChange('accentColor', e.target.value)}
+                            value={config.accentColor || "#000000"}
+                            onChange={(e) => handleChange("accentColor", e.target.value)}
                         />
                         <input
                             type="text"
                             className="lake-system-config__input"
-                            value={config.accentColor || '#000000'}
-                            onChange={(e) => handleChange('accentColor', e.target.value)}
+                            value={config.accentColor || "#000000"}
+                            onChange={(e) => handleChange("accentColor", e.target.value)}
                             placeholder="#000000"
                         />
                     </div>
@@ -88,7 +91,7 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                     <select
                         className="lake-system-config__select"
                         value={config.status}
-                        onChange={(e) => handleChange('status', e.target.value)}
+                        onChange={(e) => handleChange("status", e.target.value)}
                     >
                         <option value="ENABLED">Enabled</option>
                         <option value="DISABLED">Disabled</option>
@@ -99,7 +102,7 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                 <div className="lake-system-config__field">
                     <label className="lake-system-config__label">Features</label>
                     <div className="lake-system-config__features-list">
-                        {Object.values(LakeSystemFeatures).map(feature => (
+                        {Object.values(LakeSystemFeatures).map((feature) => (
                             <div key={feature} className="lake-system-config__checkbox-group">
                                 <input
                                     type="checkbox"
@@ -116,7 +119,9 @@ export default function LakeSystemConfig({ config, onChange }: LakeSystemConfigP
                                 </label>
                             </div>
                         ))}
-                        <p><em>The Current Conditions feature is always enabled</em></p>
+                        <p>
+                            <em>The Current Conditions feature is always enabled</em>
+                        </p>
                     </div>
                 </div>
             </div>

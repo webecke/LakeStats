@@ -1,7 +1,7 @@
-import React from 'react';
-import { AccessPoint } from '../../../shared/services/data';
-import { MapPin } from 'lucide-react';
-import './AccessPointItem.css';
+import React from "react";
+import { AccessPoint } from "../../../shared/services/data";
+import { MapPin } from "lucide-react";
+import "./AccessPointItem.css";
 
 interface AccessPointItemProps {
     accessPoint: AccessPoint;
@@ -13,9 +13,10 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
     const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation).toFixed(2);
 
     // Format the difference WITHOUT a + sign when positive
-    const formattedDifference = usableElevationDiff >= 0
-        ? `${usableElevationDiff.toFixed(2)} ft`
-        : `${usableElevationDiff.toFixed(2)} ft`;
+    const formattedDifference =
+        usableElevationDiff >= 0
+            ? `${usableElevationDiff.toFixed(2)} ft`
+            : `${usableElevationDiff.toFixed(2)} ft`;
 
     // Determine status
     let status, statusClass;
@@ -36,16 +37,17 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
 
     // Format the access point type for display
     const formatAccessType = (type: string) => {
-        return type.split('_')
-            .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-            .join(' ');
+        return type
+            .split("_")
+            .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+            .join(" ");
     };
 
     // Handle opening Google Maps
     const handleOpenMaps = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (accessPoint.googleMapsLink) {
-            window.open(accessPoint.googleMapsLink, '_blank', 'noopener,noreferrer');
+            window.open(accessPoint.googleMapsLink, "_blank", "noopener,noreferrer");
         }
     };
 
@@ -68,9 +70,7 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
 
             <div className="access-point-details">
                 <div className={`status-text ${statusClass}`}>{status}</div>
-                <div className={`elevation-difference ${statusClass}`}>
-                    {formattedDifference}
-                </div>
+                <div className={`elevation-difference ${statusClass}`}>{formattedDifference}</div>
             </div>
         </div>
     );

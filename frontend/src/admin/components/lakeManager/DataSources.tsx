@@ -1,5 +1,5 @@
-import './DataSources.css';
-import { DataType } from '../../../shared/services/data';
+import "./DataSources.css";
+import { DataType } from "../../../shared/services/data";
 
 interface DataSourcesProps {
     sources: Map<DataType, string>;
@@ -15,9 +15,9 @@ export default function DataSources({ sources, onChange }: DataSourcesProps) {
     const handleAddSource = () => {
         const newSources = new Map(sources);
         // Find first available type
-        const availableType = Object.values(DataType).find(type => !sources.has(type));
+        const availableType = Object.values(DataType).find((type) => !sources.has(type));
         if (availableType) {
-            newSources.set(availableType, '');
+            newSources.set(availableType, "");
             onChange(newSources);
         }
     };
@@ -36,7 +36,7 @@ export default function DataSources({ sources, onChange }: DataSourcesProps) {
 
     const handleTypeChange = (oldType: DataType, newType: DataType) => {
         const newSources = new Map(sources);
-        const url = newSources.get(oldType) || '';
+        const url = newSources.get(oldType) || "";
         newSources.delete(oldType);
         newSources.set(newType, url);
         onChange(newSources);
@@ -45,21 +45,20 @@ export default function DataSources({ sources, onChange }: DataSourcesProps) {
     // Convert sources map to array for easier rendering
     const sourceItems: DataSourceItem[] = Array.from(sources).map(([type, url]) => ({
         type,
-        url
+        url,
     }));
 
     // Get available types (not currently in use)
     const getAvailableTypes = (currentType: DataType): DataType[] => {
-        return Object.values(DataType).filter(type =>
-            type === currentType || !sources.has(type)
-        );
+        return Object.values(DataType).filter((type) => type === currentType || !sources.has(type));
     };
 
     // Format enum value for display
     const formatDataType = (type: string): string => {
-        return type.split('_')
-            .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-            .join(' ');
+        return type
+            .split("_")
+            .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+            .join(" ");
     };
 
     return (
@@ -72,7 +71,7 @@ export default function DataSources({ sources, onChange }: DataSourcesProps) {
                             value={type}
                             onChange={(e) => handleTypeChange(type, e.target.value as DataType)}
                         >
-                            {getAvailableTypes(type).map(availableType => (
+                            {getAvailableTypes(type).map((availableType) => (
                                 <option key={availableType} value={availableType}>
                                     {formatDataType(availableType)}
                                 </option>
@@ -97,10 +96,7 @@ export default function DataSources({ sources, onChange }: DataSourcesProps) {
             </div>
 
             {sourceItems.length < Object.keys(DataType).length && (
-                <button
-                    className="data-sources__add"
-                    onClick={handleAddSource}
-                >
+                <button className="data-sources__add" onClick={handleAddSource}>
                     + Add Data Source
                 </button>
             )}
