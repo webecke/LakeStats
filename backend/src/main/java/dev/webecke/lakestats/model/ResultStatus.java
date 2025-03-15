@@ -19,4 +19,8 @@ public enum ResultStatus {
      * Operation was not successful due to some sort of exception or error that occurred during the operation.
      */
     SYSTEM_EXCEPTION,
+    /**
+     * Operation was successful, but there was an error while publishing the data to the database.
+     */
+    PUBLICATION_ERROR
 }

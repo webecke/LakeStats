@@ -5,6 +5,7 @@ import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.TimeSeriesData;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
+import dev.webecke.lakestats.service.LakeStatsLogger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -12,22 +13,17 @@ import java.util.Map;
 
 @Service
 public class CurrentConditionsAggregator {
-    ErrorAggregator errorAggregator;
+    private final LakeStatsLogger logger = new LakeStatsLogger(CurrentConditionsAggregator.class);
 
-    public CurrentConditionsAggregator(ErrorAggregator errorAggregator) {
-        this.errorAggregator = errorAggregator;
-    }
+    public CurrentConditionsAggregator() {}
 
     public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse, Lake lake) {
         if (!collectorResponse.successful()) { return null; }
         if (collectorResponse.data().lakeId() != lake.id()) {
-            errorAggregator.add("Lake ID mismatch: data is for %s, but got lake info for %s".formatted(lake.id(), collectorResponse.data().lakeId()), lake.id());
-            return null;
+            throw new IllegalArgumentException("Lake ID mismatch: data is for %s, but got lake info for %s".formatted(lake.id(), collectorResponse.data().lakeId()));
         }
         if (collectorResponse.data().type() != DataType.ELEVATION) {
-            errorAggregator.add("Unexpected data type received while aggregating current conditions: %s on %s"
-                    .formatted(collectorResponse.data().type()), collectorResponse.data().lakeId());
-            return null;
+            throw new IllegalArgumentException("Unexpected data type: %s. Was expecting ELEVATION".formatted(collectorResponse.data().type()));
         }
 
         TimeSeriesData dataset = collectorResponse.data();
@@ -65,7 +61,7 @@ public class CurrentConditionsAggregator {
             TimeSeriesData.TimeSeriesEntry entry = indexedData.get(startDate.minusYears(i + 1));
 
             if (entry == null) {
-                errorAggregator.add(
+                logger.warn(
                         "Less than %d years of data found for %s while calculating multiYearAverageOnThisDate"
                                 .formatted(years, dataset.lakeId()), dataset.lakeId());
                 break;

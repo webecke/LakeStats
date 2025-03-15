@@ -1,13 +1,15 @@
 package dev.webecke.lakestats.collector;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.model.CollectorResponse;
+import dev.webecke.lakestats.model.LakeStatsException;
+import dev.webecke.lakestats.model.ResultStatus;
 import dev.webecke.lakestats.model.TimeSeriesData;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.network.NetworkClient;
 import dev.webecke.lakestats.network.NetworkException;
+import dev.webecke.lakestats.service.LakeStatsLogger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,11 +20,10 @@ import java.util.List;
 @Service
 public class BureauOfReclamationDataCollector {
     private final NetworkClient networkClient;
-    private final ErrorAggregator errorAggregator;
+    private final LakeStatsLogger logger = new LakeStatsLogger(BureauOfReclamationDataCollector.class);
 
-    public BureauOfReclamationDataCollector(NetworkClient networkClient, ErrorAggregator errorAggregator) {
+    public BureauOfReclamationDataCollector(NetworkClient networkClient) {
         this.networkClient = networkClient;
-        this.errorAggregator = errorAggregator;
     }
 
     public CollectorResponse<TimeSeriesData> collectData(Lake lake, DataType type) {
@@ -30,8 +31,7 @@ public class BureauOfReclamationDataCollector {
         try {
             dataSourceUrl = lake.getDataSourceUrl(type);
         } catch (IllegalArgumentException e) {
-            errorAggregator.add("No URL found for data type: " + type + " while collecting data", e, lake.id());
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException("No URL found for data type: " + type + " while collecting data");
         }
 
         try {
@@ -51,8 +51,7 @@ public class BureauOfReclamationDataCollector {
             return new CollectorResponse<>(data, true, LocalDateTime.now());
 
         } catch (NetworkException e) {
-            errorAggregator.add("Network exception while collecting %s data for lakeId %s".formatted(type, lake.id()), e, lake.id());
-            return new CollectorResponse<>(null, false, LocalDateTime.now());
+            throw new LakeStatsException("Network exception while collecting %s data for %s".formatted(type, lake.id()), ResultStatus.SYSTEM_EXCEPTION, e);
         }
     }
 }

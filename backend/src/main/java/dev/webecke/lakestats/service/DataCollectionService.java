@@ -1,7 +1,6 @@
 package dev.webecke.lakestats.service;
 
 import dev.webecke.lakestats.aggregator.CurrentConditionsAggregator;
-import dev.webecke.lakestats.aggregator.ErrorAggregator;
 import dev.webecke.lakestats.collector.BureauOfReclamationDataCollector;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
@@ -18,16 +17,14 @@ import java.util.List;
 
 @Service
 public class DataCollectionService {
-    private final ErrorAggregator errorAggregator;
     private final BureauOfReclamationDataCollector bureauOfReclamationDataCollector;
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final DatabaseAccess databaseAccess;
+    private final LakeStatsLogger logger = new LakeStatsLogger(DataCollectionService.class);
 
-    public DataCollectionService(ErrorAggregator errorAggregator,
-                                 BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
+    public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
                                  DatabaseAccess databaseAccess) {
-        this.errorAggregator = errorAggregator;
         this.bureauOfReclamationDataCollector = bureauOfReclamationDataCollector;
         this.currentConditionsAggregator = currentConditionsAggregator;
         this.databaseAccess = databaseAccess;
@@ -47,37 +44,37 @@ public class DataCollectionService {
             lakeCollectorResults.add(result);
         }
 
-        List<SystemError> errors = errorAggregator.flushErrors();
-        databaseAccess.publishErrors(errors);
         return new RunSystemResult(LocalDateTime.now(), ResultStatus.SUCCESS, "Data collection completed",
                 timer.end(), lakeCollectorResults);
     }
 
     public RunLakeCollectorResult collectDataForLake(String lakeId) {
-        SystemTimer timer = new SystemTimer();
+        Lake lake;
         try {
-            Lake lake = databaseAccess.getLakeDetails(lakeId);
-            collectDataForLake(lake);
+            lake = databaseAccess.getLakeDetails(lakeId);
         } catch (Exception e) {
-            errorAggregator.add("Error while getting lake details for data for lake: " + lakeId, e, lakeId);
+            String resultMessage = "Error while getting lake details";
+            logger.errorForLake(resultMessage, lakeId, e);
             return new RunLakeCollectorResult(
                     LocalDateTime.now(),
                     lakeId,
-                    ResultStatus.SYSTEM_EXCEPTION,
-                    "Error while collecting data for lake: " + lakeId,
-                    timer.end(),
-                    null);
+                    ResultStatus.CONFIGURATION_ERROR,
+                    resultMessage,
+                    -1,
+                    null
+            );
         }
-        return new RunLakeCollectorResult(
-                LocalDateTime.now(),
-                lakeId,
-                ResultStatus.SUCCESS,
-                "Successfully ran all features of " + lakeId,
-                timer.end(),
-                null);
+
+        return collectDataForLake(lake);
     }
 
-    public void collectDataForLake(Lake lake) {
+    public RunLakeCollectorResult collectDataForLake(Lake lake) {
+        logger.infoForLake("Running collector for lake %s".formatted(lake.id()), lake.id());
+
+        SystemTimer timer = new SystemTimer();
+        ResultStatus status;
+        String resultMessage = "Data collection completed and successfully published";
+
         try {
             CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
             CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
@@ -85,11 +82,30 @@ public class DataCollectionService {
             try {
                 databaseAccess.publishCurrentConditions(currentConditions);
                 databaseAccess.publishLakeInfo(lake);
+                status = ResultStatus.SUCCESS;
             } catch (DataAccessException e) {
-                errorAggregator.add("Error while publishing data for lake: " + lake.id(), e, lake.id());
+                status = ResultStatus.PUBLICATION_ERROR;
+                resultMessage = "Error while publishing data to the database";
+                logger.errorForLake(resultMessage, lake.id(), e);
             }
+        } catch (LakeStatsException e) {
+            status = e.getType();
+            resultMessage = e.getMessage();
+            logger.errorForLake(resultMessage, lake.id(), e);
         } catch (Exception e) {
-            errorAggregator.add("Unknown error while collecting data for lake: " + lake.id(), e, lake.id());
+            status = ResultStatus.SYSTEM_EXCEPTION;
+            resultMessage = "Unknown error while collecting data";
+            logger.errorForLake(resultMessage, lake.id(), e);
         }
+
+        logger.infoForLake("Collector for %s has been run in %d milliseconds".formatted(lake.id(), timer.end()), lake.id());
+        return new RunLakeCollectorResult(
+                LocalDateTime.now(),
+                lake.id(),
+                status,
+                resultMessage,
+                timer.getElapsedTime(),
+                null
+        );
     }
 }
