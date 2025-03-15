@@ -7,6 +7,7 @@ import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
 import DataSources from "../components/lakeManager/DataSources";
+import RegionManager from "../components/lakeManager/RegionManager";
 import {useNotifications} from '../../shared/components/Notification/NotificationContext';
 
 export default function LakeManager() {
@@ -140,7 +141,10 @@ export default function LakeManager() {
                             <h2 className="content-panel__title">Regions</h2>
                         </div>
                         <div className="content-panel__content">
-                            <p>REGION MANAGER</p>
+                            <RegionManager
+                                lakeData={lakeData!}
+                                onLakeDataChange={setLakeData}
+                            />
                         </div>
                     </div>
                 );

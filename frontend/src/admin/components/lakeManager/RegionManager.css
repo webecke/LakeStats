@@ -1,0 +1,187 @@
+.region-manager {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.region-manager__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.region-manager__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.region-manager__content {
+    display: flex;
+    gap: 20px;
+    min-height: 400px;
+}
+
+.region-manager__sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background-color: var(--background-higher);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.region-manager__detail {
+    flex: 1;
+    background-color: var(--background-higher);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.region-manager__empty {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 20px 12px;
+    font-style: italic;
+    background-color: var(--background-base);
+    border-radius: 6px;
+}
+
+.region-manager__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.region-manager__list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--background-base);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: background-color 0.2s;
+}
+
+.region-manager__list-item.active {
+    background-color: var(--background-elevated);
+    border-left: 3px solid var(--action-primary);
+}
+
+.region-manager__list-button {
+    flex: 1;
+    padding: 10px 12px;
+    text-align: left;
+    border: none;
+    background: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.region-manager__list-button:hover {
+    color: var(--action-primary);
+}
+
+.region-manager__list-actions {
+    display: flex;
+    padding-right: 6px;
+}
+
+.region-manager__action-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.region-manager__action-button:hover {
+    color: var(--text-primary);
+    background-color: var(--background-elevated);
+}
+
+.region-manager__action-button--delete:hover {
+    color: var(--status-error);
+}
+
+.region-manager__action-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.region-manager__select-prompt {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 40px 20px;
+}
+
+/* Region Form Styles */
+.region-form {
+    max-width: 100%;
+}
+
+.region-form h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--background-base);
+    border: 1px solid var(--border-medium);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: var(--action-primary);
+}
+
+.form-field input.error,
+.form-field textarea.error {
+    border-color: var(--status-error);
+}
+
+.error-message {
+    color: var(--status-error);
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.form-field input:disabled {
+    background-color: var(--background-elevated);
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
