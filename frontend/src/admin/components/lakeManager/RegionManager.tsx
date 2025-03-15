@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { LakeMetaData, LakeRegion } from '../../../shared/services/data';
 import './RegionManager.css';
 import { Button } from '../../../shared/components/Button';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
 import AccessPointManager from './AccessPointManager';
+import RegionForm from './RegionForm';
 
 interface RegionManagerProps {
     lakeData: LakeMetaData;
@@ -16,7 +17,14 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
     const [isEditingRegion, setIsEditingRegion] = useState(false);
 
     // Get array of regions from the record
-    const regionsList = Object.values(lakeData.regions || {});
+    const regionsList = Object.values(lakeData.regions || {})
+        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+    // Calculate max sort order for new regions
+    const getMaxSortOrder = () => {
+        if (regionsList.length === 0) return 0;
+        return Math.max(...regionsList.map(region => region.sortOrder || 0));
+    };
 
     // Handle adding a new region
     const handleAddRegion = () => {
@@ -52,8 +60,70 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
         }
     };
 
+    // Handle moving a region up in sort order
+    const handleMoveUp = (regionId: string) => {
+        const sortedRegions = regionsList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        const currentIndex = sortedRegions.findIndex(r => r.id === regionId);
+
+        if (currentIndex <= 0) return; // Already at the top
+
+        const currentRegion = sortedRegions[currentIndex];
+        const previousRegion = sortedRegions[currentIndex - 1];
+
+        // Swap sort orders
+        const updatedRegions = { ...lakeData.regions };
+        updatedRegions[currentRegion.id] = {
+            ...currentRegion,
+            sortOrder: previousRegion.sortOrder || 0
+        };
+        updatedRegions[previousRegion.id] = {
+            ...previousRegion,
+            sortOrder: currentRegion.sortOrder || 0
+        };
+
+        onLakeDataChange({
+            ...lakeData,
+            regions: updatedRegions
+        });
+    };
+
+    // Handle moving a region down in sort order
+    const handleMoveDown = (regionId: string) => {
+        const sortedRegions = regionsList.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        const currentIndex = sortedRegions.findIndex(r => r.id === regionId);
+
+        if (currentIndex === -1 || currentIndex === sortedRegions.length - 1) return; // Already at the bottom
+
+        const currentRegion = sortedRegions[currentIndex];
+        const nextRegion = sortedRegions[currentIndex + 1];
+
+        // Swap sort orders
+        const updatedRegions = { ...lakeData.regions };
+        updatedRegions[currentRegion.id] = {
+            ...currentRegion,
+            sortOrder: nextRegion.sortOrder || 0
+        };
+        updatedRegions[nextRegion.id] = {
+            ...nextRegion,
+            sortOrder: currentRegion.sortOrder || 0
+        };
+
+        onLakeDataChange({
+            ...lakeData,
+            regions: updatedRegions
+        });
+    };
+
     // Handle saving a new or edited region
     const handleSaveRegion = (region: LakeRegion) => {
+        // For new regions, automatically assign the highest sort order + 1
+        if (!lakeData.regions[region.id]) {
+            region = {
+                ...region,
+                sortOrder: getMaxSortOrder() + 1
+            };
+        }
+
         const updatedRegions = {
             ...lakeData.regions,
             [region.id]: region
@@ -117,11 +187,30 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                         </div>
                     ) : (
                         <ul className="region-manager__list">
-                            {regionsList.map(region => (
+                            {regionsList.map((region, index) => (
                                 <li
                                     key={region.id}
                                     className={`region-manager__list-item ${selectedRegionId === region.id ? 'active' : ''}`}
                                 >
+                                    <div className="region-manager__list-order-buttons">
+                                        <button
+                                            className="region-manager__action-button"
+                                            onClick={() => handleMoveUp(region.id)}
+                                            disabled={index === 0 || isAddingRegion || isEditingRegion}
+                                            title="Move up"
+                                        >
+                                            <ChevronUp size={14} />
+                                        </button>
+                                        <button
+                                            className="region-manager__action-button"
+                                            onClick={() => handleMoveDown(region.id)}
+                                            disabled={index === regionsList.length - 1 || isAddingRegion || isEditingRegion}
+                                            title="Move down"
+                                        >
+                                            <ChevronDown size={14} />
+                                        </button>
+                                    </div>
+
                                     <button
                                         className="region-manager__list-button"
                                         onClick={() => setSelectedRegionId(region.id)}
@@ -187,137 +276,6 @@ const RegionManager: React.FC<RegionManagerProps> = ({ lakeData, onLakeDataChang
                     )}
                 </div>
             </div>
-        </div>
-    );
-};
-
-// Region Form Component for adding/editing regions
-interface RegionFormProps {
-    region?: LakeRegion;
-    onSave: (region: LakeRegion) => void;
-    onCancel: () => void;
-    existingRegionIds: string[];
-}
-
-const RegionForm: React.FC<RegionFormProps> = ({
-                                                   region,
-                                                   onSave,
-                                                   onCancel,
-                                                   existingRegionIds
-                                               }) => {
-    const [formData, setFormData] = useState<LakeRegion>(
-        region || {
-            id: '',
-            name: '',
-            description: '',
-            accessPoints: []
-        }
-    );
-
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-
-        // Clear error when field is edited
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
-        }
-    };
-
-    const validateForm = () => {
-        const newErrors: Record<string, string> = {};
-
-        if (!formData.id.trim()) {
-            newErrors.id = 'Region ID is required';
-        } else if (existingRegionIds.includes(formData.id)) {
-            newErrors.id = 'Region ID must be unique';
-        }
-
-        if (!formData.name.trim()) {
-            newErrors.name = 'Region name is required';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (validateForm()) {
-            onSave({
-                ...formData,
-                id: formData.id.trim(),
-                name: formData.name.trim(),
-                description: formData.description.trim(),
-                accessPoints: formData.accessPoints || []
-            });
-        }
-    };
-
-    return (
-        <div className="region-form">
-            <h3>{region ? 'Edit Region' : 'Add New Region'}</h3>
-
-            <form onSubmit={handleSubmit}>
-                <div className="form-field">
-                    <label htmlFor="id">Region ID</label>
-                    <input
-                        type="text"
-                        id="id"
-                        name="id"
-                        value={formData.id}
-                        onChange={handleChange}
-                        disabled={!!region} // Disable editing ID for existing regions
-                        placeholder="e.g., north, south"
-                        className={errors.id ? 'error' : ''}
-                    />
-                    {errors.id && <div className="error-message">{errors.id}</div>}
-                </div>
-
-                <div className="form-field">
-                    <label htmlFor="name">Region Name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="e.g., North Lake, South Lake"
-                        className={errors.name ? 'error' : ''}
-                    />
-                    {errors.name && <div className="error-message">{errors.name}</div>}
-                </div>
-
-                <div className="form-field">
-                    <label htmlFor="description">Region Description</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        placeholder="Brief description of this region"
-                        rows={3}
-                    />
-                </div>
-
-                <div className="form-actions">
-                    <Button variant="secondary" onClick={onCancel} type="button">
-                        Cancel
-                    </Button>
-                    <Button variant="primary" type="submit">
-                        {region ? 'Save Changes' : 'Add Region'}
-                    </Button>
-                </div>
-            </form>
         </div>
     );
 };

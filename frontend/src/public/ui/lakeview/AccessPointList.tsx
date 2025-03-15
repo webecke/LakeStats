@@ -1,4 +1,5 @@
 import React from 'react';
+import { AccessPoint } from '../../../shared/services/data';
 import AccessPointItem from './AccessPointItem';
 import { useSelectedRegion } from './RegionContext';
 import './AccessPointList.css';
@@ -19,16 +20,39 @@ const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation }) =
         return <div className="no-access-points">No access points available in this region</div>;
     }
 
-    // Sort access points: first by open/closed status (open first), then by name
+    // Determine status for each access point
+    const getAccessPointStatus = (ap: AccessPoint) => {
+        if (currentElevation >= ap.minSafeElevation) {
+            return 'OPEN';
+        } else if (currentElevation < ap.minUsableElevation) {
+            return 'CLOSED';
+        } else {
+            return 'CAUTION';
+        }
+    };
+
+    // Sort access points with priority logic:
+    // 1. Status (OPEN first, then CAUTION, then CLOSED)
+    // 2. sortOrder (if available)
+    // 3. name (as fallback)
     const sortedAccessPoints = [...accessPoints].sort((a, b) => {
-        const aIsOpen = currentElevation >= a.minSafeElevation;
-        const bIsOpen = currentElevation >= b.minSafeElevation;
+        const aStatus = getAccessPointStatus(a);
+        const bStatus = getAccessPointStatus(b);
 
-        // First sort by status
-        if (aIsOpen && !bIsOpen) return -1;
-        if (!aIsOpen && bIsOpen) return 1;
+        // First sort by status priority
+        if (aStatus !== bStatus) {
+            if (aStatus === 'OPEN') return -1;
+            if (bStatus === 'OPEN') return 1;
+            if (aStatus === 'CAUTION') return -1;
+            if (bStatus === 'CAUTION') return 1;
+        }
 
-        // Then sort by name
+        // Then sort by sortOrder if available
+        if (a.sortOrder !== undefined && b.sortOrder !== undefined) {
+            return a.sortOrder - b.sortOrder;
+        }
+
+        // Finally fall back to name
         return a.name.localeCompare(b.name);
     });
 

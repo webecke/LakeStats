@@ -10,8 +10,16 @@ interface RegionSelectorProps {
 }
 
 const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children }) => {
-    // Convert regions record to array
-    const regionArray = Object.values(regions);
+    // Convert regions record to array and sort by sortOrder
+    const regionArray = Object.values(regions)
+        .sort((a, b) => {
+            // First sort by sortOrder if available
+            if (a.sortOrder !== undefined && b.sortOrder !== undefined) {
+                return a.sortOrder - b.sortOrder;
+            }
+            // Fallback to sorting by name
+            return a.name.localeCompare(b.name);
+        });
 
     // State for the selected region ID
     const [selectedRegionId, setSelectedRegionId] = useState<string>('');

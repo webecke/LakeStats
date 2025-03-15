@@ -43,6 +43,7 @@ export interface LakeRegion {
     id: string;
     name: string;
     description: string;
+    sortOrder: number;
     accessPoints: AccessPoint[];
 }
 
@@ -53,6 +54,7 @@ export interface AccessPoint {
     minSafeElevation: number;
     minUsableElevation: number;
     googleMapsLink: string;
+    sortOrder: number;
 }
 
 export interface CurrentConditions {
