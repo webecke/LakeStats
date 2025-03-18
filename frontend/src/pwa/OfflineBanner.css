@@ -1,0 +1,63 @@
+.offline-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: var(--status-warning);
+    color: var(--background-base);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slide-down 0.3s ease-out;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.offline-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.offline-banner__retry {
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    color: inherit;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.offline-banner__retry:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Add spacing to top of page content when banner is visible */
+.offline-banner + .public-layout .main-content,
+.offline-banner + .lake-view {
+    margin-top: 40px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .offline-banner {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+}

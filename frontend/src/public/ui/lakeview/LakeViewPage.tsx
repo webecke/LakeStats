@@ -13,9 +13,12 @@ import AsyncContainer from "../../components/AsyncContainer";
 import { PageTitle } from "../../components/PageTitle";
 import { handleNotFoundRedirect } from "../../../routes";
 import { LakeSystemFeatures } from "../../../shared/services/data";
+import InstallPrompt from "../../../pwa/InstallPrompt";
+import { usePWA } from "../../../pwa/PWAContext";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
+    const { isPWAInstalled, showInstallPrompt } = usePWA();
 
     // Get lakeId from URL parameters
     const { lakeId } = useParams<{ lakeId: string }>();
@@ -84,6 +87,10 @@ const LakeViewPage: React.FC = () => {
                     <>
                         {/* Current Conditions Section */}
                         <CurrentConditions data={data} />
+
+                        {/* Install Prompt - only show if not installed and prompt is available */}
+                        {!isPWAInstalled && showInstallPrompt && <InstallPrompt />}
+                        <InstallPrompt/>
 
                         {/* Regions and Access Points Section - using direct children */}
                         {lakeInfo?.features.includes(LakeSystemFeatures.REGIONS) && hasRegions && (

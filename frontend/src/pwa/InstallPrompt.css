@@ -1,0 +1,112 @@
+.install-prompt {
+    width: 100%;
+    margin: 16px 0;
+    background-color: var(--background-elevated);
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    animation: fade-in 0.3s ease-out;
+    border-left: 4px solid var(--brand-cyan);
+}
+
+.install-prompt__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.install-prompt__message {
+    flex: 1;
+    text-align: left;
+}
+
+.install-prompt__message h3 {
+    font-size: 1.1rem;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+}
+
+.install-prompt__message p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.install-prompt__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.install-prompt__install-btn {
+    background-color: var(--action-primary);
+    color: var(--background-base);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.install-prompt__install-btn:hover {
+    background-color: var(--action-secondary);
+}
+
+.install-prompt__dismiss-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.install-prompt__dismiss-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .install-prompt {
+        padding: 12px;
+    }
+
+    .install-prompt__content {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .install-prompt__actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .install-prompt__install-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
