@@ -15,7 +15,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
     return (
         <div className="current-conditions">
             <StatItem
-                value={data.currentLevel}
+                value={data.levelToday}
                 label="Current Elevation"
                 secondaryLabel={
                     "Last reading: " +
@@ -40,13 +40,13 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
 
             <div className="stat-row">
                 <StatItem
-                    value={data.oneDayChange}
+                    value={data.levelToday - data.levelYesterday}
                     label="Since Yesterday"
                     className="day-change"
                     tooltip="Change in lake level since yesterday's reading"
                 />
                 <StatItem
-                    value={data.twoWeekChange}
+                    value={data.levelToday - data.levelTwoWeeksAgo}
                     label="Last 2 Weeks"
                     className="week-change"
                     tooltip="Change in lake level over the past two weeks"
@@ -55,13 +55,13 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
 
             <div className="stat-row">
                 <StatItem
-                    value={data.oneYearChange}
+                    value={data.levelToday - data.levelOneYearAgo}
                     label="Since A Year Ago"
                     className="year-change"
                     tooltip="Change in lake level compared to the same date last year"
                 />
                 <StatItem
-                    value={data.differenceFromTenYearAverage}
+                    value={data.levelToday - data.levelTenYearAverage}
                     label="From 10 Year Avg"
                     className="ten-year-diff"
                     tooltip={
@@ -75,7 +75,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
 
             <div className="stat-row pool-levels">
                 <StatItem
-                    value={data.differenceFromFullPool}
+                    value={data.levelToday - data.referenceLevelFullPool}
                     label="vs Full Pool"
                     isTrendStat={false}
                     tooltip={
@@ -86,7 +86,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
-                    value={data.differenceFromMinPowerPool}
+                    value={data.levelToday - data.referenceLevelMinPowerPool}
                     label="vs Power Pool"
                     isTrendStat={false}
                     tooltip={
@@ -99,7 +99,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
-                    value={data.differenceFromDeadPool}
+                    value={data.levelToday - data.referenceLevelDeadPool}
                     label="vs Dead Pool"
                     isTrendStat={false}
                     tooltip={

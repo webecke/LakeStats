@@ -61,14 +61,14 @@ export interface CurrentConditions {
     lakeId: string;
     timeOfCollection: Date;
     date: Date;
-    currentLevel: number;
-    oneDayChange: number;
-    twoWeekChange: number;
-    oneYearChange: number;
-    differenceFromTenYearAverage: number;
-    differenceFromFullPool: number;
-    differenceFromMinPowerPool: number;
-    differenceFromDeadPool: number;
+    levelToday: number;
+    levelYesterday: number;
+    levelTwoWeeksAgo: number;
+    levelOneYearAgo: number;
+    levelTenYearAverage: number;
+    referenceLevelFullPool: number;
+    referenceLevelMinPowerPool: number;
+    referenceLevelDeadPool: number;
 }
 
 export interface SystemError {
