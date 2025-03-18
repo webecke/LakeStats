@@ -6,5 +6,6 @@ public record LakeRegion(
         String id,
         String name,
         String description,
-        List<AccessPoint> accessPoints
+        List<AccessPoint> accessPoints,
+        int sortOrder
 ){}
