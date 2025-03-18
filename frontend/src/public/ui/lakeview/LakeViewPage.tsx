@@ -89,7 +89,7 @@ const LakeViewPage: React.FC = () => {
                         {lakeInfo?.features.includes(LakeSystemFeatures.REGIONS) && hasRegions && (
                             <RegionSelector regions={lakeDetails.regions}>
                                 {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
-                                    <AccessPointList currentElevation={data.currentLevel} />
+                                    <AccessPointList currentElevation={data.levelToday} />
                                 )}
                             </RegionSelector>
                         )}
