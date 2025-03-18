@@ -29,27 +29,20 @@ public class CurrentConditionsAggregator {
         TimeSeriesData dataset = collectorResponse.data();
 
         TimeSeriesData.TimeSeriesEntry today = dataset.chronologicalData().getFirst();
-        float todayElevation = today.value();
         LocalDate todayDate = today.date();
-
-        float oneDayChange = todayElevation - dataset.dateIndex().get(todayDate.minusDays(1)).value();
-        float twoWeekChange = todayElevation - dataset.dateIndex().get(todayDate.minusWeeks(2)).value();
-        float oneYearChange = todayElevation - dataset.dateIndex().get(todayDate.minusYears(1)).value();
-
-        float tenYearAverage = multiYearAverageOnThisDate(todayDate, 10, dataset);
 
         return new CurrentConditions(
                 dataset.lakeId(),
                 collectorResponse.collectedAt(),
                 todayDate,
-                todayElevation,
-                oneDayChange,
-                twoWeekChange,
-                oneYearChange,
-                todayElevation - tenYearAverage,
-                todayElevation - lake.fullPoolElevation(),
-                todayElevation - lake.minPowerPoolElevation(),
-                todayElevation - lake.deadPoolElevation()
+                today.value(),
+                dataset.dateIndex().get(todayDate.minusDays(1)).value(),
+                dataset.dateIndex().get(todayDate.minusWeeks(2)).value(),
+                dataset.dateIndex().get(todayDate.minusYears(1)).value(),
+                multiYearAverageOnThisDate(todayDate, 10, dataset),
+                lake.fullPoolElevation(),
+                lake.minPowerPoolElevation(),
+                lake.deadPoolElevation()
         );
     }
 

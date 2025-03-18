@@ -7,12 +7,12 @@ public record CurrentConditions(
         String lakeId,
         LocalDateTime timeOfCollection,
         LocalDate date,
-        float currentLevel,
-        float oneDayChange,
-        float twoWeekChange,
-        float oneYearChange,
-        float differenceFromTenYearAverage,
-        float differenceFromFullPool,
-        float differenceFromMinPowerPool,
-        float differenceFromDeadPool
+        float levelToday,
+        float levelYesterday,
+        float levelTwoWeeksAgo,
+        float levelOneYearAgo,
+        float levelTenYearAverage,
+        float referenceLevelFullPool,
+        float referenceLevelMinPowerPool,
+        float referenceLevelDeadPool
 ) {}
