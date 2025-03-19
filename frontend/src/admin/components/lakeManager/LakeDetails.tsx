@@ -56,6 +56,23 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                 </div>
 
                 <div className="lake-form__field">
+                    <label className="lake-form__label" htmlFor="usgsSiteNumber">
+                        USGS Site Number
+                    </label>
+                    <div className="lake-form__help-text">
+                        The USGS site identifier for real-time water level data
+                    </div>
+                    <input
+                        className="lake-form__input"
+                        id="usgsSiteNumber"
+                        name="usgsSiteNumber"
+                        value={lake.usgsSiteNumber || ''}
+                        onChange={handleChange}
+                        placeholder="e.g., 09380000"
+                    />
+                </div>
+
+                <div className="lake-form__field">
                     <label className="lake-form__label" htmlFor="fillDate">
                         Fill Date
                     </label>

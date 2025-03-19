@@ -14,7 +14,8 @@ public record Lake(
         int fullPoolElevation,
         int minPowerPoolElevation,
         int deadPoolElevation,
-        Map<DataType, String> dataSources,  // Changed this to use Map directly
+        String usgsSiteNumber,
+        Map<DataType, String> dataSources,
         Map<String, LakeRegion> regions
 ) {
     public String getDataSourceUrl(DataType type) {  // Moved the getUrl method here

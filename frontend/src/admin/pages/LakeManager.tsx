@@ -4,7 +4,6 @@ import { Button } from "../../shared/components/Button";
 import "./LakeManager.css";
 import {
     dataService,
-    DataType,
     LakeMetaData,
     LakeSystemSettings,
 } from "../../shared/services/data";
@@ -44,6 +43,7 @@ export default function LakeManager() {
                         description: "",
                         fillDate: "",
                         googleMapsLinkToDam: "",
+                        usgsSiteNumber: "",
                         fullPoolElevation: 0,
                         minPowerPoolElevation: 0,
                         deadPoolElevation: 0,
@@ -71,15 +71,8 @@ export default function LakeManager() {
         if (!lakeId || !lakeData || !systemConfig) return;
 
         if (systemConfig.status !== "DISABLED") {
-            if (!lakeData.dataSources.has(DataType.ELEVATION)) {
-                showNotification("Non-disabled lakes must have an elevation data source", "error");
-                return;
-            } else if (
-                !lakeData.dataSources
-                    .get(DataType.ELEVATION)
-                    ?.startsWith("https://www.usbr.gov/uc/water/hydrodata/reservoir_data/")
-            ) {
-                showNotification("Elevation data source must be a valid USBR link", "error");
+            if (!lakeData.usgsSiteNumber) {
+                showNotification("Non-disabled lakes must have a USGS Site Number", "error");
                 return;
             } else if (
                 !lakeData.deadPoolElevation ||

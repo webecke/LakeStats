@@ -6,6 +6,7 @@ export interface LakeMetaData {
     fullPoolElevation: number;
     minPowerPoolElevation: number;
     deadPoolElevation: number;
+    usgsSiteNumber: string;
     dataSources: Map<DataType, string>;
     regions: Record<string, LakeRegion>;
 }

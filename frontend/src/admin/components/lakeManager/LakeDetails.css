@@ -64,3 +64,9 @@
     min-width: 0;
     width: 100%;
 }
+
+.lake-form__help-text {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0;
+}
