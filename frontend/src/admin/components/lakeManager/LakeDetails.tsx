@@ -62,24 +62,14 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
     return (
         <div className="lake-form">
             <div className="lake-form__grid">
-                <h3>Lake Details</h3>
-
                 <div className="lake-form__field">
-                    <label className="lake-form__label" htmlFor="description">
-                        Description
-                    </label>
-                    <input
-                        className="lake-form__input"
-                        id="description"
-                        name="description"
-                        value={lake.description}
-                        onChange={handleChange}
-                    />
+                    <h3>Lake Details</h3>
+                    <h6>Details with * are required for non-disabled lakes</h6>
                 </div>
 
                 <div className="lake-form__field">
                     <label className="lake-form__label" htmlFor="usgsSiteNumber">
-                        USGS Site Number
+                        USGS Site Number*
                     </label>
                     <div className="lake-form__help-text">
                         The USGS site identifier for real-time water level data
@@ -104,18 +94,48 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                     </div>
                 </div>
 
-                <div className="lake-form__field">
-                    <label className="lake-form__label" htmlFor="fillDate">
-                        Fill Date
-                    </label>
-                    <input
-                        className="lake-form__input"
-                        type="date"
-                        id="fillDate"
-                        name="fillDate"
-                        value={lake.fillDate}
-                        onChange={handleChange}
-                    />
+                <div className="lake-form__elevation-grid">
+                    <div className="lake-form__field">
+                        <label className="lake-form__label" htmlFor="fullPoolElevation">
+                            Full Pool Elevation*
+                        </label>
+                        <input
+                            className="lake-form__input"
+                            type="number"
+                            id="fullPoolElevation"
+                            name="fullPoolElevation"
+                            value={lake.fullPoolElevation}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="lake-form__field">
+                        <label className="lake-form__label" htmlFor="minPowerPoolElevation">
+                            Min Power Pool*
+                        </label>
+                        <input
+                            className="lake-form__input"
+                            type="number"
+                            id="minPowerPoolElevation"
+                            name="minPowerPoolElevation"
+                            value={lake.minPowerPoolElevation}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="lake-form__field">
+                        <label className="lake-form__label" htmlFor="deadPoolElevation">
+                            Dead Pool*
+                        </label>
+                        <input
+                            className="lake-form__input"
+                            type="number"
+                            id="deadPoolElevation"
+                            name="deadPoolElevation"
+                            value={lake.deadPoolElevation}
+                            onChange={handleChange}
+                        />
+                    </div>
                 </div>
 
                 <div className="lake-form__field">
@@ -131,49 +151,33 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                     />
                 </div>
 
-                <div className="lake-form__elevation-grid">
-                    <div className="lake-form__field">
-                        <label className="lake-form__label" htmlFor="fullPoolElevation">
-                            Full Pool Elevation
-                        </label>
-                        <input
-                            className="lake-form__input"
-                            type="number"
-                            id="fullPoolElevation"
-                            name="fullPoolElevation"
-                            value={lake.fullPoolElevation}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="lake-form__field">
-                        <label className="lake-form__label" htmlFor="minPowerPoolElevation">
-                            Min Power Pool
-                        </label>
-                        <input
-                            className="lake-form__input"
-                            type="number"
-                            id="minPowerPoolElevation"
-                            name="minPowerPoolElevation"
-                            value={lake.minPowerPoolElevation}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className="lake-form__field">
-                        <label className="lake-form__label" htmlFor="deadPoolElevation">
-                            Dead Pool
-                        </label>
-                        <input
-                            className="lake-form__input"
-                            type="number"
-                            id="deadPoolElevation"
-                            name="deadPoolElevation"
-                            value={lake.deadPoolElevation}
-                            onChange={handleChange}
-                        />
-                    </div>
+                <div className="lake-form__field">
+                    <label className="lake-form__label" htmlFor="description">
+                        Description
+                    </label>
+                    <input
+                        className="lake-form__input"
+                        id="description"
+                        name="description"
+                        value={lake.description}
+                        onChange={handleChange}
+                    />
                 </div>
+
+                <div className="lake-form__field">
+                    <label className="lake-form__label" htmlFor="fillDate">
+                        Fill Date
+                    </label>
+                    <input
+                        className="lake-form__input"
+                        type="date"
+                        id="fillDate"
+                        name="fillDate"
+                        value={lake.fillDate}
+                        onChange={handleChange}
+                    />
+                </div>
+
             </div>
         </div>
     );
