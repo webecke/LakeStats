@@ -52,15 +52,19 @@ const StatItem: React.FC<StatItemProps> = ({
         prefix = value < 0 ? "-" : "";
     }
 
-    const {feet, inches} = getFeetAndInches(value);
+    const { feet, inches } = getFeetAndInches(value);
 
     // Create the inner content
     const innerContent = (
         <>
             <p className={`stat-value ${numberClass}`}>
                 {prefix}
-                {feet}
-                <span className="unit">ft</span>
+                {feet ? (
+                    <>
+                        {feet}
+                        <span className="unit">ft</span>
+                    </>
+                ) : null}
                 {inches}
                 <span className="unit">in</span>
                 {!isCurrentElevation && isTrendStat && icon}

@@ -14,9 +14,10 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
     const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation);
 
     // Format the difference WITHOUT a + sign when positive
-    const {feet, inches} = getFeetAndInches(usableElevationDiff)
+    const { feet, inches } = getFeetAndInches(usableElevationDiff);
     const prefix = usableElevationDiff >= 0 ? "" : "-";
-    const formattedDifference = `${prefix}${feet}ft ${inches}in`;
+    const feetDisplay = feet ? `${feet}ft ` : "";
+    const formattedDifference = `${prefix}${feetDisplay}${inches}in`;
 
     // Determine status
     let status, statusClass;
