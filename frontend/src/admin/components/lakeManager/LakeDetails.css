@@ -70,3 +70,13 @@
     color: var(--text-secondary);
     margin-top: 0;
 }
+
+.lake-form__input-group {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.lake-form__input--with-button {
+    flex: 1;
+}

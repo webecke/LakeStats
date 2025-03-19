@@ -13,6 +13,7 @@ import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";
 import DataSources from "../components/lakeManager/DataSources";
 import RegionManager from "../components/lakeManager/RegionManager";
 import { useNotifications } from "../../shared/components/Notification/NotificationContext";
+import { validateUsgsSiteNumber } from "../components/lakeManager/lakeManagerTools.ts";
 
 export default function LakeManager() {
     const { lakeId } = useParams();
@@ -69,11 +70,14 @@ export default function LakeManager() {
 
     const handleSave = async () => {
         if (!lakeId || !lakeData || !systemConfig) return;
+        const usgsVerificationResult = await validateUsgsSiteNumber(lakeData.usgsSiteNumber);
 
         if (systemConfig.status !== "DISABLED") {
             if (!lakeData.usgsSiteNumber) {
                 showNotification("Non-disabled lakes must have a USGS Site Number", "error");
                 return;
+            } else if (!usgsVerificationResult.isValid) {
+                showNotification("Invalid USGS Site Number", "error");
             } else if (
                 !lakeData.deadPoolElevation ||
                 !lakeData.fullPoolElevation ||

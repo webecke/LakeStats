@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./LakeDetails.css";
 import { LakeMetaData } from "../../../shared/services/data";
+import { Button } from "../../../shared/components/Button";
+import { validateUsgsSiteNumber } from "./lakeManagerTools.ts";
+import { useNotifications } from "../../../shared/components/Notification/NotificationContext.tsx";
 
 interface LakeDetailsProps {
     lake: LakeMetaData;
@@ -10,6 +13,9 @@ interface LakeDetailsProps {
 }
 
 export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
+    const [isTestingUsgs, setIsTestingUsgs] = useState(false);
+    const { showNotification } = useNotifications();
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setLake((prev) => {
@@ -37,6 +43,22 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
         });
     };
 
+    const handleTestUsgsSite = async () => {
+        setIsTestingUsgs(true);
+        const result = await validateUsgsSiteNumber(lake.usgsSiteNumber)
+        setIsTestingUsgs(false);
+
+        if (result.isValid) {
+            showNotification("Valid USGS Site Number! Site Name:\n" + (result.siteName || ""), 'success');
+        } else {
+            showNotification("Invalid USGS Site Number", 'error');
+        }
+
+        setTimeout(() => {
+            setIsTestingUsgs(false);
+        }, 1000);
+    };
+
     return (
         <div className="lake-form">
             <div className="lake-form__grid">
@@ -62,14 +84,24 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                     <div className="lake-form__help-text">
                         The USGS site identifier for real-time water level data
                     </div>
-                    <input
-                        className="lake-form__input"
-                        id="usgsSiteNumber"
-                        name="usgsSiteNumber"
-                        value={lake.usgsSiteNumber || ''}
-                        onChange={handleChange}
-                        placeholder="e.g., 09380000"
-                    />
+                    <div className="lake-form__input-group">
+                        <input
+                            className="lake-form__input lake-form__input--with-button"
+                            id="usgsSiteNumber"
+                            name="usgsSiteNumber"
+                            value={lake.usgsSiteNumber || ''}
+                            onChange={handleChange}
+                            placeholder="e.g., 09380000"
+                        />
+                        <Button
+                            variant="secondary"
+                            size="sm"
+                            onClick={handleTestUsgsSite}
+                            isLoading={isTestingUsgs}
+                        >
+                            Test
+                        </Button>
+                    </div>
                 </div>
 
                 <div className="lake-form__field">

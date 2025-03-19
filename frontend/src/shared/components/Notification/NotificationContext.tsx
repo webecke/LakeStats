@@ -49,7 +49,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     }, []);
 
     const showNotification = useCallback(
-        (message: string, type: NotificationType, duration = 3000) => {
+        (message: string, type: NotificationType, duration = 6000) => {
             const id = uuidv4();
             dispatch({
                 type: "SHOW_NOTIFICATION",
