@@ -2,6 +2,7 @@ import React from "react";
 import { TrendingDown, TrendingUp, MinusCircle } from "lucide-react";
 import "./LakeViewStyles.css";
 import Tooltip from "../../components/Tooltip.tsx";
+import { getFeetAndInches } from "../dataRenderTools.ts";
 
 interface StatItemProps {
     value: number;
@@ -37,9 +38,6 @@ const StatItem: React.FC<StatItemProps> = ({
         numberClass = "neutral";
     }
 
-    // Format the value for display (remove negative sign if present)
-    const displayValue = Math.abs(value).toFixed(2);
-
     // Determine prefix based on component type
     let prefix;
 
@@ -54,13 +52,17 @@ const StatItem: React.FC<StatItemProps> = ({
         prefix = value < 0 ? "-" : "";
     }
 
+    const {feet, inches} = getFeetAndInches(value);
+
     // Create the inner content
     const innerContent = (
         <>
             <p className={`stat-value ${numberClass}`}>
                 {prefix}
-                {displayValue}
+                {feet}
                 <span className="unit">ft</span>
+                {inches}
+                <span className="unit">in</span>
                 {!isCurrentElevation && isTrendStat && icon}
             </p>
             <p className="stat-label">{label}</p>

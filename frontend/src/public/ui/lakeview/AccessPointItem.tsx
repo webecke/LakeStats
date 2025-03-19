@@ -2,6 +2,7 @@ import React from "react";
 import { AccessPoint } from "../../../shared/services/data";
 import { MapPin } from "lucide-react";
 import "./AccessPointItem.css";
+import { getFeetAndInches } from "../dataRenderTools.ts";
 
 interface AccessPointItemProps {
     accessPoint: AccessPoint;
@@ -10,13 +11,12 @@ interface AccessPointItemProps {
 
 const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentElevation }) => {
     // Calculate differences to safe and usable elevations
-    const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation).toFixed(2);
+    const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation);
 
     // Format the difference WITHOUT a + sign when positive
-    const formattedDifference =
-        usableElevationDiff >= 0
-            ? `${usableElevationDiff.toFixed(2)} ft`
-            : `${usableElevationDiff.toFixed(2)} ft`;
+    const {feet, inches} = getFeetAndInches(usableElevationDiff)
+    const prefix = usableElevationDiff >= 0 ? "" : "-";
+    const formattedDifference = `${prefix}${feet}ft ${inches}in`;
 
     // Determine status
     let status, statusClass;
