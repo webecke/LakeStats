@@ -8,7 +8,7 @@ public record CurrentConditions(
         ZonedDateTime timeConditionsCalculated,
         ZonedDateTime currentReadingTimestamp,
         float levelToday,
-        float levelYesterday,
+        float level24HoursAgo,
         float levelTwoWeeksAgo,
         float levelOneYearAgo,
         float levelTenYearAverage,

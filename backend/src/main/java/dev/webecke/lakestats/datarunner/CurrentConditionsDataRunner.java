@@ -1,6 +1,7 @@
 package dev.webecke.lakestats.datarunner;
 
 import dev.webecke.lakestats.model.ContinuousTimeSeriesData;
+import dev.webecke.lakestats.model.ContinuousTimeSeriesEntry;
 import dev.webecke.lakestats.model.LakeStatsException;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.geography.Lake;
@@ -26,23 +27,23 @@ public class CurrentConditionsDataRunner {
         logger.info("Running current conditions data collection for lake: " + lake.id());
 
         try {
-            ContinuousTimeSeriesData twoDayData = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(2), LocalDate.now());
-            ContinuousTimeSeriesData twoWeekData = usgsService.getDailyElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(14));
+            ContinuousTimeSeriesData last48Hours = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(2), LocalDate.now());
+            ContinuousTimeSeriesData twoWeeksAgo = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(14), LocalDate.now().minusDays(14));
 
-            if (twoDayData.getNewestEntry().isEmpty()) {
+            if (last48Hours.getNewestEntry().isEmpty()) {
                 logger.warn("No data found for lake: " + lake.id());
                 throw new LakeStatsException("No data found for lake: " + lake.id());
             }
-            ZonedDateTime readingTime = twoDayData.getNewestEntry().get().date();
+            ZonedDateTime readingTime = last48Hours.getNewestEntry().get().date();
 
             return new CurrentConditions(
                     lake.id(),
-                    twoDayData.sourceLabel(),
+                    last48Hours.sourceLabel(),
                     ZonedDateTime.now(),
                     readingTime,
-                    twoDayData.dateIndex().get(readingTime).value(),
-                    twoDayData.dateIndex().get(readingTime.minusDays(1)).value(),
-                    twoWeekData.dateIndex().get(readingTime.minusWeeks(2).truncatedTo(java.time.temporal.ChronoUnit.DAYS)).value(),
+                    last48Hours.dateIndex().get(readingTime).value(),
+                    last48Hours.dateIndex().get(readingTime.minusDays(1)).value(),
+                    twoWeeksAgo.dateIndex().get(readingTime.minusDays(14)).value(),
                     -1,
                     -1,
                     lake.fullPoolElevation(),

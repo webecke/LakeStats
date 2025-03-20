@@ -47,10 +47,6 @@ public class UsgsService {
         return getInstantTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
     }
 
-    public ContinuousTimeSeriesData getDailyElevationData(String siteId, LocalDate day) throws NetworkException, DataFormatingException {
-        return getDailyElevationData(siteId, day, day);
-    }
-
     public ContinuousTimeSeriesData getDailyElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
         return getDailyTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
     }
