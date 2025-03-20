@@ -24,3 +24,22 @@ public class DataRunController {
         return ResponseEntity.ok(dataRunService.triggerAllDataRunners());
     }
 }
+/**
+ * switch (result.status()) {
+ *             case SUCCESS -> {
+ *                 logger.info("Collector completed successfully for lake %s in %d milliseconds"
+ *                         .formatted(lakeId, result.durationInMillis()));
+ *                 return ResponseEntity.ok(result);
+ *             }
+ *             case SOURCE_DATA_NOT_UPDATED -> {
+ *                 return ResponseEntity.status(503).body(result);
+ *             }
+ *             case CONFIGURATION_ERROR -> {
+ *                 return ResponseEntity.badRequest().body(result);
+ *             }
+ *             case SYSTEM_EXCEPTION -> {
+ *                 return ResponseEntity.status(500).body(result);
+ *             }
+ *             default -> throw new IllegalStateException("Unexpected value: " + result.status());
+ *         }
+ */

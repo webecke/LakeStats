@@ -4,7 +4,9 @@ import dev.webecke.lakestats.model.UsgsTimeSeriesData;
 import dev.webecke.lakestats.model.LakeStatsException;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.geography.Lake;
+import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.network.NetworkException;
+import dev.webecke.lakestats.service.BorService;
 import dev.webecke.lakestats.service.DataFormatingException;
 import dev.webecke.lakestats.service.LakeStatsLogger;
 import dev.webecke.lakestats.service.UsgsService;
@@ -17,9 +19,11 @@ import java.time.ZonedDateTime;
 public class CurrentConditionsDataRunner {
     private final LakeStatsLogger logger = new LakeStatsLogger(CurrentConditionsDataRunner.class);
     private final UsgsService usgsService;
+    private final BorService borService;
 
-    public CurrentConditionsDataRunner(UsgsService usgsService) {
+    public CurrentConditionsDataRunner(UsgsService usgsService, BorService borService) {
         this.usgsService = usgsService;
+        this.borService = borService;
     }
 
     public CurrentConditions runCurrentConditionsData(Lake lake) {
@@ -43,8 +47,8 @@ public class CurrentConditionsDataRunner {
                     last48Hours.dateIndex().get(readingTime).value(),
                     last48Hours.dateIndex().get(readingTime.minusDays(1)).value(),
                     twoWeeksAgo.dateIndex().get(readingTime.minusDays(14)).value(),
-                    -1,
-                    -1
+                    borService.getOneYearAgo(lake, DataType.ELEVATION),
+                    borService.getTenYearDateAverage(lake, DataType.ELEVATION)
             );
         } catch (NetworkException e) {
             throw new RuntimeException(e);
