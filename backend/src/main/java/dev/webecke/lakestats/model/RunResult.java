@@ -157,7 +157,7 @@ public record RunResult(
                 ));
 
         if (statusCounts.size() == 1 && statusCounts.containsKey(ResultStatus.SUCCESS)) {
-            message = "All lake collectors completed successfully";
+            message = "All lake completed data runs successfully";
         } else {
             StringBuilder sb = new StringBuilder("Lake collection completed with issues: ");
             statusCounts.forEach((status, count) -> {

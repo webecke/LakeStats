@@ -4,17 +4,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import dev.webecke.lakestats.model.ContinuousTimeSeriesData;
 import dev.webecke.lakestats.model.ContinuousTimeSeriesEntry;
-import dev.webecke.lakestats.model.TimeSeriesData;
 import dev.webecke.lakestats.network.NetworkClient;
 import dev.webecke.lakestats.network.NetworkException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UsgsService {
@@ -42,31 +43,42 @@ public class UsgsService {
         this.networkClient = networkClient;
     }
 
-    public ContinuousTimeSeriesData getElevationData(String siteId, ZonedDateTime start, ZonedDateTime end) throws NetworkException, DataFormatingException {
-        return getTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
+    public ContinuousTimeSeriesData getInstantElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
+        return getInstantTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
     }
 
-    private ContinuousTimeSeriesData getTimeSeriesData(String siteId, ZonedDateTime start, ZonedDateTime end, String parameterCode) throws NetworkException, DataFormatingException {
-        String queryUrl = getInstantValueUrl(siteId, parameterCode, LocalDate.now().minusDays(1), LocalDate.now());
+    public ContinuousTimeSeriesData getDailyElevationData(String siteId, LocalDate day) throws NetworkException, DataFormatingException {
+        return getDailyElevationData(siteId, day, day);
+    }
+
+    public ContinuousTimeSeriesData getDailyElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
+        return getDailyTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
+    }
+
+    private ContinuousTimeSeriesData getDailyTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
+        String queryUrl = getDailyValueUrl(siteId, parameterCode, start, end);
         JsonNode result = networkClient.getRequest(queryUrl);
         return extractTimeSeriesData(result);
     }
 
-
-    /**
-     * Constructs the URL to get all instant values for a given site and parameter code for a date.
-     * The URL will be for all values on the provided date.
-     */
-    private String getInstantValueUrl(String siteId, String parameterCode, LocalDate date) {
-        return getInstantValueUrl(siteId, parameterCode, date, date);
+    private ContinuousTimeSeriesData getInstantTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
+        String queryUrl = getInstantValueUrl(siteId, parameterCode, start, end);
+        JsonNode result = networkClient.getRequest(queryUrl);
+        return extractTimeSeriesData(result);
     }
 
     /**
-     * Constructs the URL to get all instant values for a given site and parameter code within a date range.
-     * The date range is inclusive of both start and end dates.
+     * Constructs the URL to get all instant values for a given site and parameter code within a currentReadingTimestamp range.
+     * The currentReadingTimestamp range is inclusive of both start and end dates.
      */
     private String getInstantValueUrl(String siteId, String parameterCode, LocalDate startDate, LocalDate endDate) {
         return USGS_BASE_URL + USGS_INSTANT_VALUE_SUFFIX + USGS_FORMAT_PARAM + USGS_SITE_PREFIX + siteId +
+                USGS_PARAMETER_PREFIX + parameterCode + USGS_START_DATE_PREFIX + startDate.format(API_DATE_FORMAT) +
+                USGS_END_DATE_PREFIX + endDate.format(API_DATE_FORMAT);
+    }
+
+    private String getDailyValueUrl(String siteId, String parameterCode, LocalDate startDate, LocalDate endDate) {
+        return USGS_BASE_URL + USGS_DAILY_VALUE_SUFFIX + USGS_FORMAT_PARAM + USGS_SITE_PREFIX + siteId +
                 USGS_PARAMETER_PREFIX + parameterCode + USGS_START_DATE_PREFIX + startDate.format(API_DATE_FORMAT) +
                 USGS_END_DATE_PREFIX + endDate.format(API_DATE_FORMAT);
     }
@@ -87,6 +99,24 @@ public class UsgsService {
         }
     }
 
+    private ZoneId extractTimezoneInfo(JsonNode data) throws DataFormatingException {
+        try {
+            JsonNode timeZoneInfo = data.get("value")
+                    .get("timeSeries")
+                    .get(0)
+                    .get("sourceInfo")
+                    .get("timeZoneInfo");
+
+            // TODO: This doesn't handle daylight savings. Consider adding a helper to do this
+            String defaultOffset = timeZoneInfo.get("defaultTimeZone").get("zoneOffset").asText();
+
+            return ZoneId.of(defaultOffset);
+        } catch (NullPointerException e) {
+            logger.error("Timezone information not found in response");
+            throw new DataFormatingException("Timezone information not found in response");
+        }
+    }
+
     private ContinuousTimeSeriesData extractTimeSeriesData(JsonNode data) throws DataFormatingException {
         JsonNode timeSeries;
         try {
@@ -101,6 +131,8 @@ public class UsgsService {
         }
         ArrayNode timeSeriesArrayNode = (ArrayNode) timeSeries;
 
+        ZoneId siteZoneId = extractTimezoneInfo(data);
+
         List<ContinuousTimeSeriesEntry> entries = new ArrayList<>();
 
         for (int i = 0; i < timeSeriesArrayNode.size(); i++) {
@@ -114,7 +146,16 @@ public class UsgsService {
             float value = Float.parseFloat(node.get("value").asText());
 
             String dateTimeStr = node.get("dateTime").asText();
-            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateTimeStr);
+            ZonedDateTime zonedDateTime;
+
+            try {
+                // Try to parse as ZonedDateTime first (if it has timezone info)
+                zonedDateTime = ZonedDateTime.parse(dateTimeStr);
+            } catch (DateTimeParseException e) {
+                // If that fails, parse as LocalDateTime and add the timezone
+                LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr);
+                zonedDateTime = localDateTime.atZone(siteZoneId);
+            }
 
             entries.add(new ContinuousTimeSeriesEntry(value, zonedDateTime));
         }

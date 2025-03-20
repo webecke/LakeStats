@@ -6,6 +6,7 @@ import dev.webecke.lakestats.service.LakeStatsLogger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/datarun")
@@ -18,8 +19,8 @@ public class DataRunController {
         this.dataRunService = dataRunService;
     }
 
-    @GetMapping("/")
-    public RunResult triggerAllDataRunners() {
-        return dataRunService.triggerAllDataRunners();
+    @GetMapping
+    public ResponseEntity<RunResult> triggerAllDataRunners() {
+        return ResponseEntity.ok(dataRunService.triggerAllDataRunners());
     }
 }

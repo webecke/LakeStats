@@ -3,6 +3,7 @@ package dev.webecke.lakestats.service;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
 import dev.webecke.lakestats.datarunner.CurrentConditionsDataRunner;
+import dev.webecke.lakestats.model.LakeSystemSettings;
 import dev.webecke.lakestats.model.RunResult;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.geography.Lake;
@@ -31,6 +32,12 @@ public class DataRunService {
         List<RunResult> lakeRunResults = new ArrayList<>();
 
         for (String lakeId : lakeIds) {
+            LakeSystemSettings lakeSystemSettings = databaseAccess.getLakeSystemSettings(lakeId);
+            if (lakeSystemSettings.status().equals(LakeSystemSettings.Status.DISABLED)) {
+                logger.info("Skipping data run for lake " + lakeId + " as it is disabled.");
+                continue;
+            }
+
             lakeRunResults.add(triggerDataRunner(lakeId));
         }
 
