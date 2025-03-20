@@ -45,10 +45,7 @@ public class CurrentConditionsDataRunner {
                     last48Hours.dateIndex().get(readingTime.minusDays(1)).value(),
                     twoWeeksAgo.dateIndex().get(readingTime.minusDays(14)).value(),
                     -1,
-                    -1,
-                    lake.fullPoolElevation(),
-                    lake.minPowerPoolElevation(),
-                    lake.deadPoolElevation()
+                    -1
             );
         } catch (NetworkException e) {
             throw new RuntimeException(e);
