@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import dev.webecke.lakestats.model.CollectorResponse;
 import dev.webecke.lakestats.model.LakeStatsException;
 import dev.webecke.lakestats.model.ResultStatus;
-import dev.webecke.lakestats.model.TimeSeriesData;
+import dev.webecke.lakestats.model.BorTimeSeriesData;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.network.NetworkClient;
@@ -26,7 +26,7 @@ public class BureauOfReclamationDataCollector {
         this.networkClient = networkClient;
     }
 
-    public CollectorResponse<TimeSeriesData> collectData(Lake lake, DataType type) {
+    public CollectorResponse<BorTimeSeriesData> collectData(Lake lake, DataType type) {
         String dataSourceUrl;
         try {
             dataSourceUrl = lake.getDataSourceUrl(type);
@@ -38,15 +38,15 @@ public class BureauOfReclamationDataCollector {
             JsonNode response = networkClient.getRequest(dataSourceUrl);
 
             JsonNode dataArray = response.get("data");
-            List<TimeSeriesData.TimeSeriesEntry> entries = new ArrayList<>();
+            List<BorTimeSeriesData.BorTimeSeriesEntry> entries = new ArrayList<>();
 
             for (JsonNode entry : dataArray) {
                 LocalDate date = LocalDate.parse(entry.get(0).asText());
                 float level = entry.get(1).floatValue();
-                entries.add(new TimeSeriesData.TimeSeriesEntry(level, date));
+                entries.add(new BorTimeSeriesData.BorTimeSeriesEntry(level, date));
             }
 
-            TimeSeriesData data = new TimeSeriesData(lake.id(), entries, type);
+            BorTimeSeriesData data = new BorTimeSeriesData(lake.id(), entries, type);
 
             return new CollectorResponse<>(data, true, LocalDateTime.now());
 

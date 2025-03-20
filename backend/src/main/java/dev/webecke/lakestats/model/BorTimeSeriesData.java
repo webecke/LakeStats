@@ -14,25 +14,25 @@ import java.util.stream.Collectors;
  * @param dateIndex the same data as 'chronologicalData', but in a map to provided O(1) access to specific dates
  * @param type the type of data stored in this object
  */
-public record TimeSeriesData(
+public record BorTimeSeriesData(
         String lakeId,
-        List<TimeSeriesEntry> chronologicalData,
-        Map<LocalDate, TimeSeriesEntry> dateIndex,
+        List<BorTimeSeriesEntry> chronologicalData,
+        Map<LocalDate, BorTimeSeriesEntry> dateIndex,
         DataType type
 ) {
-    public record TimeSeriesEntry(
+    public record BorTimeSeriesEntry(
             float value,    // Changed from elevationFeet to be more generic
             LocalDate date
     ) {}
 
-    public TimeSeriesData(String lakeId, List<TimeSeriesEntry> data, DataType type) {
+    public BorTimeSeriesData(String lakeId, List<BorTimeSeriesEntry> data, DataType type) {
         this(
                 lakeId,
                 data.stream()
                         .sorted((a, b) -> b.date().compareTo(a.date()))
                         .toList(),
                 data.stream().collect(Collectors.toMap(
-                        TimeSeriesEntry::date,
+                        BorTimeSeriesEntry::date,
                         entry -> entry
                 )),
                 type

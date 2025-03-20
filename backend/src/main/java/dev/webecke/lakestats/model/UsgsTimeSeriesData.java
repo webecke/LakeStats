@@ -12,23 +12,23 @@ import java.util.stream.Collectors;
  * @param chronologicalData an ordered list (newest entries first) of daily data entries
  * @param dateIndex the same data as 'chronologicalData', but in a map to provided O(1) access to specific datetimes
  */
-public record ContinuousTimeSeriesData(
+public record UsgsTimeSeriesData(
         String sourceLabel,
-        List<ContinuousTimeSeriesEntry> chronologicalData,
-        Map<ZonedDateTime, ContinuousTimeSeriesEntry> dateIndex
+        List<UsgsTimeSeriesEntry> chronologicalData,
+        Map<ZonedDateTime, UsgsTimeSeriesEntry> dateIndex
 ) {
-    public ContinuousTimeSeriesData(List<ContinuousTimeSeriesEntry> data) {
+    public UsgsTimeSeriesData(List<UsgsTimeSeriesEntry> data) {
         this(data, "undefined");
     }
 
-    public ContinuousTimeSeriesData(List<ContinuousTimeSeriesEntry> data, String sourceLabel) {
+    public UsgsTimeSeriesData(List<UsgsTimeSeriesEntry> data, String sourceLabel) {
         this(
                 sourceLabel,
                 data.stream()
                         .sorted((a, b) -> b.date().compareTo(a.date()))
                         .toList(),
                 data.stream().collect(Collectors.toMap(
-                        ContinuousTimeSeriesEntry::date,
+                        UsgsTimeSeriesEntry::date,
                         entry -> entry
                 ))
         );
@@ -38,7 +38,7 @@ public record ContinuousTimeSeriesData(
      * Returns the newest entry in the time series.
      * @return Optional containing the newest entry, or empty if the series is empty
      */
-    public Optional<ContinuousTimeSeriesEntry> getNewestEntry() {
+    public Optional<UsgsTimeSeriesEntry> getNewestEntry() {
         if (chronologicalData.isEmpty()) {
             return Optional.empty();
         }
@@ -49,7 +49,7 @@ public record ContinuousTimeSeriesData(
      * Returns the oldest entry in the time series.
      * @return Optional containing the oldest entry, or empty if the series is empty
      */
-    public Optional<ContinuousTimeSeriesEntry> getOldestEntry() {
+    public Optional<UsgsTimeSeriesEntry> getOldestEntry() {
         if (chronologicalData.isEmpty()) {
             return Optional.empty();
         }

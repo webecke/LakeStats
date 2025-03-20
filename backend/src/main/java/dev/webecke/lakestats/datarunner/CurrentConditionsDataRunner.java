@@ -1,7 +1,6 @@
 package dev.webecke.lakestats.datarunner;
 
-import dev.webecke.lakestats.model.ContinuousTimeSeriesData;
-import dev.webecke.lakestats.model.ContinuousTimeSeriesEntry;
+import dev.webecke.lakestats.model.UsgsTimeSeriesData;
 import dev.webecke.lakestats.model.LakeStatsException;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.geography.Lake;
@@ -27,8 +26,8 @@ public class CurrentConditionsDataRunner {
         logger.info("Running current conditions data collection for lake: " + lake.id());
 
         try {
-            ContinuousTimeSeriesData last48Hours = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(2), LocalDate.now());
-            ContinuousTimeSeriesData twoWeeksAgo = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(14), LocalDate.now().minusDays(14));
+            UsgsTimeSeriesData last48Hours = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(2), LocalDate.now());
+            UsgsTimeSeriesData twoWeeksAgo = usgsService.getInstantElevationData(lake.usgsSiteNumber(), LocalDate.now().minusDays(14), LocalDate.now().minusDays(14));
 
             if (last48Hours.getNewestEntry().isEmpty()) {
                 logger.warn("No data found for lake: " + lake.id());

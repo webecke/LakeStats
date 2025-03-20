@@ -2,7 +2,7 @@ package dev.webecke.lakestats.aggregator;
 
 import dev.webecke.lakestats.model.CollectorResponse;
 import dev.webecke.lakestats.model.features.CurrentConditions;
-import dev.webecke.lakestats.model.TimeSeriesData;
+import dev.webecke.lakestats.model.BorTimeSeriesData;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.service.LakeStatsLogger;
@@ -18,7 +18,7 @@ public class CurrentConditionsAggregator {
 
     public CurrentConditionsAggregator() {}
 
-    public CurrentConditions aggregateCurrentConditions(CollectorResponse<TimeSeriesData> collectorResponse, Lake lake) {
+    public CurrentConditions aggregateCurrentConditions(CollectorResponse<BorTimeSeriesData> collectorResponse, Lake lake) {
         if (!collectorResponse.successful()) { return null; }
         if (collectorResponse.data().lakeId() != lake.id()) {
             throw new IllegalArgumentException("Lake ID mismatch: data is for %s, but got lake info for %s".formatted(lake.id(), collectorResponse.data().lakeId()));
@@ -27,9 +27,9 @@ public class CurrentConditionsAggregator {
             throw new IllegalArgumentException("Unexpected data type: %s. Was expecting ELEVATION".formatted(collectorResponse.data().type()));
         }
 
-        TimeSeriesData dataset = collectorResponse.data();
+        BorTimeSeriesData dataset = collectorResponse.data();
 
-        TimeSeriesData.TimeSeriesEntry today = dataset.chronologicalData().getFirst();
+        BorTimeSeriesData.BorTimeSeriesEntry today = dataset.chronologicalData().getFirst();
         LocalDate todayDate = today.date();
 
         return new CurrentConditions(
@@ -45,12 +45,12 @@ public class CurrentConditionsAggregator {
         );
     }
 
-    private float multiYearAverageOnThisDate(LocalDate startDate, Integer years, TimeSeriesData dataset) {
-        Map<LocalDate, TimeSeriesData.TimeSeriesEntry> indexedData = dataset.dateIndex();
+    private float multiYearAverageOnThisDate(LocalDate startDate, Integer years, BorTimeSeriesData dataset) {
+        Map<LocalDate, BorTimeSeriesData.BorTimeSeriesEntry> indexedData = dataset.dateIndex();
 
         float runningSum = 0;
         for (int i = 0; i < years; i++) {
-            TimeSeriesData.TimeSeriesEntry entry = indexedData.get(startDate.minusYears(i + 1));
+            BorTimeSeriesData.BorTimeSeriesEntry entry = indexedData.get(startDate.minusYears(i + 1));
 
             if (entry == null) {
                 logger.warn(

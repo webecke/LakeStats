@@ -82,7 +82,7 @@ public class DataCollectionService {
         String resultMessage = "Data collection completed and successfully published";
 
         try {
-            CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
+            CollectorResponse<BorTimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
             CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
 
             try {

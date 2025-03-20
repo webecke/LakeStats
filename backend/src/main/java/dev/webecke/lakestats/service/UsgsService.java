@@ -2,8 +2,8 @@ package dev.webecke.lakestats.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import dev.webecke.lakestats.model.ContinuousTimeSeriesData;
-import dev.webecke.lakestats.model.ContinuousTimeSeriesEntry;
+import dev.webecke.lakestats.model.UsgsTimeSeriesData;
+import dev.webecke.lakestats.model.UsgsTimeSeriesEntry;
 import dev.webecke.lakestats.network.NetworkClient;
 import dev.webecke.lakestats.network.NetworkException;
 import org.springframework.stereotype.Service;
@@ -43,21 +43,21 @@ public class UsgsService {
         this.networkClient = networkClient;
     }
 
-    public ContinuousTimeSeriesData getInstantElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
+    public UsgsTimeSeriesData getInstantElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
         return getInstantTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
     }
 
-    public ContinuousTimeSeriesData getDailyElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
+    public UsgsTimeSeriesData getDailyElevationData(String siteId, LocalDate start, LocalDate end) throws NetworkException, DataFormatingException {
         return getDailyTimeSeriesData(siteId, start, end, USGS_ELEVATION_CODE);
     }
 
-    private ContinuousTimeSeriesData getDailyTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
+    private UsgsTimeSeriesData getDailyTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
         String queryUrl = getDailyValueUrl(siteId, parameterCode, start, end);
         JsonNode result = networkClient.getRequest(queryUrl);
         return extractTimeSeriesData(result);
     }
 
-    private ContinuousTimeSeriesData getInstantTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
+    private UsgsTimeSeriesData getInstantTimeSeriesData(String siteId, LocalDate start, LocalDate end, String parameterCode) throws NetworkException, DataFormatingException {
         String queryUrl = getInstantValueUrl(siteId, parameterCode, start, end);
         JsonNode result = networkClient.getRequest(queryUrl);
         return extractTimeSeriesData(result);
@@ -113,7 +113,7 @@ public class UsgsService {
         }
     }
 
-    private ContinuousTimeSeriesData extractTimeSeriesData(JsonNode data) throws DataFormatingException {
+    private UsgsTimeSeriesData extractTimeSeriesData(JsonNode data) throws DataFormatingException {
         JsonNode timeSeries;
         try {
             timeSeries = data.get("value").get("timeSeries").get(0).get("values").get(0).get("value");
@@ -129,7 +129,7 @@ public class UsgsService {
 
         ZoneId siteZoneId = extractTimezoneInfo(data);
 
-        List<ContinuousTimeSeriesEntry> entries = new ArrayList<>();
+        List<UsgsTimeSeriesEntry> entries = new ArrayList<>();
 
         for (int i = 0; i < timeSeriesArrayNode.size(); i++) {
             JsonNode node = timeSeriesArrayNode.get(i);
@@ -153,10 +153,10 @@ public class UsgsService {
                 zonedDateTime = localDateTime.atZone(siteZoneId);
             }
 
-            entries.add(new ContinuousTimeSeriesEntry(value, zonedDateTime));
+            entries.add(new UsgsTimeSeriesEntry(value, zonedDateTime));
         }
 
-        return new ContinuousTimeSeriesData(
+        return new UsgsTimeSeriesData(
                 entries,
                 "USGS Site [%s] - %s".formatted(
                         extractSourceSiteNumber(data),
