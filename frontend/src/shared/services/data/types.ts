@@ -60,10 +60,11 @@ export interface AccessPoint {
 
 export interface CurrentConditions {
     lakeId: string;
-    timeOfCollection: Date;
-    date: Date;
+    measurementSiteName: string;
+    timeConditionsCalculated: Date;
+    currentReadingTimestamp: Date;
     levelToday: number;
-    levelYesterday: number;
+    level24HoursAgo: number;
     levelTwoWeeksAgo: number;
     levelOneYearAgo: number;
     levelTenYearAverage: number;

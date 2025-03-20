@@ -86,14 +86,16 @@ export class FirestoreService implements DataService {
 
         const data = docSnap.data();
 
-        // Parse the ISO string
-        const timeOfCollection = this.parseISODate(data.timeOfCollection);
-        const date = this.parseISODate(data.date);
-
         return {
-            ...data,
-            timeOfCollection: timeOfCollection,
-            date: date,
+            lakeId: data.lakeId,
+            measurementSiteName: data.measurementSiteName,
+            timeConditionsCalculated: this.parseTimestamp(data.timeConditionsCalculated),
+            currentReadingTimestamp: this.parseTimestamp(data.currentReadingTimestamp),
+            levelToday: data.levelToday,
+            level24HoursAgo: data.level24HoursAgo,
+            levelTwoWeeksAgo: data.levelTwoWeeksAgo,
+            levelOneYearAgo: data.levelOneYearAgo,
+            levelTenYearAverage: data.levelTenYearAverage
         } as CurrentConditions;
     }
 
@@ -292,28 +294,21 @@ export class FirestoreService implements DataService {
     }
 
     /**
-     * Parses a date string in YYYY-MM-DD format into a Date object
-     * that preserves the correct date regardless of timezone.
+     * Parses an ISO timestamp string into a Date object
      *
-     * @param dateString - Date string in YYYY-MM-DD format or undefined
-     * @returns Date object with the correct date in local timezone
+     * @param timestamp - Timestamp string (ISO 8601 format) or undefined
+     * @returns Date object representing the timestamp
      */
-    private parseISODate(dateString: string | undefined | null): Date {
-        // Return current date if input is missing
-        if (!dateString) {
+    private parseTimestamp(timestamp: string | undefined | null): Date {
+        if (!timestamp) {
             return new Date();
         }
 
-        // Check if it matches YYYY-MM-DD format
-        const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
-
-        if (typeof dateString === "string" && isoDatePattern.test(dateString)) {
-            // Parse the components and create a date in the local timezone
-            const [year, month, day] = dateString.split("-").map(Number);
-            return new Date(year, month - 1, day); // month is 0-indexed in JavaScript
+        try {
+            return new Date(timestamp);
+        } catch (error) {
+            console.warn("Failed to parse timestamp:", timestamp);
+            return new Date();
         }
-
-        // Fallback to standard parsing if it's not a simple YYYY-MM-DD string
-        return new Date(dateString);
     }
 }

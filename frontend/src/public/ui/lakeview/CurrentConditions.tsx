@@ -12,10 +12,11 @@ interface CurrentConditionsProps {
 }
 
 const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, meta }) => {
-    const dateString = data.date.toLocaleDateString("default", {
+    const dateString = data.currentReadingTimestamp.toLocaleDateString("default", {
         month: "long",
-        day: "2-digit",
+        day: "2-digit"
     });
+    console.log(data.currentReadingTimestamp)
     return (
         <div className="current-conditions">
             <StatItem
@@ -23,10 +24,12 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, meta }) => 
                 label="Current Elevation"
                 secondaryLabel={
                     "Last reading: " +
-                    data.date.toLocaleDateString("default", {
+                    data.currentReadingTimestamp.toLocaleDateString("default", {
                         month: "long",
-                        day: "2-digit",
-                        year: "numeric",
+                        day: "2-digit"
+                    }) + " at " +
+                    data.currentReadingTimestamp.toLocaleTimeString("default", {
+                        timeStyle: "short",
                     })
                 }
                 className="current-elevation"
@@ -44,10 +47,10 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, meta }) => 
 
             <div className="stat-row">
                 <StatItem
-                    value={data.levelToday - data.levelYesterday}
-                    label="Since Yesterday"
+                    value={data.levelToday - data.level24HoursAgo}
+                    label="Last 24 Hours"
                     className="day-change"
-                    tooltip="Change in lake level since yesterday's reading"
+                    tooltip="Change in lake level over the past 24 hours"
                 />
                 <StatItem
                     value={data.levelToday - data.levelTwoWeeksAgo}
