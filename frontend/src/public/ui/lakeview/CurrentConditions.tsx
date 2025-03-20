@@ -1,13 +1,17 @@
 import React from "react";
 import StatItem from "./StatItem";
 import "./LakeViewStyles.css";
-import type { CurrentConditions as CurrentConditionsType } from "../../../shared/services/data";
+import type {
+    CurrentConditions as CurrentConditionsType,
+    LakeMetaData,
+} from "../../../shared/services/data";
 
 interface CurrentConditionsProps {
     data: CurrentConditionsType;
+    meta: LakeMetaData;
 }
 
-const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
+const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data, meta }) => {
     const dateString = data.date.toLocaleDateString("default", {
         month: "long",
         day: "2-digit",
@@ -75,7 +79,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
 
             <div className="stat-row pool-levels">
                 <StatItem
-                    value={data.levelToday - data.referenceLevelFullPool}
+                    value={data.levelToday - meta.fullPoolElevation}
                     label="vs Full Pool"
                     isTrendStat={false}
                     tooltip={
@@ -86,7 +90,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
-                    value={data.levelToday - data.referenceLevelMinPowerPool}
+                    value={data.levelToday - meta.minPowerPoolElevation}
                     label="vs Power Pool"
                     isTrendStat={false}
                     tooltip={
@@ -99,7 +103,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
-                    value={data.levelToday - data.referenceLevelDeadPool}
+                    value={data.levelToday - meta.deadPoolElevation}
                     label="vs Dead Pool"
                     isTrendStat={false}
                     tooltip={

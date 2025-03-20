@@ -83,7 +83,7 @@ const LakeViewPage: React.FC = () => {
                 {(data) => (
                     <>
                         {/* Current Conditions Section */}
-                        <CurrentConditions data={data} />
+                        <CurrentConditions data={data} meta={lakeDetails} />
 
                         {/* Regions and Access Points Section - using direct children */}
                         {lakeInfo?.features.includes(LakeSystemFeatures.REGIONS) && hasRegions && (

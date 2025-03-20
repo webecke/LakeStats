@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../../shared/components/Button";
 import "./LakeManager.css";
-import {
-    dataService,
-    LakeMetaData,
-    LakeSystemSettings,
-} from "../../shared/services/data";
+import { dataService, LakeMetaData, LakeSystemSettings } from "../../shared/services/data";
 import LoadingSpinner from "../../shared/components/LoadingSpinner";
 import LakeDetails from "../components/lakeManager/LakeDetails";
 import LakeSystemConfig from "../components/lakeManager/LakeSystemConfig";

@@ -35,7 +35,7 @@ export async function validateUsgsSiteNumber(siteNumber: string): Promise<{
             return {
                 isValid: true,
                 siteName: siteInfo?.siteName || undefined,
-                siteDescription: siteInfo?.siteDescription || undefined
+                siteDescription: siteInfo?.siteDescription || undefined,
             };
         }
 

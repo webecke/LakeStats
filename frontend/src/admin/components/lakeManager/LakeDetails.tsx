@@ -45,13 +45,16 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
 
     const handleTestUsgsSite = async () => {
         setIsTestingUsgs(true);
-        const result = await validateUsgsSiteNumber(lake.usgsSiteNumber)
+        const result = await validateUsgsSiteNumber(lake.usgsSiteNumber);
         setIsTestingUsgs(false);
 
         if (result.isValid) {
-            showNotification("Valid USGS Site Number! Site Name:\n" + (result.siteName || ""), 'success');
+            showNotification(
+                "Valid USGS Site Number! Site Name:\n" + (result.siteName || ""),
+                "success"
+            );
         } else {
-            showNotification("Invalid USGS Site Number", 'error');
+            showNotification("Invalid USGS Site Number", "error");
         }
 
         setTimeout(() => {
@@ -79,7 +82,7 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                             className="lake-form__input lake-form__input--with-button"
                             id="usgsSiteNumber"
                             name="usgsSiteNumber"
-                            value={lake.usgsSiteNumber || ''}
+                            value={lake.usgsSiteNumber || ""}
                             onChange={handleChange}
                             placeholder="e.g., 09380000"
                         />
@@ -177,7 +180,6 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                         onChange={handleChange}
                     />
                 </div>
-
             </div>
         </div>
     );
