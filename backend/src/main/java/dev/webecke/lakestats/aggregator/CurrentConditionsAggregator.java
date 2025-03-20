@@ -9,6 +9,7 @@ import dev.webecke.lakestats.service.LakeStatsLogger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Map;
 
 @Service
@@ -33,8 +34,9 @@ public class CurrentConditionsAggregator {
 
         return new CurrentConditions(
                 dataset.lakeId(),
-                collectorResponse.collectedAt(),
-                todayDate,
+                "BOR",
+                collectorResponse.collectedAt().atZone(ZoneId.of("America/Denver")),
+                todayDate.atStartOfDay(ZoneId.of("America/Denver")),
                 today.value(),
                 dataset.dateIndex().get(todayDate.minusDays(1)).value(),
                 dataset.dateIndex().get(todayDate.minusWeeks(2)).value(),

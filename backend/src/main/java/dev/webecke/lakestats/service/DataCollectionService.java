@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,9 +96,9 @@ public class DataCollectionService {
             }
 
             LocalDate utahToday = ZonedDateTime.now(ZoneId.of("America/Denver")).toLocalDate();
-            if (currentConditions.date().isBefore(utahToday.minusDays(1))) {
+            if (currentConditions.currentReadingTimestamp().isBefore(ChronoZonedDateTime.from(utahToday.minusDays(1)))) {
                 status = ResultStatus.SOURCE_DATA_NOT_UPDATED;
-                resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.date());
+                resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.currentReadingTimestamp());
                 logger.warnForLake(resultMessage, lake.id());
             }
 
