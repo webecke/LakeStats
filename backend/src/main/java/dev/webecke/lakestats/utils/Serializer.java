@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +44,42 @@ public class Serializer {
                             }
                             return map;
                         })
+                .registerTypeAdapter(ZonedDateTime.class, (JsonSerializer<ZonedDateTime>) (date, type, context) ->
+                        new JsonPrimitive(date.format(DateTimeFormatter.ISO_ZONED_DATE_TIME)))
+                .registerTypeAdapter(ZonedDateTime.class, (JsonDeserializer<ZonedDateTime>) (json, type, context) ->
+                        json.getAsString().isEmpty() ? null : ZonedDateTime.parse(json.getAsString(), DateTimeFormatter.ISO_ZONED_DATE_TIME))
+                // Add custom exception adapter to access only public fields
+                .registerTypeHierarchyAdapter(Throwable.class, new ThrowableSerializer())
                 .create();
+    }
+
+    // Custom serializer for Throwable classes
+    private static class ThrowableSerializer implements JsonSerializer<Throwable> {
+        @Override
+        public JsonElement serialize(Throwable src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject result = new JsonObject();
+
+            // Add basic exception information
+            result.addProperty("message", src.getMessage());
+            result.addProperty("class", src.getClass().getName());
+
+            // Add stack trace as a string array
+            JsonArray stackTraceJson = new JsonArray();
+            for (StackTraceElement element : src.getStackTrace()) {
+                stackTraceJson.add(element.toString());
+            }
+            result.add("stackTrace", stackTraceJson);
+
+            // Include cause if present (but only one level deep to avoid recursion issues)
+            if (src.getCause() != null && src.getCause() != src) {
+                JsonObject causeJson = new JsonObject();
+                causeJson.addProperty("message", src.getCause().getMessage());
+                causeJson.addProperty("class", src.getCause().getClass().getName());
+                result.add("cause", causeJson);
+            }
+
+            return result;
+        }
     }
 
     public String serialize(Object object) {
@@ -57,5 +93,9 @@ public class Serializer {
     public Map<String, Object> serializeToMap(Object object) {
         Type type = new TypeToken<Map<String, Object>>(){}.getType();
         return gson.fromJson(serialize(object), type);
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }
