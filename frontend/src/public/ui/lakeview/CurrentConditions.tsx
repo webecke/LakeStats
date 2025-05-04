@@ -32,7 +32,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                         <strong>Lake Elevation</strong>
                         <p>
                             The current surface elevation of the lake, measured in feet above sea
-                            level at 11:59PM on {dateString}
+                            level at 12:00AM on {dateString}
                         </p>
                     </div>
                 }
