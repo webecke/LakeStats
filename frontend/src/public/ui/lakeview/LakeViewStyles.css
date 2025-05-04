@@ -247,12 +247,20 @@
     color: var(--text-primary);
 }
 
-/* Ensure tooltip integration doesn't break the layout */
+/* New flexbox approach */
 .pool-levels {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-md);
     width: 100%;
+    justify-content: center; /* Centers items when they don't fill the row */
+}
+
+/* Ensure items have a minimum and maximum width */
+.pool-levels .stat-item {
+    flex: 0 1 calc(33.333% - var(--spacing-md)); /* Prefer 3 per row */
+    min-width: 120px; /* Minimum width for readability */
+    max-width: 260px; /* Maximum width to prevent stretching */
 }
 
 /* Make tooltips appear with cursor pointer style */
@@ -263,13 +271,13 @@
 /* Responsive adjustments for mobile */
 @media (max-width: 480px) {
     .pool-levels {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
         gap: var(--spacing-sm);
     }
 
     .pool-levels .stat-item {
-        padding: var(--spacing-sm);
+        flex: 0 1 calc(33.333% - var(--spacing-sm));
+        min-width: 100px;
+        max-width: 140px;
     }
 
     /* Make tooltips more mobile-friendly */

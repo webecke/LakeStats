@@ -12,6 +12,7 @@ interface StatItemProps {
     isCurrentElevation?: boolean;
     isTrendStat?: boolean;
     tooltip?: React.ReactNode | null;
+    showStat?: boolean;
 }
 
 const StatItem: React.FC<StatItemProps> = ({
@@ -22,7 +23,12 @@ const StatItem: React.FC<StatItemProps> = ({
     isCurrentElevation = false,
     isTrendStat = true,
     tooltip = null,
+    showStat = true,
 }) => {
+    if (!showStat) {
+        return null; // Don't render anything if showStat is false
+    }
+
     // Determine if value is positive, negative, or zero
     let icon;
     let numberClass;

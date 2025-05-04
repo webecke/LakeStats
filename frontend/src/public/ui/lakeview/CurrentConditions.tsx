@@ -75,6 +75,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
 
             <div className="stat-row pool-levels">
                 <StatItem
+                    showStat={!!data.referenceLevelFullPool}
                     value={data.levelToday - data.referenceLevelFullPool}
                     label="vs Full Pool"
                     isTrendStat={false}
@@ -86,6 +87,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
+                    showStat={!!data.referenceLevelMinPowerPool}
                     value={data.levelToday - data.referenceLevelMinPowerPool}
                     label="vs Power Pool"
                     isTrendStat={false}
@@ -99,6 +101,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     }
                 />
                 <StatItem
+                    showStat={!!data.referenceLevelDeadPool}
                     value={data.levelToday - data.referenceLevelDeadPool}
                     label="vs Dead Pool"
                     isTrendStat={false}
