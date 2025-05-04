@@ -7,9 +7,11 @@ import { RegionProvider } from "./RegionContext";
 interface RegionSelectorProps {
     regions: Record<string, LakeRegion>;
     children: React.ReactNode;
+    /** If true, show the region selector tabs. If false, only show the first region. */
+    showSelector: boolean;
 }
 
-const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children }) => {
+const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children, showSelector }) => {
     // Convert regions record to array and sort by sortOrder
     const regionArray = Object.values(regions).sort((a, b) => {
         // First sort by sortOrder if available
@@ -36,7 +38,6 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children }) =>
         }
     }, [regions]);
 
-    // If no regions, render nothing
     if (regionArray.length === 0) {
         return null;
     }
@@ -52,7 +53,7 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children }) =>
     return (
         <div className="region-container">
             {/* Only show the tabs if there is more than one region */}
-            {regionArray.length > 1 && (
+            {regionArray.length > 1 && showSelector && (
                 <div className="region-tabs">
                     {regionArray.map((region) => (
                         <Tooltip key={region.id} content={region.description || null}>
