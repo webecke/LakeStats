@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { LakeRegion } from "../../../shared/services/data";
-import Tooltip from "../../components/Tooltip";
 import "./RegionSelector.css";
 import { RegionProvider } from "./RegionContext";
 
@@ -56,14 +55,12 @@ const RegionSelector: React.FC<RegionSelectorProps> = ({ regions, children, show
             {regionArray.length > 1 && showSelector && (
                 <div className="region-tabs">
                     {regionArray.map((region) => (
-                        <Tooltip key={region.id} content={region.description || null}>
-                            <button
-                                className={`region-tab ${selectedRegionId === region.id ? "active" : ""}`}
-                                onClick={() => setSelectedRegionId(region.id)}
-                            >
-                                {region.name}
-                            </button>
-                        </Tooltip>
+                        <button
+                            className={`region-tab ${selectedRegionId === region.id ? "active" : ""}`}
+                            onClick={() => setSelectedRegionId(region.id)}
+                        >
+                            {region.name}
+                        </button>
                     ))}
                 </div>
             )}
