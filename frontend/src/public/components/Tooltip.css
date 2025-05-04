@@ -1,8 +1,7 @@
 .tooltip-container {
     position: relative;
-    display: inherit;
-    width: 100%;
-    height: 100%;
+    display: inline-block;
+    overflow: visible;
 }
 
 /* Mobile specific styles */
@@ -15,6 +14,7 @@
     position: absolute;
     z-index: 1000; /* Higher z-index to ensure visibility */
     max-width: 250px;
+    width: max-content;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     animation: tooltip-fade-in 0.2s ease-out forwards;
     /* Important to allow clicks on mobile */
@@ -27,7 +27,7 @@
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
     font-size: 0.875rem;
-    text-align: center;
+    text-align: left; /* Changed from center to left for better readability */
     word-wrap: break-word;
     line-height: 1.4;
 }

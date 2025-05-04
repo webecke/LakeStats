@@ -125,6 +125,7 @@ export default function LakeDetails({ lake, setLake }: LakeDetailsProps) {
                         />
                     </div>
                 </div>
+                <p><em>Leave elevations at 0 that do not apply</em></p>
             </div>
         </div>
     );

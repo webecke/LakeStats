@@ -42,8 +42,10 @@ public class BureauOfReclamationDataCollector {
 
             for (JsonNode entry : dataArray) {
                 LocalDate date = LocalDate.parse(entry.get(0).asText());
+                // We roll the date forward one day because its record at 11:59 PM, which is really the next day
+                LocalDate adjustedDate = date.plusDays(1);
                 float level = entry.get(1).floatValue();
-                entries.add(new TimeSeriesData.TimeSeriesEntry(level, date));
+                entries.add(new TimeSeriesData.TimeSeriesEntry(level, adjustedDate));
             }
 
             TimeSeriesData data = new TimeSeriesData(lake.id(), entries, type);

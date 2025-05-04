@@ -5,7 +5,6 @@
     border-radius: 6px;
     background-color: var(--background-elevated, #1e1e1e);
     position: relative;
-    overflow: hidden;
     margin-bottom: 8px;
 }
 

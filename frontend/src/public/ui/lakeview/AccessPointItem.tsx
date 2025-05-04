@@ -2,7 +2,8 @@ import React from "react";
 import { AccessPoint } from "../../../shared/services/data";
 import { MapPin } from "lucide-react";
 import "./AccessPointItem.css";
-import { getFeetAndInches } from "../dataRenderTools.ts";
+import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
+import Tooltip from "../../components/Tooltip.tsx";
 
 interface AccessPointItemProps {
     accessPoint: AccessPoint;
@@ -14,7 +15,7 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
     const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation);
 
     // Format the difference WITHOUT a + sign when positive
-    const { feet, inches } = getFeetAndInches(usableElevationDiff);
+    const { feet, inches } = getFeetAndInchesWithFraction(usableElevationDiff);
     const prefix = usableElevationDiff >= 0 ? "" : "-";
     const feetDisplay = feet ? `${feet}ft ` : "";
     const formattedDifference = `${prefix}${feetDisplay}${inches}in`;
@@ -52,6 +53,14 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
         }
     };
 
+    const tooltipContent = (
+        <div>
+            <div><strong>Safe Elevation:</strong> {accessPoint.minSafeElevation} ft</div>
+            <div><strong>Usable Elevation:</strong> {accessPoint.minUsableElevation} ft</div>
+            <div style={{fontSize: "smaller"}}><em>The difference displayed is the distance from current levels to "usable" levels. These are not official numbers, check in person before using.</em></div>
+        </div>
+    );
+
     return (
         <div className={`access-point-item ${statusClass}`}>
             <div className="access-point-content">
@@ -69,10 +78,12 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
                 </button>
             )}
 
-            <div className="access-point-details">
-                <div className={`status-text ${statusClass}`}>{status}</div>
-                <div className={`elevation-difference ${statusClass}`}>{formattedDifference}</div>
-            </div>
+            <Tooltip content={tooltipContent} position="left">
+                <div className="access-point-details">
+                    <div className={`status-text ${statusClass}`}>{status}</div>
+                    <div className={`elevation-difference ${statusClass}`}>{formattedDifference}</div>
+                </div>
+            </Tooltip>
         </div>
     );
 };

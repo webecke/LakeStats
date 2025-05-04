@@ -63,9 +63,6 @@ const LakeViewPage: React.FC = () => {
         ? ({ "--brand-accent": lakeInfo.accentColor } as React.CSSProperties)
         : {};
 
-    // Determine if regions section should be shown
-    const hasRegions = lakeDetails.regions && Object.keys(lakeDetails.regions).length > 0;
-
     return (
         <div className="lake-view" style={accentColorStyle}>
             <PageTitle title={lakeInfo.lakeName + " Conditions"} />
@@ -82,17 +79,13 @@ const LakeViewPage: React.FC = () => {
             >
                 {(data) => (
                     <>
-                        {/* Current Conditions Section */}
                         <CurrentConditions data={data} />
 
-                        {/* Regions and Access Points Section - using direct children */}
-                        {lakeInfo?.features.includes(LakeSystemFeatures.REGIONS) && hasRegions && (
-                            <RegionSelector regions={lakeDetails.regions}>
-                                {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
-                                    <AccessPointList currentElevation={data.levelToday} />
-                                )}
-                            </RegionSelector>
-                        )}
+                        <RegionSelector regions={lakeDetails.regions} showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}>
+                            {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
+                                <AccessPointList currentElevation={data.levelToday} />
+                            )}
+                        </RegionSelector>
                     </>
                 )}
             </AsyncContainer>
