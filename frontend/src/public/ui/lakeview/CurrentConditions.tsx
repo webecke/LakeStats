@@ -29,9 +29,8 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                 isCurrentElevation={true}
                 tooltip={
                     <div>
-                        <strong>Lake Elevation</strong>
                         <p>
-                            The current surface elevation of the lake, measured in feet above sea
+                            The surface elevation of the lake in feet above sea
                             level at 12:00AM on {dateString}
                         </p>
                         <em>Exact reading: {data.levelToday}</em>

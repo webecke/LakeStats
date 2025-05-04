@@ -247,7 +247,11 @@
     color: var(--text-primary);
 }
 
-/* New flexbox approach */
+.stat-item {
+    cursor: default;
+}
+
+/* Update the existing pool-levels styles */
 .pool-levels {
     display: flex;
     flex-wrap: wrap;
@@ -263,11 +267,6 @@
     max-width: 260px; /* Maximum width to prevent stretching */
 }
 
-/* Make tooltips appear with cursor pointer style */
-.stat-item {
-    cursor: default;
-}
-
 /* Responsive adjustments for mobile */
 @media (max-width: 480px) {
     .pool-levels {
@@ -276,8 +275,22 @@
 
     .pool-levels .stat-item {
         flex: 0 1 calc(33.333% - var(--spacing-sm));
-        min-width: 100px;
-        max-width: 140px;
+        min-width: 90px; /* Reduced from 100px to give more room */
+        max-width: 120px; /* Reduced from 140px to prevent wrapping */
+    }
+
+    /* Make fonts slightly smaller in the pool row to help fit better */
+    .pool-levels .stat-value {
+        font-size: calc(var(--font-size-medium) * 0.7); /* Further reduced */
+    }
+
+    .pool-levels .stat-label {
+        font-size: 0.75rem; /* Smaller label text */
+    }
+
+    /* Reduce padding inside the stat items in the pool row */
+    .pool-levels .stat-item {
+        padding: var(--spacing-tiny) var(--spacing-sm);
     }
 
     /* Make tooltips more mobile-friendly */

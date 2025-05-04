@@ -13,7 +13,7 @@
 .tooltip {
     position: absolute;
     z-index: 1000; /* Higher z-index to ensure visibility */
-    max-width: 250px;
+    max-width: 300px;
     width: max-content;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     animation: tooltip-fade-in 0.2s ease-out forwards;
