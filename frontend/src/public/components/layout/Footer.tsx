@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import webeckeLogo from "../../../assets/webeckedev.svg";
 import "./Footer.css";
-import { BUILD_TIME } from "../../../buildInfo.ts";
 
 export default function Footer() {
+    const version = import.meta.env.VITE_VERSION || 'dev';
+
     return (
         <footer className="footer">
             <div className="footer-container">
@@ -13,16 +14,11 @@ export default function Footer() {
                 <div className="footer-content">
                     <p>© 2025 Dallin Webecke</p>
                     <p>
-                        <a href="https://github.com/webecke/LakeStats" target="_blank">
-                            View on Github
-                        </a>
-                        {" | "}
-                        Latest build: <em>{BUILD_TIME}</em>
-                    </p>
-                    <p>
-                        <Link to="/privacy">Privacy Notice</Link>
-                        {" | "}
                         <Link to="/terms">Terms of Service</Link>
+                        <span style={{padding: "0 10px"}}>•</span>
+                        <a href={`https://github.com/webecke/LakeStats/releases/tag/${version}`} target="_blank">
+                            {version}
+                        </a>
                     </p>
                 </div>
             </div>
