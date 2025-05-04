@@ -2,7 +2,7 @@ import React from "react";
 import { TrendingDown, TrendingUp, MinusCircle } from "lucide-react";
 import "./LakeViewStyles.css";
 import Tooltip from "../../components/Tooltip.tsx";
-import { getFeetAndInches } from "../dataRenderTools.ts";
+import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
 
 interface StatItemProps {
     value: number;
@@ -25,70 +25,76 @@ const StatItem: React.FC<StatItemProps> = ({
     tooltip = null,
     showStat = true,
 }) => {
-    if (!showStat) {
-        return null; // Don't render anything if showStat is false
-    }
+    if (!showStat) return null;
 
-    // Determine if value is positive, negative, or zero
-    let icon;
-    let numberClass;
+    // Get icon and styling based on value
+    const icon = value > 0 ? <TrendingUp className="trend-icon trend-up" /> :
+        value < 0 ? <TrendingDown className="trend-icon trend-down" /> :
+            <MinusCircle className="trend-icon trend-neutral" />;
 
-    if (value > 0) {
-        icon = <TrendingUp className="trend-icon trend-up" />;
-        numberClass = "positive";
-    } else if (value < 0) {
-        icon = <TrendingDown className="trend-icon trend-down" />;
-        numberClass = "negative";
-    } else {
-        icon = <MinusCircle className="trend-icon trend-neutral" />;
-        numberClass = "neutral";
-    }
+    const numberClass = value > 0 ? "positive" :
+        value < 0 ? "negative" : "neutral";
 
-    // Determine prefix based on component type
-    let prefix;
+    // Determine prefix
+    const prefix = isCurrentElevation ? "" :
+        isTrendStat ? (value > 0 ? "+" : value < 0 ? "-" : "") :
+            (value < 0 ? "-" : "");
 
-    if (isCurrentElevation) {
-        // Current elevation: no prefix
-        prefix = "";
-    } else if (isTrendStat) {
-        // Trend stats: always show + or - prefix
-        prefix = value > 0 ? "+" : value < 0 ? "-" : "";
-    } else {
-        // Non-trend stats: only show - for negative values
-        prefix = value < 0 ? "-" : "";
-    }
+    const { feet, inches, fraction } = getFeetAndInchesWithFraction(value);
 
-    const { feet, inches } = getFeetAndInches(value);
-
-    // Create the inner content
-    const innerContent = (
+    // Create display value
+    const displayValue = (
         <>
-            <p className={`stat-value ${numberClass}`}>
-                {prefix}
-                {feet ? (
+            {prefix}
+            {feet > 0 ? (
+                <>
+                    {feet}
+                    <span className="unit">ft</span>
+                    {" "}
+                    {inches}
+                    <span className="unit">in</span>
+                </>
+            ) :
+                (inches || fraction ?
                     <>
-                        {feet}
-                        <span className="unit">ft</span>
+                        {inches}
+                        {" " + fraction}
+                        <span className="unit">in</span>
                     </>
-                ) : null}
-                {inches}
-                <span className="unit">in</span>
-                {!isCurrentElevation && isTrendStat && icon}
-            </p>
+                : (value !== 0 ?
+                        <>
+                            {'< ⅛'}
+                            <span className="unit">in</span>
+                        </>
+                            :
+                        <>
+                            {'0'}
+                            <span className="unit">in</span>
+                        </>
+                    )
+                )
+            }
+
+            {!isCurrentElevation && isTrendStat && icon}
+        </>
+    );
+
+    const content = (
+        <>
+            <p className={`stat-value ${numberClass}`}>{displayValue}</p>
             <p className="stat-label">{label}</p>
             {secondaryLabel && <p className="stat-label">{secondaryLabel}</p>}
         </>
     );
 
-    // If tooltip is provided, wrap the inner content with Tooltip, but always preserve the stat-item div as the outermost container
     return (
         <div className={`stat-item ${className}`}>
             {tooltip !== null ? (
                 <Tooltip content={tooltip}>
-                    <div className="stat-item-inner">{innerContent}</div>
+                    <div className="stat-item-inner">{content}</div>
                 </Tooltip>
             ) : (
-                innerContent
+                content
             )}
         </div>
     );

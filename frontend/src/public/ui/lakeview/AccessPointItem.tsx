@@ -2,7 +2,7 @@ import React from "react";
 import { AccessPoint } from "../../../shared/services/data";
 import { MapPin } from "lucide-react";
 import "./AccessPointItem.css";
-import { getFeetAndInches } from "../dataRenderTools.ts";
+import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
 
 interface AccessPointItemProps {
     accessPoint: AccessPoint;
@@ -14,7 +14,7 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
     const usableElevationDiff = +(currentElevation - accessPoint.minUsableElevation);
 
     // Format the difference WITHOUT a + sign when positive
-    const { feet, inches } = getFeetAndInches(usableElevationDiff);
+    const { feet, inches } = getFeetAndInchesWithFraction(usableElevationDiff);
     const prefix = usableElevationDiff >= 0 ? "" : "-";
     const feetDisplay = feet ? `${feet}ft ` : "";
     const formattedDifference = `${prefix}${feetDisplay}${inches}in`;
