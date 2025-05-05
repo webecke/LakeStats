@@ -13,6 +13,8 @@ import AsyncContainer from "../../components/AsyncContainer";
 import { PageTitle } from "../../components/PageTitle";
 import { handleNotFoundRedirect } from "../../../routes";
 import { LakeSystemFeatures } from "../../../shared/services/data";
+import { Callout } from "../../components/Callout.tsx";
+import { Button } from "../../../shared/components/Button";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -80,6 +82,13 @@ const LakeViewPage: React.FC = () => {
                 {(data) => (
                     <>
                         <CurrentConditions data={data} />
+
+                        <Callout type={"info"} title={"Give us feedback!"}>
+                            <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+                                <p>Help us improve LakeStats! Take 60 seconds to share your thoughts</p>
+                                <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank"><Button>Take survey</Button></a>
+                            </div>
+                        </Callout>
 
                         <RegionSelector regions={lakeDetails.regions} showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}>
                             {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (

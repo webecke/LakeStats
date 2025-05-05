@@ -20,6 +20,7 @@ export default function Footer() {
                             {version}
                         </a>
                     </p>
+                    <p><Link to={"/feedback"}>Give Feedback</Link></p>
                 </div>
             </div>
         </footer>

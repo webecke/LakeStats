@@ -13,6 +13,7 @@ const Terms = lazy(() => import("./public/ui/static/Terms.tsx"));
 import Home from "./public/ui/Home.tsx";
 import LakeViewPage from "./public/ui/lakeview/LakeViewPage.tsx";
 import NotFound from "./public/ui/static/NotFound.tsx";
+import Feedback from "./public/ui/static/Feedback.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
             {
                 path: "/terms",
                 element: <Terms />,
+            },
+            {
+                path: "/feedback",
+                element: <Feedback />,
             },
         ],
     },

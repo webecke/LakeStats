@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { dataService } from "../../shared/services/data";
+import { dataService, LakeSystemSettings } from "../../shared/services/data";
 import logoSvg from "../../assets/LakeStatsLogo-NoBackground.svg";
-
-// Updated interface to match your LakeSystemSettings
-interface LakeSystemSettings {
-    lakeId: string;
-    lakeName: string;
-    brandedName: string;
-    status: "ENABLED" | "DISABLED" | "TESTING";
-    features: string[];
-    sortOrder: number;
-    accentColor: string;
-}
 import "./Home.css";
 import AsyncContainer from "../components/AsyncContainer.tsx";
 
