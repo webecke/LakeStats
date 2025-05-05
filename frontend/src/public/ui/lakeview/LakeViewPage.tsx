@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import LakeViewHeader from "./LakeViewHeader";
 import CurrentConditions from "./CurrentConditions";
 import RegionSelector from "./RegionSelector";
@@ -27,6 +27,8 @@ const LakeViewPage: React.FC = () => {
 
     // Fetch detailed lake data including regions
     const { loading: loadingDetails, error: detailsError, lakeDetails } = useLakeDetails(lakeId);
+
+    const [showBetaFeedback, setShowBetaFeedback] = useState(localStorage.getItem("hideBetaFeedback") !== "true");
 
     // Fetch current conditions data
     const {
@@ -65,6 +67,11 @@ const LakeViewPage: React.FC = () => {
         ? ({ "--brand-accent": lakeInfo.accentColor } as React.CSSProperties)
         : {};
 
+    const handleCloseFeedback = () => {
+        localStorage.setItem("hideBetaFeedback", "true")
+        setShowBetaFeedback(false);
+    }
+
     return (
         <div className="lake-view" style={accentColorStyle}>
             <PageTitle title={lakeInfo.lakeName + " Conditions"} />
@@ -83,7 +90,11 @@ const LakeViewPage: React.FC = () => {
                     <>
                         <CurrentConditions data={data} />
 
-                        <Callout type={"info"} title={"Give us feedback!"}>
+                        <Callout
+                            visible={showBetaFeedback}
+                            type={"info"}
+                            title={"Give us feedback!"}
+                            onClose={handleCloseFeedback}>
                             <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
                                 <p>Help us improve LakeStats! Take 60 seconds to share your thoughts</p>
                                 <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank"><Button>Take survey</Button></a>
