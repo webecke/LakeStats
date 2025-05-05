@@ -8,9 +8,16 @@
 
 .callout__header {
     display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+}
+
+.callout__header-content {
+    display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    flex: 1;
 }
 
 .callout__icon {
@@ -26,10 +33,31 @@
     color: var(--text-primary);
 }
 
+.callout__close {
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+}
+
+.callout__close:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.callout__close-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
 .callout__content {
     color: var(--text-primary);
     line-height: 1.5;
-    text-align: left;
 }
 
 /* Type-specific styling */

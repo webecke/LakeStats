@@ -1,5 +1,5 @@
 import React from "react";
-import { AlertCircle, CheckCircle, Info, AlertTriangle, Flame } from "lucide-react";
+import { AlertCircle, CheckCircle, Info, AlertTriangle, Flame, X } from "lucide-react";
 import "./Callout.css";
 
 export type CalloutType = "success" | "warning" | "error" | "info" | "important";
@@ -14,6 +14,8 @@ export interface CalloutProps {
     title?: string;
     /** Additional CSS classes */
     className?: string;
+    /** Function to call when close button is clicked */
+    onClose?: () => void;
 }
 
 const defaultIcons = {
@@ -31,6 +33,7 @@ export const Callout: React.FC<CalloutProps> = ({
                                                     customIcon,
                                                     title,
                                                     className = "",
+                                                    onClose,
                                                 }) => {
     if (!visible) return null;
 
@@ -39,8 +42,19 @@ export const Callout: React.FC<CalloutProps> = ({
     return (
         <div className={`callout callout--${type} ${className}`}>
             <div className="callout__header">
-                {icon}
-                {title && <h3 className="callout__title">{title}</h3>}
+                <div className="callout__header-content">
+                    {icon}
+                    {title && <h3 className="callout__title">{title}</h3>}
+                </div>
+                {onClose && (
+                    <button
+                        className="callout__close"
+                        onClick={onClose}
+                        aria-label="Close callout"
+                    >
+                        <X className="callout__close-icon" />
+                    </button>
+                )}
             </div>
             <div className="callout__content">{children}</div>
         </div>
