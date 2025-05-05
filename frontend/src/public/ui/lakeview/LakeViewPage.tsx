@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LakeViewHeader from "./LakeViewHeader";
 import CurrentConditions from "./CurrentConditions";
 import RegionSelector from "./RegionSelector";
@@ -15,6 +15,7 @@ import { handleNotFoundRedirect } from "../../../routes";
 import { LakeSystemFeatures } from "../../../shared/services/data";
 import { Callout } from "../../components/Callout.tsx";
 import { Button } from "../../../shared/components/Button";
+import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ const LakeViewPage: React.FC = () => {
     const { loading: loadingDetails, error: detailsError, lakeDetails } = useLakeDetails(lakeId);
 
     const [showBetaFeedback, setShowBetaFeedback] = useState(localStorage.getItem("hideBetaFeedback") !== "true");
+    const [summaryString, setSummaryString] = useState("");
 
     // Fetch current conditions data
     const {
@@ -36,6 +38,28 @@ const LakeViewPage: React.FC = () => {
         error: conditionsError,
         currentConditions,
     } = useCurrentConditions(lakeId);
+
+    useEffect(() => {
+        const formatValue = (value: number) => {
+            const { feet, inches, fraction } = getFeetAndInchesWithFraction(Math.abs(value));
+            const prefix = value >= 0 ? "up" : "down";
+
+            if (feet > 0) {
+                return `${feet} feet ${inches}${fraction ? ' ' + fraction : ''} inches ${prefix}`;
+            } else {
+                return `${inches}${fraction ? ' ' + fraction : ''} inches ${prefix}`;
+            }
+        };
+
+        if (lakeInfo && currentConditions) {
+            const summary: string =
+                `Latest stats for ${lakeInfo.lakeName} \n` +
+                `Current elevation: ${currentConditions.levelToday} ft\n` +
+                `${formatValue(currentConditions.levelToday - currentConditions.levelYesterday)} since yesterday\n` +
+                `${formatValue(currentConditions.levelToday - currentConditions.levelOneYearAgo)} since a year ago\n`
+            setSummaryString(summary);
+        }
+    }, [lakeInfo, lakeId, currentConditions]);
 
     if (!lakeId) {
         return <div>Lake ID is required</div>;
@@ -76,9 +100,11 @@ const LakeViewPage: React.FC = () => {
         <div className="lake-view" style={accentColorStyle}>
             <PageTitle title={lakeInfo.lakeName + " Conditions"} />
             <LakeViewHeader
+                lakeId={lakeId}
                 lakeName={lakeInfo.lakeName}
                 brandColor={lakeInfo.accentColor}
                 brandedName={lakeInfo.brandedName}
+                summaryString={summaryString}
             />
 
             <AsyncContainer

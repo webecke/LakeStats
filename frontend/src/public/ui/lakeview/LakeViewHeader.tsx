@@ -6,12 +6,42 @@ import "./LakeViewStyles.css";
 interface LakeViewHeaderProps {
     lakeName: string;
     brandedName: string;
+    lakeId: string;
     brandColor?: string;
-    onShare?: () => void;
+    summaryString?: string;
 }
 
-const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, brandColor, onShare }) => {
+const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, lakeId, brandColor, summaryString }) => {
     const brandStyle = brandColor ? { color: brandColor } : {};
+
+    const onShare = () => {
+        const shareText = summaryString || `Check out the latest stats for ${lakeName}`;
+
+        if (navigator.share) {
+            navigator.share({
+                title: `Latest ${lakeName} Stats`,
+                text: shareText,
+                url: `/${lakeId}`
+            })
+                .catch(console.error);
+        } else {
+            // Fallback: Copy to clipboard
+            try {
+                const clipboardText = `${shareText}\nStay up to date at lakestats.com/${lakeId}`;
+                navigator.clipboard.writeText(clipboardText)
+                    .then(() => {
+                        alert("Summary of stats copied to clipboard!");
+                    })
+                    .catch(err => {
+                        console.error("Failed to copy: ", err);
+                        alert("Couldn't copy to clipboard. Please try again.");
+                    });
+            } catch (err) {
+                console.error("Clipboard API not available", err);
+                alert(`Sharing is unavailable on your browser. Try just copying this link: lakestats.com/${lakeId}`);
+            }
+        }
+    };
 
     return (
         <div className="lake-header">
