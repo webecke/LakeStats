@@ -95,7 +95,7 @@ public class DataCollectionService {
             }
 
             LocalDate utahToday = ZonedDateTime.now(ZoneId.of("America/Denver")).toLocalDate();
-            if (currentConditions.date().isBefore(utahToday.minusDays(1))) {
+            if (currentConditions.date().isBefore(utahToday)) {
                 status = ResultStatus.SOURCE_DATA_NOT_UPDATED;
                 resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.date());
                 logger.warnForLake(resultMessage, lake.id());
