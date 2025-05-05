@@ -1,0 +1,95 @@
+.callout {
+    padding: 1rem;
+    border-radius: 6px;
+    border-left: 4px solid;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.callout__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.callout__icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.callout__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.callout__content {
+    color: var(--text-primary);
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* Type-specific styling */
+.callout--success {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-color: var(--status-success);
+}
+
+.callout--success .callout__icon {
+    color: var(--status-success);
+}
+
+.callout--warning {
+    background-color: rgba(241, 196, 15, 0.1);
+    border-color: var(--status-warning);
+}
+
+.callout--warning .callout__icon {
+    color: var(--status-warning);
+}
+
+.callout--error {
+    background-color: rgba(231, 76, 60, 0.1);
+    border-color: var(--status-error);
+}
+
+.callout--error .callout__icon {
+    color: var(--status-error);
+}
+
+.callout--info {
+    background-color: rgba(0, 211, 255, 0.1);
+    border-color: var(--status-info);
+}
+
+.callout--info .callout__icon {
+    color: var(--status-info);
+}
+
+.callout--important {
+    background-color: rgba(255, 128, 0, 0.1);
+    border-color: var(--brand-accent);
+}
+
+.callout--important .callout__icon {
+    color: var(--brand-accent);
+}
+
+/* When no title is provided, reduce header margin */
+.callout__header:only-child {
+    margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .callout {
+        padding: 0.75rem;
+    }
+
+    .callout__title {
+        font-size: 1rem;
+    }
+}
