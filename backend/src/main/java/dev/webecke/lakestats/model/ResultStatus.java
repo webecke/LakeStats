@@ -22,7 +22,11 @@ public enum ResultStatus {
     /**
      * Operation was successful, but there was an error while publishing the data to the database.
      */
-    PUBLICATION_ERROR;
+    PUBLICATION_ERROR,
+    /**
+     * Operation was skipped
+     */
+    SKIPPED;
 
     public static ResultStatus getMoreSevereStatus(ResultStatus status1, ResultStatus status2) {
         if (status1 == ResultStatus.SYSTEM_EXCEPTION || status2 == ResultStatus.SYSTEM_EXCEPTION) {
