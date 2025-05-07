@@ -21,6 +21,7 @@ public class DataCollectionService {
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final DatabaseAccess databaseAccess;
     private final LakeStatsLogger logger = new LakeStatsLogger(DataCollectionService.class);
+    private static final LocalDateTime DATA_COLLECTION_UPDATE_THRESHOLD = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 30));
 
     public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
@@ -85,7 +86,7 @@ public class DataCollectionService {
             RunLakeCollectorResult lastRunResult = databaseAccess.getLastRunResult(lake.id());
             if (lastRunResult != null &&
                     lastRunResult.success() &&
-                    lastRunResult.timestamp().isAfter(LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0)))) {
+                    lastRunResult.timestamp().isAfter(DATA_COLLECTION_UPDATE_THRESHOLD)) {
                 return new RunLakeCollectorResult(
                         LocalDateTime.now(),
                         lake.id(),
