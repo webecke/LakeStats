@@ -112,7 +112,7 @@ public class DataCollectionService {
         }
 
         logger.infoForLake("Collector for %s has been run in %d milliseconds".formatted(lake.id(), timer.end()), lake.id());
-        return new RunLakeCollectorResult(
+        RunLakeCollectorResult result = new RunLakeCollectorResult(
                 LocalDateTime.now(),
                 lake.id(),
                 status,
@@ -120,5 +120,13 @@ public class DataCollectionService {
                 timer.getElapsedTime(),
                 null
         );
+
+        try {
+            databaseAccess.publishLastRunResult(result);
+        } catch (DataAccessException e) {
+            logger.errorForLake("Error while publishing last run result", lake.id(), e);
+        }
+
+        return result;
     }
 }
