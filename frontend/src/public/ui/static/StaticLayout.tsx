@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation, ScrollRestoration } from "react-router-dom";
 import Footer from "../../components/layout/Footer.tsx";
 import logoSvg from "../../../assets/LakeStatsLogo-NoBackground.svg";
 import { ArrowLeft } from "lucide-react";
@@ -16,6 +16,8 @@ export default function StaticLayout() {
 
     return (
         <div className="static-layout">
+            <ScrollRestoration />
+
             <div className="static-header-container">
                 <Link to={"/"}>
                     <header className="home-header">
