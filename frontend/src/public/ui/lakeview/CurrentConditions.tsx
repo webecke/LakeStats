@@ -2,6 +2,8 @@ import React from "react";
 import StatItem from "./StatItem";
 import "./LakeViewStyles.css";
 import type { CurrentConditions as CurrentConditionsType } from "../../../shared/services/data";
+import { AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface CurrentConditionsProps {
     data: CurrentConditionsType;
@@ -14,6 +16,18 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
     });
     return (
         <div className="current-conditions">
+            {new Date().getTime() - data.date.getTime() > 36 * 60 * 60 * 1000 && (
+                <div className="outdated-data-warning">
+                    <AlertTriangle size={18} />
+                    <div>
+                        <p>This data is out of date. The Bureau of Reclamation occasionally experiences delays in reporting.</p>
+                        <p className="outdated-data-link">
+                            <Link to="/data">Learn more</Link>
+                        </p>
+                    </div>
+                </div>
+            )}
+
             <StatItem
                 value={data.levelToday}
                 label="Current Elevation"

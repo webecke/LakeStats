@@ -11,10 +11,7 @@ import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.utils.SystemTimer;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +21,7 @@ public class DataCollectionService {
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final DatabaseAccess databaseAccess;
     private final LakeStatsLogger logger = new LakeStatsLogger(DataCollectionService.class);
+    private static final LocalDateTime DATA_COLLECTION_UPDATE_THRESHOLD = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 30));
 
     public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
@@ -37,19 +35,29 @@ public class DataCollectionService {
         SystemTimer timer = new SystemTimer();
         List<String> lakeIds = databaseAccess.getAllLakeIds();
         List<RunLakeCollectorResult> lakeCollectorResults = new ArrayList<>();
-        ResultStatus status = ResultStatus.SUCCESS;
+        ResultStatus worstStatusSoFar = ResultStatus.SUCCESS;
+        int successCount = 0;
+        int dataNotUpdatedCount = 0;
 
         for (String lakeId : lakeIds) {
             LakeSystemSettings settings = databaseAccess.getLakeSystemSettings(lakeId);
-
             if (settings.status() == LakeSystemSettings.Status.DISABLED)  { continue; }
 
             RunLakeCollectorResult result = collectDataForLake(lakeId);
             lakeCollectorResults.add(result);
-            status = ResultStatus.getMoreSevereStatus(status, result.status());
+
+            // Handle status conditions and tracking
+            if (result.status() == ResultStatus.SUCCESS || result.status() == ResultStatus.SKIPPED) successCount++;
+            else if (result.status() == ResultStatus.SOURCE_DATA_NOT_UPDATED) dataNotUpdatedCount++;
+            worstStatusSoFar = ResultStatus.getMoreSevereStatus(worstStatusSoFar, result.status());
         }
 
-        return new RunSystemResult(LocalDateTime.now(), status, "Data collection completed without exploding",
+        // Override outdated source status if more lakes are up to date than are outdated
+        if (worstStatusSoFar == ResultStatus.SOURCE_DATA_NOT_UPDATED) {
+            if (successCount > dataNotUpdatedCount) worstStatusSoFar = ResultStatus.SUCCESS;
+        }
+
+        return new RunSystemResult(LocalDateTime.now(), worstStatusSoFar, "Data collection completed without exploding",
                 timer.end(), lakeCollectorResults);
     }
 
@@ -74,6 +82,32 @@ public class DataCollectionService {
     }
 
     public RunLakeCollectorResult collectDataForLake(Lake lake) {
+        try { /// Check if the lake has already been run today successfully
+            RunLakeCollectorResult lastRunResult = databaseAccess.getLastRunResult(lake.id());
+            if (lastRunResult != null &&
+                    lastRunResult.success() &&
+                    lastRunResult.timestamp().isAfter(DATA_COLLECTION_UPDATE_THRESHOLD)) {
+                return new RunLakeCollectorResult(
+                        LocalDateTime.now(),
+                        lake.id(),
+                        ResultStatus.SKIPPED,
+                        "Data for this lake has already been updated today at %s".formatted(lastRunResult.timestamp().toString()),
+                        -1,
+                        null
+                );
+            }
+        } catch (DataAccessException e) {
+            logger.errorForLake("Unknown error while checking last run result", lake.id(), e);
+            return new RunLakeCollectorResult(
+                    LocalDateTime.now(),
+                    lake.id(),
+                    ResultStatus.SYSTEM_EXCEPTION,
+                    "Unknown error while checking last run result",
+                    -1,
+                    null
+            );
+        }
+
         logger.infoForLake("Running collector for lake %s".formatted(lake.id()), lake.id());
 
         SystemTimer timer = new SystemTimer();
@@ -111,8 +145,8 @@ public class DataCollectionService {
             logger.errorForLake(resultMessage, lake.id(), e);
         }
 
-        logger.infoForLake("Collector for %s has been run in %d milliseconds".formatted(lake.id(), timer.end()), lake.id());
-        return new RunLakeCollectorResult(
+        logger.infoForLake("Collector for %s has been run in %d milliseconds with status %s".formatted(lake.id(), timer.end(), status), lake.id());
+        RunLakeCollectorResult result = new RunLakeCollectorResult(
                 LocalDateTime.now(),
                 lake.id(),
                 status,
@@ -120,5 +154,13 @@ public class DataCollectionService {
                 timer.getElapsedTime(),
                 null
         );
+
+        try {
+            databaseAccess.publishLastRunResult(result);
+        } catch (DataAccessException e) {
+            logger.errorForLake("Error while publishing last run result", lake.id(), e);
+        }
+
+        return result;
     }
 }

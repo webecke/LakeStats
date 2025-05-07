@@ -3,6 +3,7 @@ package dev.webecke.lakestats.dao.firebase;
 import com.google.cloud.firestore.DocumentReference;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
+import dev.webecke.lakestats.model.RunLakeCollectorResult;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 
 import com.google.cloud.firestore.Firestore;
@@ -30,7 +31,11 @@ public class FirestoreDao implements DatabaseAccess {
 
     @Override
     public void publishCurrentConditions(CurrentConditions conditions) throws DataAccessException {
-        firestore.collection(conditions.lakeId()).document("current_conditions").set(serializer.serializeToMap(conditions));
+        try {
+            firestore.collection(conditions.lakeId()).document("current_conditions").set(serializer.serializeToMap(conditions));
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to publish current conditions for " + conditions.lakeId(), e);
+        }
     }
 
     @Override
@@ -91,6 +96,36 @@ public class FirestoreDao implements DatabaseAccess {
             );
         } catch (Exception e) {
             throw new DataAccessException("Failed to fetch lake details for " + lakeId, e);
+        }
+    }
+
+    @Override
+    public void publishLastRunResult(RunLakeCollectorResult result) throws DataAccessException {
+        try {
+            firestore.collection(result.lakeId()).document("last_run_result").set(serializer.serializeToMap(result));
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to publish last run result for " + result.lakeId(), e);
+        }
+    }
+
+    @Override
+    public RunLakeCollectorResult getLastRunResult(String lakeId) throws DataAccessException {
+        try {
+            var documentSnapshot = firestore.collection(lakeId)
+                    .document("last_run_result")
+                    .get()
+                    .get(); // blocking call to get()
+
+            if (!documentSnapshot.exists()) {
+                return null;
+            }
+
+            return serializer.deserialize(
+                    serializer.serialize(documentSnapshot.getData()),
+                    RunLakeCollectorResult.class
+            );
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to fetch last run result for " + lakeId, e);
         }
     }
 }

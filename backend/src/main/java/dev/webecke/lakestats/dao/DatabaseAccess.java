@@ -1,5 +1,6 @@
 package dev.webecke.lakestats.dao;
 
+import dev.webecke.lakestats.model.RunLakeCollectorResult;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 import dev.webecke.lakestats.model.LakeSystemSettings;
 import dev.webecke.lakestats.model.geography.Lake;
@@ -12,4 +13,6 @@ public interface DatabaseAccess {
     List<String> getAllLakeIds() throws DataAccessException;
     LakeSystemSettings getLakeSystemSettings(String lakeId) throws DataAccessException;
     Lake getLakeDetails(String lakeId) throws DataAccessException;
+    RunLakeCollectorResult getLastRunResult(String lakeId) throws DataAccessException;
+    void publishLastRunResult(RunLakeCollectorResult result) throws DataAccessException;
 }

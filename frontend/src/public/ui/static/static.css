@@ -1,13 +1,52 @@
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-button:hover {
+    background-color: var(--background-elevated);
+    color: var(--text-primary);
+}
+
+.back-button:focus {
+    outline: 2px solid var(--action-primary);
+    outline-offset: 2px;
+}
+
+.back-button svg {
+    color: var(--action-primary);
+}
+
+@media (max-width: 480px) {
+    .back-button {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .back-button svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
 .static-container {
     max-width: 650px;
-    margin: 0 auto;
     padding: 2rem;
     color: var(--text-primary);
     background-color: var(--background-elevated);
     border-radius: 12px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
+    margin: 0 auto 2rem;
+    text-align: left;
 }
 
 .static-container h1 {
@@ -54,4 +93,33 @@
     .static-section p {
         font-size: 0.95rem;
     }
+}
+
+blockquote {
+    max-width: 550px;
+    background-color: var(--background-elevated);
+    border-left: 4px solid var(--action-primary);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 1rem;
+    border-radius: 4px;
+    position: relative;
+}
+
+blockquote p {
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 0;
+    position: relative;
+}
+
+blockquote cite {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: normal;
+}
+
+blockquote cite::before {
+    content: "— ";
 }
