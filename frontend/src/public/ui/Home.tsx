@@ -95,6 +95,9 @@ export default function Home() {
                 <p>
                     <a href="mailto:feedback@lakestats.com">feedback@lakestats.com</a>
                 </p>
+
+                <p>If you're interested in where we get our data, <Link to={"/data"}>check out this page
+                 about our data sources!</Link></p>
             </section>
         </div>
     );
