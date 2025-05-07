@@ -8,13 +8,13 @@ const AdminDashboard = lazy(() => import("./admin/pages/Dashboard.tsx"));
 const LakeManager = lazy(() => import("./admin/pages/LakeManager.tsx"));
 const StaticLayout = lazy(() => import("./public/ui/static/StaticLayout.tsx"));
 const Terms = lazy(() => import("./public/ui/static/Terms.tsx"));
+const Feedback = lazy(() => import("./public/ui/static/Feedback.tsx"));
+const DataSourcesInfo = lazy(() => import("./public/ui/static/DataSourcesInfo.tsx"));
 
 // load these components everytime
 import Home from "./public/ui/Home.tsx";
 import LakeViewPage from "./public/ui/lakeview/LakeViewPage.tsx";
 import NotFound from "./public/ui/static/NotFound.tsx";
-import Feedback from "./public/ui/static/Feedback.tsx";
-import DataSourcesInfo from "./public/ui/static/DataSourcesInfo.tsx";
 
 export const router = createBrowserRouter([
     {
