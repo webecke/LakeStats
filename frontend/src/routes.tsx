@@ -14,6 +14,7 @@ import Home from "./public/ui/Home.tsx";
 import LakeViewPage from "./public/ui/lakeview/LakeViewPage.tsx";
 import NotFound from "./public/ui/static/NotFound.tsx";
 import Feedback from "./public/ui/static/Feedback.tsx";
+import DataSourcesInfo from "./public/ui/static/DataSourcesInfo.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
             {
                 path: "/feedback",
                 element: <Feedback />,
+            },
+            {
+                path: "/data",
+                element: <DataSourcesInfo />,
             },
         ],
     },

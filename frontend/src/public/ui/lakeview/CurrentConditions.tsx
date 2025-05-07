@@ -22,7 +22,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
                     <div>
                         <p>This data is out of date. The Bureau of Reclamation occasionally experiences delays in reporting.</p>
                         <p className="outdated-data-link">
-                            <Link to="/data-updates">Learn more</Link>
+                            <Link to="/data">Learn more</Link>
                         </p>
                     </div>
                 </div>

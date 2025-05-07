@@ -7,7 +7,7 @@
     border-radius: 12px;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    text-align: center;
+    text-align: left;
 }
 
 .static-container h1 {
@@ -54,4 +54,33 @@
     .static-section p {
         font-size: 0.95rem;
     }
+}
+
+blockquote {
+    max-width: 550px;
+    background-color: var(--background-elevated);
+    border-left: 4px solid var(--action-primary);
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 1rem;
+    border-radius: 4px;
+    position: relative;
+}
+
+blockquote p {
+    color: var(--text-primary);
+    font-style: italic;
+    margin: 0;
+    position: relative;
+}
+
+blockquote cite {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-style: normal;
+}
+
+blockquote cite::before {
+    content: "— ";
 }
