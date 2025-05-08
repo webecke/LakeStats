@@ -39,10 +39,7 @@ public class CurrentConditionsAggregator {
                 dataset.dateIndex().get(todayDate.minusDays(1)).value(),
                 dataset.dateIndex().get(todayDate.minusWeeks(2)).value(),
                 dataset.dateIndex().get(todayDate.minusYears(1)).value(),
-                multiYearAverageOnThisDate(todayDate, 10, dataset),
-                lake.fullPoolElevation(),
-                lake.minPowerPoolElevation(),
-                lake.deadPoolElevation()
+                multiYearAverageOnThisDate(todayDate, 10, dataset)
         );
     }
 

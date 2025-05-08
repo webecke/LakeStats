@@ -11,8 +11,5 @@ public record CurrentConditions(
         float levelYesterday,
         float levelTwoWeeksAgo,
         float levelOneYearAgo,
-        float levelTenYearAverage,
-        float referenceLevelFullPool,
-        float referenceLevelMinPowerPool,
-        float referenceLevelDeadPool
+        float levelTenYearAverage
 ) {}
