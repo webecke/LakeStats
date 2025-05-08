@@ -114,7 +114,7 @@ const LakeViewPage: React.FC = () => {
             >
                 {(data) => (
                     <>
-                        <CurrentConditions data={data} />
+                        <CurrentConditions currentConditionsData={data} lakeDetails={lakeDetails}/>
 
                         <Callout
                             visible={showBetaFeedback}
