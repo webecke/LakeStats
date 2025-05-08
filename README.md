@@ -20,7 +20,6 @@ Other websites exist that display this information. However, currently they have
 Additionally, I just want to have a project to learn new technologies. This project will be the first time that I am using:
 - Google Cloud Run
 - Google Firebase
-- GoLang
 - React
 
 ## Deployment
