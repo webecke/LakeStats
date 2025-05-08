@@ -55,8 +55,8 @@ const LakeViewPage: React.FC = () => {
             const summary: string =
                 `Latest stats for ${lakeInfo.lakeName} \n` +
                 `Current elevation: ${currentConditions.levelToday} ft\n` +
-                `${formatValue(currentConditions.levelToday - currentConditions.levelYesterday)} since yesterday\n` +
-                `${formatValue(currentConditions.levelToday - currentConditions.levelOneYearAgo)} since a year ago\n`
+                `${formatValue(currentConditions.levelToday - currentConditions.levelYesterday)} vs yesterday\n` +
+                `${formatValue(currentConditions.levelToday - currentConditions.levelOneYearAgo)} vs 1 year ago\n`
             setSummaryString(summary);
         }
     }, [lakeInfo, lakeId, currentConditions]);

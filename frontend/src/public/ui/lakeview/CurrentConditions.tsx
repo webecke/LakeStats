@@ -44,13 +44,13 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
             <div className="stat-row">
                 <StatItem
                     value={data.levelToday - data.levelYesterday}
-                    label="Since Yesterday"
+                    label="vs Yesterday"
                     className="day-change"
                     tooltip={`Change in lake level since yesterday's reading [${data.levelYesterday} ft]`}
                 />
                 <StatItem
                     value={data.levelToday - data.levelTwoWeeksAgo}
-                    label="Last 2 Weeks"
+                    label="vs 2 Weeks Ago"
                     className="week-change"
                     tooltip={`Change in lake level over the past two weeks [${data.levelTwoWeeksAgo} ft]`}
                 />
@@ -59,13 +59,13 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({ data }) => {
             <div className="stat-row">
                 <StatItem
                     value={data.levelToday - data.levelOneYearAgo}
-                    label="Since A Year Ago"
+                    label="vs 1 Year Ago"
                     className="year-change"
                     tooltip={`Change in lake level compared to the same date last year [${data.levelOneYearAgo} ft]`}
                 />
                 <StatItem
                     value={data.levelToday - data.levelTenYearAverage}
-                    label="From 10 Year Avg"
+                    label="vs 10 Year Avg"
                     className="ten-year-diff"
                     tooltip={
                         <p>
