@@ -2,6 +2,7 @@ package dev.webecke.lakestats.model;
 
 import dev.webecke.lakestats.model.features.LakeSystemFeatures;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
  */
 public record RunLakeCollectorResult(
         LocalDateTime timestamp,
+        LocalDate dateCollected,
         String lakeId,
         ResultStatus status,
         String message,

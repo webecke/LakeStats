@@ -21,7 +21,6 @@ public class DataCollectionService {
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final DatabaseAccess databaseAccess;
     private final LakeStatsLogger logger = new LakeStatsLogger(DataCollectionService.class);
-    private static final LocalDateTime DATA_COLLECTION_UPDATE_THRESHOLD = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 30));
 
     public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
@@ -70,6 +69,7 @@ public class DataCollectionService {
             logger.errorForLake(resultMessage, lakeId, e);
             return new RunLakeCollectorResult(
                     LocalDateTime.now(),
+                    null,
                     lakeId,
                     ResultStatus.CONFIGURATION_ERROR,
                     resultMessage,
@@ -86,9 +86,11 @@ public class DataCollectionService {
             RunLakeCollectorResult lastRunResult = databaseAccess.getLastRunResult(lake.id());
             if (lastRunResult != null &&
                     lastRunResult.success() &&
-                    lastRunResult.timestamp().isAfter(DATA_COLLECTION_UPDATE_THRESHOLD)) {
+                    lastRunResult.dateCollected() != null &&
+                    lastRunResult.dateCollected().isEqual(LocalDate.now())){
                 return new RunLakeCollectorResult(
                         LocalDateTime.now(),
+                        lastRunResult.dateCollected(),
                         lake.id(),
                         ResultStatus.SKIPPED,
                         "Data for this lake has already been updated today at %s".formatted(lastRunResult.timestamp().toString()),
@@ -100,6 +102,7 @@ public class DataCollectionService {
             logger.errorForLake("Unknown error while checking last run result", lake.id(), e);
             return new RunLakeCollectorResult(
                     LocalDateTime.now(),
+                    null,
                     lake.id(),
                     ResultStatus.SYSTEM_EXCEPTION,
                     "Unknown error while checking last run result",
@@ -113,10 +116,12 @@ public class DataCollectionService {
         SystemTimer timer = new SystemTimer();
         ResultStatus status;
         String resultMessage = "Data collection completed and successfully published";
+        LocalDate dateCollected = null;
 
         try {
             CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
             CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
+            dateCollected = currentConditions.date();
 
             try {
                 databaseAccess.publishCurrentConditions(currentConditions);
@@ -129,7 +134,7 @@ public class DataCollectionService {
             }
 
             LocalDate utahToday = ZonedDateTime.now(ZoneId.of("America/Denver")).toLocalDate();
-            if (currentConditions.date().isBefore(utahToday)) {
+            if (dateCollected.isBefore(utahToday)) {
                 status = ResultStatus.SOURCE_DATA_NOT_UPDATED;
                 resultMessage = "Source data has not been updated for today [last update: %s]".formatted(currentConditions.date());
                 logger.warnForLake(resultMessage, lake.id());
@@ -148,6 +153,7 @@ public class DataCollectionService {
         logger.infoForLake("Collector for %s has been run in %d milliseconds with status %s".formatted(lake.id(), timer.end(), status), lake.id());
         RunLakeCollectorResult result = new RunLakeCollectorResult(
                 LocalDateTime.now(),
+                dateCollected,
                 lake.id(),
                 status,
                 resultMessage,
