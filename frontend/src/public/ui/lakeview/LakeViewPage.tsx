@@ -29,7 +29,9 @@ const LakeViewPage: React.FC = () => {
     // Fetch detailed lake data including regions
     const { loading: loadingDetails, error: detailsError, lakeDetails } = useLakeDetails(lakeId);
 
-    const [showBetaFeedback, setShowBetaFeedback] = useState(localStorage.getItem("hideBetaFeedback") !== "true");
+    const [showBetaFeedback, setShowBetaFeedback] = useState(
+        localStorage.getItem("hideBetaFeedback") !== "true"
+    );
     const [summaryString, setSummaryString] = useState("");
 
     // Fetch current conditions data
@@ -45,9 +47,9 @@ const LakeViewPage: React.FC = () => {
             const prefix = value >= 0 ? "up" : "down";
 
             if (feet > 0) {
-                return `${feet} feet ${inches}${fraction ? ' ' + fraction : ''} inches ${prefix}`;
+                return `${feet} feet ${inches}${fraction ? " " + fraction : ""} inches ${prefix}`;
             } else {
-                return `${inches}${fraction ? ' ' + fraction : ''} inches ${prefix}`;
+                return `${inches}${fraction ? " " + fraction : ""} inches ${prefix}`;
             }
         };
 
@@ -56,7 +58,7 @@ const LakeViewPage: React.FC = () => {
                 `Latest stats for ${lakeInfo.lakeName} \n` +
                 `Current elevation: ${currentConditions.levelToday} ft\n` +
                 `${formatValue(currentConditions.levelToday - currentConditions.levelYesterday)} vs yesterday\n` +
-                `${formatValue(currentConditions.levelToday - currentConditions.levelOneYearAgo)} vs 1 year ago\n`
+                `${formatValue(currentConditions.levelToday - currentConditions.levelOneYearAgo)} vs 1 year ago\n`;
             setSummaryString(summary);
         }
     }, [lakeInfo, lakeId, currentConditions]);
@@ -92,9 +94,9 @@ const LakeViewPage: React.FC = () => {
         : {};
 
     const handleCloseFeedback = () => {
-        localStorage.setItem("hideBetaFeedback", "true")
+        localStorage.setItem("hideBetaFeedback", "true");
         setShowBetaFeedback(false);
-    }
+    };
 
     return (
         <div className="lake-view" style={accentColorStyle}>
@@ -114,20 +116,29 @@ const LakeViewPage: React.FC = () => {
             >
                 {(data) => (
                     <>
-                        <CurrentConditions currentConditionsData={data} lakeDetails={lakeDetails}/>
+                        <CurrentConditions currentConditionsData={data} lakeDetails={lakeDetails} />
 
                         <Callout
                             visible={showBetaFeedback}
                             type={"info"}
                             title={"Give us feedback!"}
-                            onClose={handleCloseFeedback}>
+                            onClose={handleCloseFeedback}
+                        >
                             <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
-                                <p>Help us improve LakeStats! Take 60 seconds to share your thoughts</p>
-                                <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank"><Button>Take survey</Button></a>
+                                <p>
+                                    Help us improve LakeStats! Take 60 seconds to share your
+                                    thoughts
+                                </p>
+                                <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank">
+                                    <Button>Take survey</Button>
+                                </a>
                             </div>
                         </Callout>
 
-                        <RegionSelector regions={lakeDetails.regions} showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}>
+                        <RegionSelector
+                            regions={lakeDetails.regions}
+                            showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}
+                        >
                             {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
                                 <AccessPointList currentElevation={data.levelToday} />
                             )}

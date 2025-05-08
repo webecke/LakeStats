@@ -66,9 +66,6 @@ export interface CurrentConditions {
     levelTwoWeeksAgo: number;
     levelOneYearAgo: number;
     levelTenYearAverage: number;
-    referenceLevelFullPool: number;
-    referenceLevelMinPowerPool: number;
-    referenceLevelDeadPool: number;
 }
 
 export interface SystemError {

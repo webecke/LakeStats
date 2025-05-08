@@ -55,10 +55,15 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
 
     const tooltipContent = (
         <div>
-            <div><strong>Safe level:</strong> {accessPoint.minSafeElevation} ft</div>
-            <div><strong>Usable level:</strong> {accessPoint.minUsableElevation} ft</div>
-            <p style={{fontSize: "0.625rem", lineHeight: "1", fontStyle: "italic"}}>
-                Difference shown is between current level and "usable" level. These aren't official numbers, verify levels yourself.
+            <div>
+                <strong>Safe level:</strong> {accessPoint.minSafeElevation} ft
+            </div>
+            <div>
+                <strong>Usable level:</strong> {accessPoint.minUsableElevation} ft
+            </div>
+            <p style={{ fontSize: "0.625rem", lineHeight: "1", fontStyle: "italic" }}>
+                Difference shown is between current level and "usable" level. These aren't official
+                numbers, verify levels yourself.
             </p>
         </div>
     );
@@ -83,7 +88,9 @@ const AccessPointItem: React.FC<AccessPointItemProps> = ({ accessPoint, currentE
             <Tooltip content={tooltipContent}>
                 <div className="access-point-details">
                     <div className={`status-text ${statusClass}`}>{status}</div>
-                    <div className={`elevation-difference ${statusClass}`}>{formattedDifference}</div>
+                    <div className={`elevation-difference ${statusClass}`}>
+                        {formattedDifference}
+                    </div>
                 </div>
             </Tooltip>
         </div>

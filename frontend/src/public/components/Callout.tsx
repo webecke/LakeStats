@@ -27,14 +27,14 @@ const defaultIcons = {
 };
 
 export const Callout: React.FC<CalloutProps> = ({
-                                                    visible = true,
-                                                    children,
-                                                    type = "info",
-                                                    customIcon,
-                                                    title,
-                                                    className = "",
-                                                    onClose,
-                                                }) => {
+    visible = true,
+    children,
+    type = "info",
+    customIcon,
+    title,
+    className = "",
+    onClose,
+}) => {
     if (!visible) return null;
 
     const icon = customIcon || defaultIcons[type];
@@ -47,11 +47,7 @@ export const Callout: React.FC<CalloutProps> = ({
                     {title && <h3 className="callout__title">{title}</h3>}
                 </div>
                 {onClose && (
-                    <button
-                        className="callout__close"
-                        onClick={onClose}
-                        aria-label="Close callout"
-                    >
+                    <button className="callout__close" onClick={onClose} aria-label="Close callout">
                         <X className="callout__close-icon" />
                     </button>
                 )}

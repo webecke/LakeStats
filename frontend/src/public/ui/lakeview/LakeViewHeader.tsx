@@ -11,34 +11,44 @@ interface LakeViewHeaderProps {
     summaryString?: string;
 }
 
-const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, lakeId, brandColor, summaryString }) => {
+const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({
+    lakeName,
+    brandedName,
+    lakeId,
+    brandColor,
+    summaryString,
+}) => {
     const brandStyle = brandColor ? { color: brandColor } : {};
 
     const onShare = () => {
         const shareText = summaryString || `Check out the latest stats for ${lakeName}`;
 
         if (navigator.share) {
-            navigator.share({
-                title: `Latest ${lakeName} Stats`,
-                text: shareText,
-                url: `/${lakeId}`
-            })
+            navigator
+                .share({
+                    title: `Latest ${lakeName} Stats`,
+                    text: shareText,
+                    url: `/${lakeId}`,
+                })
                 .catch(console.error);
         } else {
             // Fallback: Copy to clipboard
             try {
                 const clipboardText = `${shareText}\nStay up to date at lakestats.com/${lakeId}`;
-                navigator.clipboard.writeText(clipboardText)
+                navigator.clipboard
+                    .writeText(clipboardText)
                     .then(() => {
                         alert("Summary of stats copied to clipboard!");
                     })
-                    .catch(err => {
+                    .catch((err) => {
                         console.error("Failed to copy: ", err);
                         alert("Couldn't copy to clipboard. Please try again.");
                     });
             } catch (err) {
                 console.error("Clipboard API not available", err);
-                alert(`Sharing is unavailable on your browser. Try just copying this link: lakestats.com/${lakeId}`);
+                alert(
+                    `Sharing is unavailable on your browser. Try just copying this link: lakestats.com/${lakeId}`
+                );
             }
         }
     };
@@ -58,7 +68,7 @@ const LakeViewHeader: React.FC<LakeViewHeaderProps> = ({ lakeName, brandedName, 
                     className="home-link"
                     onClick={onShare}
                     aria-label="Share"
-                    style={{ right: 0, left: 'auto' }}
+                    style={{ right: 0, left: "auto" }}
                 >
                     <Share2 className="home-icon" size={24} />
                 </div>

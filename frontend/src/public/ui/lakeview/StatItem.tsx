@@ -28,17 +28,29 @@ const StatItem: React.FC<StatItemProps> = ({
     if (!showStat) return null;
 
     // Get icon and styling based on value
-    const icon = value > 0 ? <TrendingUp className="trend-icon trend-up" /> :
-        value < 0 ? <TrendingDown className="trend-icon trend-down" /> :
-            <MinusCircle className="trend-icon trend-neutral" />;
+    const icon =
+        value > 0 ? (
+            <TrendingUp className="trend-icon trend-up" />
+        ) : value < 0 ? (
+            <TrendingDown className="trend-icon trend-down" />
+        ) : (
+            <MinusCircle className="trend-icon trend-neutral" />
+        );
 
-    const numberClass = value > 0 ? "positive" :
-        value < 0 ? "negative" : "neutral";
+    const numberClass = value > 0 ? "positive" : value < 0 ? "negative" : "neutral";
 
     // Determine prefix
-    const prefix = isCurrentElevation ? "" :
-        isTrendStat ? (value > 0 ? "+" : value < 0 ? "-" : "") :
-            (value < 0 ? "-" : "");
+    const prefix = isCurrentElevation
+        ? ""
+        : isTrendStat
+          ? value > 0
+              ? "+"
+              : value < 0
+                ? "-"
+                : ""
+          : value < 0
+            ? "-"
+            : "";
 
     const { feet, inches, fraction } = getFeetAndInchesWithFraction(value);
 
@@ -49,31 +61,26 @@ const StatItem: React.FC<StatItemProps> = ({
             {feet > 0 ? (
                 <>
                     {feet}
-                    <span className="unit">ft</span>
-                    {" "}
-                    {inches}
+                    <span className="unit">ft</span> {inches}
                     <span className="unit">in</span>
                 </>
-            ) :
-                (inches || fraction ?
-                    <>
-                        {inches}
-                        {" " + fraction}
-                        <span className="unit">in</span>
-                    </>
-                : (value !== 0 ?
-                        <>
-                            {'< ⅛'}
-                            <span className="unit">in</span>
-                        </>
-                            :
-                        <>
-                            {'0'}
-                            <span className="unit">in</span>
-                        </>
-                    )
-                )
-            }
+            ) : inches || fraction ? (
+                <>
+                    {inches}
+                    {" " + fraction}
+                    <span className="unit">in</span>
+                </>
+            ) : value !== 0 ? (
+                <>
+                    {"< ⅛"}
+                    <span className="unit">in</span>
+                </>
+            ) : (
+                <>
+                    {"0"}
+                    <span className="unit">in</span>
+                </>
+            )}
 
             {!isCurrentElevation && isTrendStat && icon}
         </>
