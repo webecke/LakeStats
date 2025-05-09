@@ -9,38 +9,26 @@ import { useLakeDetails } from "../../datahooks/useLakeDetails";
 import { useCurrentConditions } from "../../datahooks/useCurrentConditions";
 import "./LakeViewStyles.css";
 import { useNavigate, useParams } from "react-router-dom";
-import AsyncContainer from "../../components/AsyncContainer";
 import { PageTitle } from "../../components/PageTitle";
 import { handleNotFoundRedirect } from "../../../routes";
 import { LakeSystemFeatures } from "../../../shared/services/data";
 import { Callout } from "../../components/Callout.tsx";
 import { Button } from "../../../shared/components/Button";
 import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
-import Past365Days from "./Past365Days.tsx";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
-
-    // Get lakeId from URL parameters
     const { lakeId } = useParams<{ lakeId: string }>();
-
-    // Fetch basic lake info (name, status, etc.)
-    const { loading: loadingInfo, error: infoError, data: lakeInfo } = useBasicLakeInfo(lakeId);
-
-    // Fetch detailed lake data including regions
-    const { loading: loadingDetails, error: detailsError, data: lakeDetails } = useLakeDetails(lakeId);
 
     const [showBetaFeedback, setShowBetaFeedback] = useState(
         localStorage.getItem("hideBetaFeedback") !== "true"
     );
     const [summaryString, setSummaryString] = useState("");
 
-    // Fetch current conditions data
-    const {
-        loading: loadingConditions,
-        error: conditionsError,
-        data: currentConditions,
-    } = useCurrentConditions(lakeId);
+    // Fetch all the data
+    const { loading: loadingInfo, error: infoError, data: lakeInfo } = useBasicLakeInfo(lakeId);
+    const { loading: loadingDetails, error: detailsError, data: lakeDetails } = useLakeDetails(lakeId);
+    const { loading: loadingConditions, error: conditionsError, data: currentConditions } = useCurrentConditions(lakeId);
 
     useEffect(() => {
         const formatValue = (value: number) => {
@@ -110,45 +98,39 @@ const LakeViewPage: React.FC = () => {
                 summaryString={summaryString}
             />
 
-            <AsyncContainer
+            <CurrentConditions
+                lakeDetails={lakeDetails}
+                currentConditionsData={currentConditions}
                 isLoading={loadingConditions}
-                error={conditionsError}
-                data={currentConditions}
+                loadingError={conditionsError}/>
+
+            <Callout
+                visible={showBetaFeedback}
+                type={"info"}
+                title={"Give us feedback!"}
+                onClose={handleCloseFeedback}
             >
-                {(data) => (
-                    <>
-                        <CurrentConditions currentConditionsData={data} lakeDetails={lakeDetails} />
+                <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+                    <p>
+                        Help us improve LakeStats! Take 60 seconds to share your
+                        thoughts
+                    </p>
+                    <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank">
+                        <Button>Take survey</Button>
+                    </a>
+                </div>
+            </Callout>
 
-                        <Callout
-                            visible={showBetaFeedback}
-                            type={"info"}
-                            title={"Give us feedback!"}
-                            onClose={handleCloseFeedback}
-                        >
-                            <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
-                                <p>
-                                    Help us improve LakeStats! Take 60 seconds to share your
-                                    thoughts
-                                </p>
-                                <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank">
-                                    <Button>Take survey</Button>
-                                </a>
-                            </div>
-                        </Callout>
-
-                        <RegionSelector
-                            regions={lakeDetails.regions}
-                            showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}
-                        >
-                            {lakeInfo?.features.includes(LakeSystemFeatures.ACCESS_POINTS) && (
-                                <AccessPointList currentElevation={data.levelToday} />
-                            )}
-                        </RegionSelector>
-                    </>
-                )}
-            </AsyncContainer>
-
-            <Past365Days/>
+            <RegionSelector
+                regions={lakeDetails.regions}
+                showSelector={lakeInfo?.features.includes(LakeSystemFeatures.REGIONS)}
+            >
+                <AccessPointList
+                    lakeSystemSettings={lakeInfo}
+                    currentElevation={currentConditions && currentConditions.levelToday}
+                    isLoading={loadingConditions}
+                    loadingError={conditionsError}/>
+            </RegionSelector>
         </div>
     );
 };

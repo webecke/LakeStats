@@ -2,12 +2,21 @@ import React from "react";
 import AccessPointItem from "./AccessPointItem";
 import { useSelectedRegion } from "./RegionContext";
 import "./AccessPointList.css";
+import { LakeSystemFeatures, LakeSystemSettings } from "../../../shared/services/data";
+import AsyncContainer from "../../components/AsyncContainer.tsx";
 
 interface AccessPointListProps {
-    currentElevation: number;
+    currentElevation: number | null;
+    lakeSystemSettings: LakeSystemSettings;
+    isLoading: boolean;
+    loadingError: string | null;
 }
 
-const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation }) => {
+const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation, lakeSystemSettings, isLoading, loadingError }) => {
+    if (!lakeSystemSettings.features.includes(LakeSystemFeatures.ACCESS_POINTS)) {
+        return null;
+    }
+
     // Get selected region from context
     const { selectedRegion } = useSelectedRegion();
 
@@ -15,7 +24,7 @@ const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation }) =
     const accessPoints = selectedRegion.accessPoints;
     // Count open access points
     const openAccessPoints = accessPoints.filter(
-        (ap) => currentElevation >= ap.minSafeElevation
+        (ap) => (currentElevation || 0) >= ap.minSafeElevation
     ).length;
 
     return (
@@ -28,23 +37,27 @@ const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation }) =
                 </div>
             </div>
 
-            <div className="access-point-items">
-                {!accessPoints.length ? (
-                    <div className="no-access-points">
-                        No access points available in this region
+            <AsyncContainer isLoading={isLoading} error={loadingError} data={currentElevation}>
+                {(levelData) => (
+                    <div className="access-point-items">
+                        {!accessPoints.length ? (
+                            <div className="no-access-points">
+                                No access points available in this region
+                            </div>
+                        ) : (
+                            <>
+                                {accessPoints.map((accessPoint) => (
+                                    <AccessPointItem
+                                        key={accessPoint.id}
+                                        accessPoint={accessPoint}
+                                        currentElevation={levelData}
+                                    />
+                                ))}
+                            </>
+                        )}
                     </div>
-                ) : (
-                    <>
-                        {accessPoints.map((accessPoint) => (
-                            <AccessPointItem
-                                key={accessPoint.id}
-                                accessPoint={accessPoint}
-                                currentElevation={currentElevation}
-                            />
-                        ))}
-                    </>
                 )}
-            </div>
+            </AsyncContainer>
         </div>
     );
 };
