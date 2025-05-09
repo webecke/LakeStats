@@ -16,6 +16,7 @@ import { LakeSystemFeatures } from "../../../shared/services/data";
 import { Callout } from "../../components/Callout.tsx";
 import { Button } from "../../../shared/components/Button";
 import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
+import Past365Days from "./Past365Days.tsx";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -24,10 +25,10 @@ const LakeViewPage: React.FC = () => {
     const { lakeId } = useParams<{ lakeId: string }>();
 
     // Fetch basic lake info (name, status, etc.)
-    const { loading: loadingInfo, error: infoError, lakeInfo } = useBasicLakeInfo(lakeId);
+    const { loading: loadingInfo, error: infoError, data: lakeInfo } = useBasicLakeInfo(lakeId);
 
     // Fetch detailed lake data including regions
-    const { loading: loadingDetails, error: detailsError, lakeDetails } = useLakeDetails(lakeId);
+    const { loading: loadingDetails, error: detailsError, data: lakeDetails } = useLakeDetails(lakeId);
 
     const [showBetaFeedback, setShowBetaFeedback] = useState(
         localStorage.getItem("hideBetaFeedback") !== "true"
@@ -38,7 +39,7 @@ const LakeViewPage: React.FC = () => {
     const {
         loading: loadingConditions,
         error: conditionsError,
-        currentConditions,
+        data: currentConditions,
     } = useCurrentConditions(lakeId);
 
     useEffect(() => {
@@ -146,6 +147,8 @@ const LakeViewPage: React.FC = () => {
                     </>
                 )}
             </AsyncContainer>
+
+            <Past365Days/>
         </div>
     );
 };

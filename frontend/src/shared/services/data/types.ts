@@ -38,6 +38,7 @@ export enum DataType {
 export enum LakeSystemFeatures {
     REGIONS = "REGIONS",
     ACCESS_POINTS = "ACCESS_POINTS",
+    PAST_365_DAYS_GRAPH = "PAST_365_DAYS_GRAPH",
 }
 
 export interface LakeRegion {

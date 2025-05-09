@@ -1,51 +1,17 @@
-import { useState, useEffect } from "react";
 import { dataService, LakeSystemSettings } from "../../shared/services/data";
-
-interface BasicLakeInfoResult {
-    loading: boolean;
-    error: string | null;
-    lakeInfo: LakeSystemSettings | null;
-}
+import useLoadingFetch, { LoadingFetchResult } from "./useLoadingFetch.ts";
 
 /**
  * Custom hook to fetch basic lake information using the dataService
  * @param lakeId - The ID of the lake to fetch information for
  */
-export const useBasicLakeInfo = (lakeId: string | undefined): BasicLakeInfoResult => {
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [lakeInfo, setLakeInfo] = useState<LakeSystemSettings | null>(null);
+export const useBasicLakeInfo = (lakeId: string | undefined): LoadingFetchResult<LakeSystemSettings> => {
+    return useLoadingFetch<LakeSystemSettings>(
+        async () => {
+            if (!lakeId) throw new Error("Lake ID is required");
 
-    useEffect(() => {
-        const fetchLakeInfo = async () => {
-            if (!lakeId) {
-                setError("Lake ID is required");
-                setLoading(false);
-                return;
-            }
-
-            setLoading(true);
-            setError(null);
-
-            try {
-                // Use the existing dataService to fetch lake system settings
-                const settings = await dataService.getLakeSystemSetting(lakeId);
-
-                if (!settings) {
-                    throw new Error(`Lake with ID ${lakeId} not found`);
-                }
-
-                setLakeInfo(settings);
-            } catch (err) {
-                console.error("Error fetching lake info:", err);
-                setError(err instanceof Error ? err.message : "Failed to load lake information");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchLakeInfo();
-    }, [lakeId]);
-
-    return { loading, error, lakeInfo };
+            return await dataService.getLakeSystemSetting(lakeId);
+        },
+        [lakeId]
+    );
 };
