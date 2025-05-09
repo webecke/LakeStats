@@ -1,11 +1,13 @@
 package dev.webecke.lakestats.service;
 
 import dev.webecke.lakestats.aggregator.CurrentConditionsAggregator;
+import dev.webecke.lakestats.aggregator.HistoricalDataAggregator;
 import dev.webecke.lakestats.collector.BureauOfReclamationDataCollector;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
 import dev.webecke.lakestats.model.*;
 import dev.webecke.lakestats.model.features.CurrentConditions;
+import dev.webecke.lakestats.model.features.LakeSystemFeatures;
 import dev.webecke.lakestats.model.geography.Lake;
 import dev.webecke.lakestats.model.measurements.DataType;
 import dev.webecke.lakestats.utils.SystemTimer;
@@ -21,13 +23,16 @@ public class DataCollectionService {
     private final CurrentConditionsAggregator currentConditionsAggregator;
     private final DatabaseAccess databaseAccess;
     private final LakeStatsLogger logger = new LakeStatsLogger(DataCollectionService.class);
+    private final HistoricalDataAggregator historicalDataAggregator;
 
     public DataCollectionService(BureauOfReclamationDataCollector bureauOfReclamationDataCollector,
                                  CurrentConditionsAggregator currentConditionsAggregator,
+                                 HistoricalDataAggregator historicalDataAggregator,
                                  DatabaseAccess databaseAccess) {
         this.bureauOfReclamationDataCollector = bureauOfReclamationDataCollector;
         this.currentConditionsAggregator = currentConditionsAggregator;
         this.databaseAccess = databaseAccess;
+        this.historicalDataAggregator = historicalDataAggregator;
     }
 
     public RunSystemResult dailyDataCollection() {
@@ -62,8 +67,10 @@ public class DataCollectionService {
 
     public RunLakeCollectorResult collectDataForLake(String lakeId) {
         Lake lake;
+        LakeSystemSettings settings;
         try {
             lake = databaseAccess.getLakeDetails(lakeId);
+            settings = databaseAccess.getLakeSystemSettings(lakeId);
         } catch (Exception e) {
             String resultMessage = "Error while getting lake details";
             logger.errorForLake(resultMessage, lakeId, e);
@@ -78,10 +85,10 @@ public class DataCollectionService {
             );
         }
 
-        return collectDataForLake(lake);
+        return collectDataForLake(lake, settings);
     }
 
-    public RunLakeCollectorResult collectDataForLake(Lake lake) {
+    public RunLakeCollectorResult collectDataForLake(Lake lake, LakeSystemSettings settings) {
         try { /// Check if the lake has already been run today successfully
             RunLakeCollectorResult lastRunResult = databaseAccess.getLastRunResult(lake.id());
             if (lastRunResult != null &&
@@ -117,11 +124,18 @@ public class DataCollectionService {
         ResultStatus status;
         String resultMessage = "Data collection completed and successfully published";
         LocalDate dateCollected = null;
+        List<LakeSystemFeatures> featuresRun = new ArrayList<>();
 
         try {
             CollectorResponse<TimeSeriesData> elevationData = bureauOfReclamationDataCollector.collectData(lake, DataType.ELEVATION);
             CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
             dateCollected = currentConditions.date();
+
+            if (settings.features().contains(LakeSystemFeatures.PAST_365_DAYS_GRAPH)) {
+                HistoricalPeriodData past365days = historicalDataAggregator.past365days(elevationData.data());
+                featuresRun.add(LakeSystemFeatures.PAST_365_DAYS_GRAPH);
+                databaseAccess.publishPast365Days(past365days);
+            }
 
             try {
                 databaseAccess.publishCurrentConditions(currentConditions);
@@ -158,7 +172,7 @@ public class DataCollectionService {
                 status,
                 resultMessage,
                 timer.getElapsedTime(),
-                null
+                featuresRun.toArray(LakeSystemFeatures[]::new)
         );
 
         try {

@@ -3,6 +3,7 @@ package dev.webecke.lakestats.dao.firebase;
 import com.google.cloud.firestore.DocumentReference;
 import dev.webecke.lakestats.dao.DataAccessException;
 import dev.webecke.lakestats.dao.DatabaseAccess;
+import dev.webecke.lakestats.model.HistoricalPeriodData;
 import dev.webecke.lakestats.model.RunLakeCollectorResult;
 import dev.webecke.lakestats.model.features.CurrentConditions;
 
@@ -105,6 +106,15 @@ public class FirestoreDao implements DatabaseAccess {
             firestore.collection(result.lakeId()).document("last_run_result").set(serializer.serializeToMap(result));
         } catch (Exception e) {
             throw new DataAccessException("Failed to publish last run result for " + result.lakeId(), e);
+        }
+    }
+
+    @Override
+    public void publishPast365Days(HistoricalPeriodData data) throws DataAccessException {
+        try {
+            firestore.collection(data.lakeId()).document("past_365_days").set(serializer.serializeToMap(data));
+        } catch (Exception e) {
+            throw new DataAccessException("Failed to publish past 365 dats for " + data.lakeId(), e);
         }
     }
 
