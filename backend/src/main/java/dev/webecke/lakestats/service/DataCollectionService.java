@@ -131,9 +131,9 @@ public class DataCollectionService {
             CurrentConditions currentConditions = currentConditionsAggregator.aggregateCurrentConditions(elevationData, lake);
             dateCollected = currentConditions.date();
 
-            if (settings.features().contains(LakeSystemFeatures.PAST_365_DAYS_GRAPH)) {
+            if (settings.features().contains(LakeSystemFeatures.PREVIOUS_YEAR_GRAPH)) {
                 HistoricalPeriodData past365days = historicalDataAggregator.past365days(elevationData.data());
-                featuresRun.add(LakeSystemFeatures.PAST_365_DAYS_GRAPH);
+                featuresRun.add(LakeSystemFeatures.PREVIOUS_YEAR_GRAPH);
                 databaseAccess.publishPast365Days(past365days);
             }
 
