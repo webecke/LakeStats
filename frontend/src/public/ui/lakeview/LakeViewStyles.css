@@ -47,6 +47,22 @@
     opacity: 0.8; /* Slightly dimmed */
 }
 
+/* General Styles */
+
+.feature-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    margin: 0;
+}
+
 /* Current Conditions Styles */
 .current-conditions {
     display: flex;
