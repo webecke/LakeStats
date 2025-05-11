@@ -21,7 +21,7 @@ public record TimeSeriesData(
         DataType type
 ) {
     public record TimeSeriesEntry(
-            float value,    // Changed from elevationFeet to be more generic
+            float value,
             LocalDate date
     ) {}
 

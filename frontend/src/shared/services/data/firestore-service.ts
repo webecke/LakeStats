@@ -19,6 +19,7 @@ import {
     DataType,
     CurrentConditions,
     AccessPoint,
+    HistoricalPeriodData,
 } from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
@@ -95,6 +96,17 @@ export class FirestoreService implements DataService {
             timeOfCollection: timeOfCollection,
             date: date,
         } as CurrentConditions;
+    }
+
+    async getPast365Days(lakeId: string): Promise<HistoricalPeriodData | null> {
+        const docRef = doc(this.db, lakeId, "past_365_days");
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) return null;
+
+        const data = docSnap.data();
+
+        return data as HistoricalPeriodData;
     }
 
     //////////////////////////////

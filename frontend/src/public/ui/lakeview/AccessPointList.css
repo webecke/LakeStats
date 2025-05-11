@@ -6,20 +6,6 @@
     margin-top: 0;
 }
 
-.access-point-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px; /* Reduced spacing below header */
-}
-
-.access-point-list-title {
-    font-size: 1.5rem; /* Smaller font size for header */
-    font-weight: 600;
-    color: var(--text-primary, #ffffff);
-    margin: 0;
-}
-
 .access-point-stats {
     font-size: 1rem; /* Slightly smaller stats text */
     color: var(--text-secondary, rgba(255, 255, 255, 0.87));
