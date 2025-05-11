@@ -29,8 +29,8 @@ const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation, lak
 
     return (
         <div className="access-point-list">
-            <div className="access-point-list-header">
-                <h2 className="access-point-list-title">Access Points</h2>
+            <div className="feature-header">
+                <h2 className="feature-title">Access Points</h2>
                 <div className="access-point-stats">
                     <span className="open-count">{openAccessPoints}</span> of {accessPoints.length}{" "}
                     open

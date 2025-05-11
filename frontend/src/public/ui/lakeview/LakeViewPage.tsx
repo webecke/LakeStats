@@ -122,7 +122,7 @@ const LakeViewPage: React.FC = () => {
                 </div>
             </Callout>
 
-            <Past365Days lakeId={lakeId}/>
+            <Past365Days lakeId={lakeId} todayLevel={currentConditions?.levelToday || 0}/>
 
             <RegionSelector
                 regions={lakeDetails.regions}
