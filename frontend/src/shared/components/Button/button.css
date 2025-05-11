@@ -37,7 +37,7 @@
 
 /* Variants */
 .button--primary {
-    background-color: var(--action-primary);
+    background-color: var(--brand-blue-400);
     color: var(--text-primary);
 }
 

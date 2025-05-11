@@ -4,6 +4,7 @@ import { dataService, LakeSystemSettings } from "../../shared/services/data";
 import logoSvg from "../../assets/LakeStatsLogo-NoBackground.svg";
 import "./Home.css";
 import AsyncContainer from "../components/AsyncContainer.tsx";
+import { Button } from "../../shared/components/Button";
 
 // Function to create a color gradient based on the accent color
 const getColorGradient = (accentColor: string) => {
@@ -48,6 +49,14 @@ export default function Home() {
                 </p>
             </header>
 
+            {/* TODO: Adjust margin-bottom for home-header when you delete this */}
+            <div style={{"marginBottom": "1rem"}}>
+                <p style={{"marginBottom": "10px"}}>LakeStats is in Public Beta. Take 60 seconds to help us make it better.</p>
+                <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank">
+                    <Button className="button--lg">Take Public Beta Feedback Survey</Button>
+                </a>
+            </div>
+
             <AsyncContainer isLoading={isLakeListLoading} error={null} data={lakes}>
                 {(lakes) => (
                     <section className="lakes-grid">
@@ -87,15 +96,6 @@ export default function Home() {
                     check water levels, boat ramp access, and recent changes so you can better plan
                     your lake visits.
                 </p>
-                <p>
-                    We're still working on the site. More lakes and features are in the works. If
-                    you have any feedback for the site, whether bug reports, suggested changes, or
-                    features you'd like to see, feel free to email me:
-                </p>
-                <p>
-                    <a href="mailto:feedback@lakestats.com">feedback@lakestats.com</a>
-                </p>
-
                 <p>
                     If you're interested in where we get our data,{" "}
                     <Link to={"/data"}>check out this page about our data sources!</Link>
