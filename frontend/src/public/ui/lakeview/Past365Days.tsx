@@ -3,12 +3,21 @@ import { Chart } from 'chart.js/auto';
 import AsyncContainer from "../../components/AsyncContainer.tsx";
 import { usePast365Days } from "../../datahooks/useHistoricalData.ts";
 import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
+import { LakeSystemFeatures, LakeSystemSettings } from "../../../shared/services/data";
 
-const Past365Days: React.FC<{lakeId: string, todayLevel: number}> = ({lakeId, todayLevel}) => {
-    const { loading: loadingYearData, error: yearDataError, data: yearData } = usePast365Days(lakeId);
+const Past365Days: React.FC<{lakeSettings: LakeSystemSettings, todayLevel: number}> = ({lakeSettings, todayLevel}) => {
+    const graphEnabled = lakeSettings.features.includes(LakeSystemFeatures.PREVIOUS_YEAR_GRAPH); // or however your settings work
+
+    const { loading: loadingYearData, error: yearDataError, data: yearData } = graphEnabled
+        ? usePast365Days(lakeSettings.lakeId)
+        : { loading: false, error: null, data: null };
+
+    if (!graphEnabled) {
+        return null;
+    }
+
     const chartRef = useRef<HTMLCanvasElement>(null);
     const chartInstanceRef = useRef<Chart | null>(null);
-    console.log(yearData)
 
     return (
         <>
