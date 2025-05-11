@@ -15,6 +15,7 @@ import { LakeSystemFeatures } from "../../../shared/services/data";
 import { Callout } from "../../components/Callout.tsx";
 import { Button } from "../../../shared/components/Button";
 import { getFeetAndInchesWithFraction } from "../dataRenderTools.ts";
+import Past365Days from "./Past365Days.tsx";
 
 const LakeViewPage: React.FC = () => {
     const navigate = useNavigate();
@@ -120,6 +121,8 @@ const LakeViewPage: React.FC = () => {
                     </a>
                 </div>
             </Callout>
+
+            <Past365Days lakeId={lakeId}/>
 
             <RegionSelector
                 regions={lakeDetails.regions}

@@ -78,6 +78,20 @@ export interface SystemError {
     lakeId: string;
 }
 
+export type PeriodType = "CALENDAR_YEAR" | "ROLLING_YEAR" | "CUSTOM";
+
+export interface HistoricalPeriodData {
+    lakeId: string;
+    startDate: Date;
+    endDate: Date;
+    type: PeriodType;
+    dataType: DataType;
+    data: {
+        value: number;
+        date: Date;
+    }[];
+}
+
 export interface DataService {
     updateLakeRegionAccessPoints(
         lakeId: string,
@@ -100,4 +114,5 @@ export interface DataService {
         }
     ): Promise<void>;
     getCurrentConditions(lakeId: string): Promise<CurrentConditions | null>;
+    getPast365Days(lakeId: string): Promise<HistoricalPeriodData | null>;
 }
