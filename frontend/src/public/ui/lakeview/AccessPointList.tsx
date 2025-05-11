@@ -12,7 +12,12 @@ interface AccessPointListProps {
     loadingError: string | null;
 }
 
-const AccessPointList: React.FC<AccessPointListProps> = ({ currentElevation, lakeSystemSettings, isLoading, loadingError }) => {
+const AccessPointList: React.FC<AccessPointListProps> = ({
+    currentElevation,
+    lakeSystemSettings,
+    isLoading,
+    loadingError,
+}) => {
     if (!lakeSystemSettings.features.includes(LakeSystemFeatures.ACCESS_POINTS)) {
         return null;
     }

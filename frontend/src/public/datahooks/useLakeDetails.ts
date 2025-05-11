@@ -6,12 +6,9 @@ import useLoadingFetch, { LoadingFetchResult } from "./useLoadingFetch.ts";
  * @param lakeId - The ID of the lake to fetch details for
  */
 export const useLakeDetails = (lakeId: string | undefined): LoadingFetchResult<LakeMetaData> => {
-    return useLoadingFetch<LakeMetaData>(
-        async () => {
-            if (!lakeId) throw new Error("Lake ID is required");
+    return useLoadingFetch<LakeMetaData>(async () => {
+        if (!lakeId) throw new Error("Lake ID is required");
 
-            return await dataService.getLakeInfo(lakeId);
-        },
-        [lakeId]
-    );
+        return await dataService.getLakeInfo(lakeId);
+    }, [lakeId]);
 };

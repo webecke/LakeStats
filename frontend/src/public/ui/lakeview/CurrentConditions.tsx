@@ -21,14 +21,16 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
     isLoading,
     loadingError,
 }) => {
-    const [ dateString, setDateString ] = useState("");
+    const [dateString, setDateString] = useState("");
 
     useEffect(() => {
         if (currentConditionsData) {
-            setDateString(currentConditionsData.date.toLocaleDateString("default", {
-                month: "long",
-                day: "numeric",
-            }));
+            setDateString(
+                currentConditionsData.date.toLocaleDateString("default", {
+                    month: "long",
+                    day: "numeric",
+                })
+            );
         }
     }, [isLoading]);
 
@@ -54,8 +56,8 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                         tooltip={
                             <div>
                                 <p>
-                                    The surface elevation of the lake in feet above sea level at 12:00AM on{" "}
-                                    {dateString}
+                                    The surface elevation of the lake in feet above sea level at
+                                    12:00AM on {dateString}
                                 </p>
                                 <em>Exact reading: {data.levelToday}</em>
                             </div>
@@ -70,9 +72,7 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                             tooltip={`Change in lake level since yesterday's reading [${data.levelYesterday} ft]`}
                         />
                         <StatItem
-                            value={
-                                data.levelToday - data.levelTwoWeeksAgo
-                            }
+                            value={data.levelToday - data.levelTwoWeeksAgo}
                             label="vs 2 Weeks Ago"
                             className="week-change"
                             tooltip={`Change in lake level over the past two weeks [${data.levelTwoWeeksAgo} ft]`}
@@ -87,16 +87,14 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                             tooltip={`Change in lake level compared to the same date last year [${data.levelOneYearAgo} ft]`}
                         />
                         <StatItem
-                            value={
-                                data.levelToday - data.levelTenYearAverage
-                            }
+                            value={data.levelToday - data.levelTenYearAverage}
                             label="vs 10 Year Avg"
                             className="ten-year-diff"
                             tooltip={
                                 <p>
-                                    Difference between the current level and average for {dateString} of the
-                                    last 10 years [{data.levelTenYearAverage.toFixed(3)}{" "}
-                                    ft]
+                                    Difference between the current level and average for{" "}
+                                    {dateString} of the last 10 years [
+                                    {data.levelTenYearAverage.toFixed(3)} ft]
                                 </p>
                             }
                         />
@@ -127,8 +125,8 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                                 <div>
                                     <strong>Min Power Pool</strong>
                                     <p>
-                                        Distance from the lowest level that the dam can generate electricity
-                                        which is {lakeDetails.minPowerPoolElevation} ft
+                                        Distance from the lowest level that the dam can generate
+                                        electricity which is {lakeDetails.minPowerPoolElevation} ft
                                     </p>
                                 </div>
                             }
@@ -142,8 +140,8 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                                 <div>
                                     <strong>Dead Pool</strong>
                                     <p>
-                                        Distance from the lowest level that lets water out of the dam which
-                                        is {lakeDetails.deadPoolElevation} ft
+                                        Distance from the lowest level that lets water out of the
+                                        dam which is {lakeDetails.deadPoolElevation} ft
                                     </p>
                                 </div>
                             }

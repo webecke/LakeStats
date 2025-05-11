@@ -27,9 +27,21 @@ const LakeViewPage: React.FC = () => {
     const [summaryString, setSummaryString] = useState("");
 
     // Fetch all the data
-    const { loading: loadingSettings, error: settingsError, data: lakeSettings } = useLakeSystemSettings(lakeId);
-    const { loading: loadingDetails, error: detailsError, data: lakeDetails } = useLakeDetails(lakeId);
-    const { loading: loadingConditions, error: conditionsError, data: currentConditions } = useCurrentConditions(lakeId);
+    const {
+        loading: loadingSettings,
+        error: settingsError,
+        data: lakeSettings,
+    } = useLakeSystemSettings(lakeId);
+    const {
+        loading: loadingDetails,
+        error: detailsError,
+        data: lakeDetails,
+    } = useLakeDetails(lakeId);
+    const {
+        loading: loadingConditions,
+        error: conditionsError,
+        data: currentConditions,
+    } = useCurrentConditions(lakeId);
 
     useEffect(() => {
         const formatValue = (value: number) => {
@@ -103,7 +115,8 @@ const LakeViewPage: React.FC = () => {
                 lakeDetails={lakeDetails}
                 currentConditionsData={currentConditions}
                 isLoading={loadingConditions}
-                loadingError={conditionsError}/>
+                loadingError={conditionsError}
+            />
 
             <Callout
                 visible={showBetaFeedback}
@@ -112,17 +125,17 @@ const LakeViewPage: React.FC = () => {
                 onClose={handleCloseFeedback}
             >
                 <div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
-                    <p>
-                        Help us improve LakeStats! Take 60 seconds to share your
-                        thoughts
-                    </p>
+                    <p>Help us improve LakeStats! Take 60 seconds to share your thoughts</p>
                     <a href="https://forms.gle/tQ6yU7WRMDdUHZdz9" target="_blank">
                         <Button>Take survey</Button>
                     </a>
                 </div>
             </Callout>
 
-            <Past365Days lakeSettings={lakeSettings} todayLevel={currentConditions?.levelToday || 0}/>
+            <Past365Days
+                lakeSettings={lakeSettings}
+                todayLevel={currentConditions?.levelToday || 0}
+            />
 
             <RegionSelector
                 regions={lakeDetails.regions}
@@ -132,7 +145,8 @@ const LakeViewPage: React.FC = () => {
                     lakeSystemSettings={lakeSettings}
                     currentElevation={currentConditions && currentConditions.levelToday}
                     isLoading={loadingConditions}
-                    loadingError={conditionsError}/>
+                    loadingError={conditionsError}
+                />
             </RegionSelector>
         </div>
     );

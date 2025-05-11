@@ -18,7 +18,8 @@ import {
     LakeSystemSettings,
     DataType,
     CurrentConditions,
-    AccessPoint, HistoricalPeriodData,
+    AccessPoint,
+    HistoricalPeriodData,
 } from "./types.ts";
 import { getFirestoreDb } from "../../../firebase/config.ts";
 
@@ -105,7 +106,7 @@ export class FirestoreService implements DataService {
 
         const data = docSnap.data();
 
-        return data as HistoricalPeriodData
+        return data as HistoricalPeriodData;
     }
 
     //////////////////////////////
