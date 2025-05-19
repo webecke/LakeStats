@@ -68,7 +68,9 @@ const Past365Days: React.FC<{ lakeSettings: LakeSystemSettings; todayLevel: numb
                                                     x: string;
                                                     y: number;
                                                 };
-                                                const date = new Date(dataPoint.x);
+
+                                                const [year, month, day] = dataPoint.x.split('-').map(Number);
+                                                const date = new Date(year, month - 1, day);
 
                                                 return date.toLocaleDateString("en", {
                                                     year: "numeric",
