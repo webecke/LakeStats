@@ -33,7 +33,7 @@ const AccessPointList: React.FC<AccessPointListProps> = ({
     ).length;
 
     return (
-        <div className="access-point-list">
+        <div className="feature-container">
             <div className="feature-header">
                 <h2 className="feature-title">Access Points</h2>
                 <div className="access-point-stats">

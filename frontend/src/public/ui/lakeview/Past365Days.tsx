@@ -27,7 +27,7 @@ const Past365Days: React.FC<{ lakeSettings: LakeSystemSettings; todayLevel: numb
     const chartInstanceRef = useRef<Chart | null>(null);
 
     return (
-        <>
+        <div className="feature-container">
             <div className="feature-header">
                 <h2 className="feature-title">Past 365 Days</h2>
             </div>
@@ -134,7 +134,7 @@ const Past365Days: React.FC<{ lakeSettings: LakeSystemSettings; todayLevel: numb
                     return <canvas ref={chartRef}></canvas>;
                 }}
             </AsyncContainer>
-        </>
+        </div>
     );
 };
 

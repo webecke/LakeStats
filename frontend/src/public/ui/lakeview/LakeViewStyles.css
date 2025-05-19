@@ -49,11 +49,18 @@
 
 /* General Styles */
 
+.feature-container {
+    width: 100%;
+    padding: 12px 8px;
+    border-radius: 8px;
+    margin-top: 0;
+}
+
 .feature-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .feature-title {
@@ -204,6 +211,10 @@
         --font-size-large: 36px;
         --font-size-medium: 24px;
         --font-size-small: 12px;
+    }
+
+    .feature-container {
+        padding: 8px 6px;
     }
 
     .lake-view {

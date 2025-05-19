@@ -100,53 +100,55 @@ const CurrentConditions: React.FC<CurrentConditionsProps> = ({
                         />
                     </div>
 
-                    <div className="stat-row pool-levels">
-                        <StatItem
-                            showStat={!!lakeDetails.fullPoolElevation}
-                            value={data.levelToday - lakeDetails.fullPoolElevation}
-                            label="vs Full Pool"
-                            isTrendStat={false}
-                            tooltip={
-                                <div>
-                                    <strong>Full Pool</strong>
-                                    <p>
-                                        Distance from the dam's designed capacity which is{" "}
-                                        {lakeDetails.fullPoolElevation} ft
-                                    </p>
-                                </div>
-                            }
-                        />
-                        <StatItem
-                            showStat={!!lakeDetails.minPowerPoolElevation}
-                            value={data.levelToday - lakeDetails.minPowerPoolElevation}
-                            label="vs Power Pool"
-                            isTrendStat={false}
-                            tooltip={
-                                <div>
-                                    <strong>Min Power Pool</strong>
-                                    <p>
-                                        Distance from the lowest level that the dam can generate
-                                        electricity which is {lakeDetails.minPowerPoolElevation} ft
-                                    </p>
-                                </div>
-                            }
-                        />
-                        <StatItem
-                            showStat={!!lakeDetails.deadPoolElevation}
-                            value={data.levelToday - lakeDetails.deadPoolElevation}
-                            label="vs Dead Pool"
-                            isTrendStat={false}
-                            tooltip={
-                                <div>
-                                    <strong>Dead Pool</strong>
-                                    <p>
-                                        Distance from the lowest level that lets water out of the
-                                        dam which is {lakeDetails.deadPoolElevation} ft
-                                    </p>
-                                </div>
-                            }
-                        />
-                    </div>
+                    { (lakeDetails.fullPoolElevation || lakeDetails.deadPoolElevation || lakeDetails.minPowerPoolElevation) ?
+                        <div className="stat-row pool-levels">
+                            <StatItem
+                                showStat={!!lakeDetails.fullPoolElevation}
+                                value={data.levelToday - lakeDetails.fullPoolElevation}
+                                label="vs Full Pool"
+                                isTrendStat={false}
+                                tooltip={
+                                    <div>
+                                        <strong>Full Pool</strong>
+                                        <p>
+                                            Distance from the dam's designed capacity which is{" "}
+                                            {lakeDetails.fullPoolElevation} ft
+                                        </p>
+                                    </div>
+                                }
+                            />
+                            <StatItem
+                                showStat={!!lakeDetails.minPowerPoolElevation}
+                                value={data.levelToday - lakeDetails.minPowerPoolElevation}
+                                label="vs Power Pool"
+                                isTrendStat={false}
+                                tooltip={
+                                    <div>
+                                        <strong>Min Power Pool</strong>
+                                        <p>
+                                            Distance from the lowest level that the dam can generate
+                                            electricity which is {lakeDetails.minPowerPoolElevation} ft
+                                        </p>
+                                    </div>
+                                }
+                            />
+                            <StatItem
+                                showStat={!!lakeDetails.deadPoolElevation}
+                                value={data.levelToday - lakeDetails.deadPoolElevation}
+                                label="vs Dead Pool"
+                                isTrendStat={false}
+                                tooltip={
+                                    <div>
+                                        <strong>Dead Pool</strong>
+                                        <p>
+                                            Distance from the lowest level that lets water out of the
+                                            dam which is {lakeDetails.deadPoolElevation} ft
+                                        </p>
+                                    </div>
+                                }
+                            />
+                        </div>
+                   : null }
                 </div>
             )}
         </AsyncContainer>

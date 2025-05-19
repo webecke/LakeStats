@@ -1,6 +1,6 @@
 .region-container {
     width: 100%;
-    margin-top: 24px; /* Increased gap between current conditions and region selector */
+    margin-top: 8px;
 }
 
 .region-tabs {
