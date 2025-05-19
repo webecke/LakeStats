@@ -123,3 +123,44 @@ blockquote cite {
 blockquote cite::before {
     content: "— ";
 }
+
+/* List styling for static pages */
+.static-section ul {
+    margin: 1rem 0 1.5rem 0;
+    padding-left: 1.5rem;
+    list-style-type: none;
+}
+
+.static-section li {
+    position: relative;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    padding-left: 1.25rem;
+}
+
+/* Custom bullet points using a dash character */
+.static-section li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--action-primary);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Style for nested lists */
+.static-section ul ul {
+    margin: 0.75rem 0 0.75rem 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .static-section ul {
+        padding-left: 0.75rem;
+    }
+
+    .static-section li {
+        font-size: 0.95rem;
+        padding-left: 1rem;
+    }
+}

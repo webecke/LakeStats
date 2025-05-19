@@ -65,9 +65,27 @@ const Terms: React.FC = () => {
             <div className="static-section">
                 <h2>Privacy Stuff</h2>
                 <p>
-                    We collect literally none of your data. Frankly, we're too busy checking lake
-                    levels to build complicated tracking systems. We don't have ads and theres
-                    nothing to log in to, so your privacy is safe with us.
+                    LakeStats uses Firebase for database services. Firebase automatically collects basic analytics data including:
+                </p>
+                <ul>
+                    <li>Anonymous usage information (pages visited, features used)</li>
+                    <li>General device information (browser type, approximate location based on IP)</li>
+                    <li>Performance data (errors, load times)</li>
+                </ul>
+                <p>
+                    This data is used solely to improve the website and understand how features are being used. We do not:
+                </p>
+                <ul>
+                    <li>Have advertising on our site</li>
+                    <li>Connect with any advertising services</li>
+                    <li>Sell or share your data with third parties</li>
+                    <li>Track individual users or collect personal information</li>
+                </ul>
+                <p>
+                    We've configured Firebase to minimize data collection, and since we don't have or use Google Ads, your data is not used for targeted advertising purposes. If you're curious, you can check out <a href="https://firebase.google.com/support/privacy" target="_blank">Firebases's Privacy Policy</a> yourself.
+                </p>
+                <p>
+                    In short, the only data collected is to better understand how to make LakeStats better for users.
                 </p>
             </div>
 
@@ -83,7 +101,7 @@ const Terms: React.FC = () => {
                     contact us at <a href="mailto:feedback@lakestats.com">feedback@lakestats.com</a>
                     .
                 </p>
-                <p>Last updated: March 13, 2025</p>
+                <p>Last updated: May 19, 2025</p>
             </div>
         </div>
     );
