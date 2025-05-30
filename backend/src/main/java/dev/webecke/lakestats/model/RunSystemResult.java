@@ -1,12 +1,12 @@
 package dev.webecke.lakestats.model;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Result of running collectors for all lakes.
  */
 public record RunSystemResult (
-        LocalDateTime timestamp,
+        ZonedDateTime timestamp,
         ResultStatus status,
         String message,
         long durationInMillis,

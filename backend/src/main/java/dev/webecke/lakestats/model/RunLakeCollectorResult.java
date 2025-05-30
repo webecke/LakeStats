@@ -4,12 +4,13 @@ import dev.webecke.lakestats.model.features.LakeSystemFeatures;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Result of running collectors for a specific lake.
  */
 public record RunLakeCollectorResult(
-        LocalDateTime timestamp,
+        ZonedDateTime timestamp,
         LocalDate dateCollected,
         String lakeId,
         ResultStatus status,
