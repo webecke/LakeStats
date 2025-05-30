@@ -4,8 +4,8 @@ export const getFeetAndInchesWithFraction = (
     const absValue = Math.abs(value);
     const feet = Math.floor(absValue);
 
-    const rawInches = (absValue - feet) * 12;
-    const inches = Math.floor(rawInches);
+    let rawInches = (absValue - feet) * 12;
+    let inches = Math.floor(rawInches);
 
     const fractionalInches = rawInches - inches;
     let fraction = "";
@@ -13,7 +13,7 @@ export const getFeetAndInchesWithFraction = (
     // Convert to 8ths
     const eighths = Math.round(fractionalInches * 8);
 
-    if (eighths > 0 && eighths < 8) {
+    if (eighths > 0 && eighths <= 8) {
         // Simplify fraction
         switch (eighths) {
             case 1:
@@ -36,6 +36,10 @@ export const getFeetAndInchesWithFraction = (
                 break;
             case 7:
                 fraction = "⅞";
+                break;
+            case 8:
+                rawInches += 1;
+                inches += 1;
                 break;
         }
     }
